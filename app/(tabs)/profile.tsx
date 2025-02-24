@@ -9,25 +9,58 @@ import axios from "@/scripts/axiosConfig";
 export default function Profile() {
 
     const [user, setUser] = useState(null);
+    const [store, setStore] = useState(null);
+    const [profit, setProfit] = useState(0);
+    const [storeId, setStoreId] = useState(null);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const getUser = async () => {
-        const token = await SecureStore.getItemAsync('token');
-        if (token) {
-            try {
-                const response = await axios.get('/api/user');
-                setUser(response.data);
-            } catch (error: any) {
-                console.log(error.response.data.message);
+    const getUserData = async () => {
+        const user = JSON.parse(await SecureStore.getItemAsync('user') as string);
+        const store = JSON.parse(await SecureStore.getItemAsync('store') as string);
+        if (user) {
+            setUser(user);
+            if (store) {
+                setStore(store);
             }
         } else {
             router.replace('/login');
         }
     }
 
+    const getTodayProfit = async () => {
+        let response;
+        try {
+            response = await axios.get('/api/store/profit/today');
+        } catch (error) {
+            console.log(error);
+        } finally {
+            if (response?.status === 200) {
+                setProfit(response.data);
+            }
+        }
+    };
+
+    const getStoreId = async () => {
+        let response;
+        try {
+            response = await axios.get('/api/store/id');
+        } catch (error) {
+            console.log(error);
+        } finally {
+            if (response?.status === 200) {
+                setStoreId(response.data);
+            }
+        }
+    }
+
     useEffect(() => {
-        getUser();
+        getUserData().then(() => {
+            if (store) {
+                getStoreId();
+                getTodayProfit();
+            }
+        });
     }, []);
 
     const handleLogout = async () => {
@@ -45,16 +78,26 @@ export default function Profile() {
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}}>
-                <Link href="/login" asChild>
-                    <Button title="Log in" />
-                </Link>
-                {user && <>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Name: {user.name}</Text>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Email: {user.email}</Text>
-                </>}
-                {user && <>
-                    <Button title="Log out" onPress={() => {handleLogout()}} />
-                </>}
+                <Text style={[styles.header, {color: theme.colors.text}]}>User info</Text>
+                <Text style={[styles.text, {color: theme.colors.text}]}>Name: {user?.name}</Text>
+                <Text style={[styles.text, {color: theme.colors.text}]}>Email: {user?.email}</Text>
+                <Pressable style={styles.button}>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Edit profile</Text>
+                </Pressable>
+                <Text style={[styles.header, {color: theme.colors.text}]}>Store info</Text>
+                <Text style={[styles.text, {color: theme.colors.text}]}>Store name: {store?.name}</Text>
+                <Text style={[styles.text, {color: theme.colors.text}]}>Today's profit: {profit}</Text>
+                <Pressable style={styles.button} onPress={() => {getTodayProfit()}}>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Refresh</Text>
+                </Pressable>
+                <Pressable style={styles.button} onPress={() => {getStoreId()}}>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Show store id</Text>
+                </Pressable>
+                <Text style={[styles.text, {color: theme.colors.text}]}>{storeId}</Text>
+                <Pressable style={styles.button}>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>
+                </Pressable>
+                <Button title="Log out" onPress={() => {handleLogout()}} />
             </ScrollView>
         </SafeAreaView>
     )
@@ -64,5 +107,17 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         padding: 10,
+    },
+    header: {
+        fontSize: 25,
+        padding: 10,
+        fontWeight: 'bold',
+    },
+    button: {
+        backgroundColor: 'lightblue',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
     }
-})
+});

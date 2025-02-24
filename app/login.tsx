@@ -1,4 +1,14 @@
-import {SafeAreaView, Text, TextInput, StyleSheet, Pressable, ScrollView, useColorScheme, Platform} from "react-native";
+import {
+    SafeAreaView,
+    Text,
+    TextInput,
+    StyleSheet,
+    Pressable,
+    ScrollView,
+    useColorScheme,
+    Platform,
+    Button
+} from "react-native";
 import {useState} from "react";
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
@@ -39,8 +49,31 @@ export default function Login() {
             }
             if (token) {
                 await save('token', token);
+                await getUserData();
                 router.replace('/');
             }
+        }
+    }
+
+    const getUserData = async () => {
+        const token = await SecureStore.getItemAsync('token');
+        if (token) {
+            try {
+                const response = await axios.get('/api/user');
+                await save('user', JSON.stringify(response.data));
+            } catch (error: any) {
+                console.log(error.response.data.message);
+            }
+            try {
+                const response = await axios.get('/api/store');
+                if (response.status === 200 && Object.keys(response.data).length > 0) {
+                    await save('store', JSON.stringify(response.data));
+                }
+            } catch (error: any) {
+                console.log(error.response.data.message);
+            }
+        } else {
+            router.replace('/login');
         }
     }
 
@@ -72,10 +105,11 @@ export default function Login() {
                                }}
                     />
                     <Pressable style={styles.button} onPress={() => {handleLogin()}}>
-                        <Text>Log in</Text>
+                        <Text>Sign in</Text>
                     </Pressable>
                     {error && <Text style={{color: 'red'}}>{error}</Text>}
-                    {/*<Button title="Log in" onPress={() => {}} />*/}
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Don't have an account yet?</Text>
+                    <Button title="Sign up" onPress={() => {router.push('/register')}} />
                 </ScrollView>
             </SafeAreaView>
     )
