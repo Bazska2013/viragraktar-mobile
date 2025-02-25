@@ -26,7 +26,7 @@ export default function Sell() {
                     setStore(store);
                 }
             } else {
-                router.replace('/(tabs)/profile');
+                router.replace('/(tabs)/(profile)');
             }
         } else {
             router.replace('/login');

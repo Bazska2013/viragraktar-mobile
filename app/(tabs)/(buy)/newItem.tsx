@@ -3,8 +3,13 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useState} from "react";
 import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
+import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
+import axios from "@/scripts/axiosConfig";
 
 export default function NewItem() {
+
+    const {fetchItems} = useItemsContext();
+
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [name, setName] = useState('');
@@ -15,6 +20,26 @@ export default function NewItem() {
     const [priceInputStyle, setPriceInputStyle] = useState(styles.textInput);
     const [stock, setStock] = useState('');
     const [stockInputStyle, setStockInputStyle] = useState(styles.textInput);
+
+    const handleSubmit = async () => {
+        let response;
+        try {
+            response = await axios.post('/api/item', {
+                name: name,
+                description: description,
+                price: price,
+                stock: stock,
+                /*image: values.image*/
+            });
+        } catch (error: any) {
+            console.log(error.response.data.message);
+        } finally {
+            if (response?.status === 201) {
+                fetchItems();
+                router.back();
+            }
+        }
+    }
 
     return (
         <SafeAreaView>
@@ -61,7 +86,7 @@ export default function NewItem() {
                                setStockInputStyle(styles.textInput);
                            }}
                 />
-                <Pressable style={styles.button} onPress={() => {router.back()}}>
+                <Pressable style={styles.button} onPress={() => {handleSubmit()}}>
                     <Text style={[styles.text, {color: theme.colors.text}]}>Add new item</Text>
                 </Pressable>
             </ScrollView>

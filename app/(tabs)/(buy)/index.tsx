@@ -5,14 +5,16 @@ import {useEffect, useState} from "react";
 import axios from '../../../scripts/axiosConfig';
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
+import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 
 export default  function Buy() {
+
+    const {items, fetchItems} = useItemsContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [user, setUser] = useState(null);
     const [store, setStore] = useState(null);
-    const [items, setItems] = useState([]);
 
     const getUserData = async () => {
         const user = JSON.parse(await SecureStore.getItemAsync('user') as string);
@@ -24,23 +26,23 @@ export default  function Buy() {
                     setStore(store);
                 }
             } else {
-                router.replace('/(tabs)/profile');
+                router.replace('/(tabs)/(profile)');
             }
         } else {
             router.replace('/login');
         }
     }
 
-    const fetchItems = async () => {
-        try {
-            const response = await axios.get('/api/items');
-            if (response.status === 200) {
-                setItems(response.data);
-            }
-        } catch (error: any) {
-            console.log(error.response.data.message);
-        }
-    }
+    // const fetchItems = async () => {
+    //     try {
+    //         const response = await axios.get('/api/items');
+    //         if (response.status === 200) {
+    //             setItems(response.data);
+    //         }
+    //     } catch (error: any) {
+    //         console.log(error.response.data.message);
+    //     }
+    // }
 
     useEffect(() => {
         getUserData().then(() => {

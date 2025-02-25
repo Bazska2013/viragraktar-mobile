@@ -1,12 +1,49 @@
 import {Stack} from "expo-router";
+import React, {createContext, useContext, useState} from "react";
+import axios from "@/scripts/axiosConfig";
+
+const ItemsContext = createContext<{
+    items: any,
+    setItems: (items: any) => void,
+    fetchItems: () => void
+} | undefined>(undefined);
+
+export function useItemsContext() {
+    const context = useContext(ItemsContext);
+    if (!context) {
+        throw new Error('useItemsContext must be used within ItemsContextProvider');
+    }
+    return context;
+}
 
 export default function BuyLayout() {
+    const [items, setItems] = useState([]);
+
+    const fetchItems = async () => {
+        try {
+            const response = await axios.get('/api/items');
+            if (response.status === 200) {
+                setItems(response.data);
+            }
+        } catch (error: any) {
+            console.log(error.response.data.message);
+        }
+    }
+
+    const contextValue = {
+        items: items,
+        setItems: setItems,
+        fetchItems: fetchItems
+    };
+
     return (
-        <Stack>
-            <Stack.Screen name="index"
-                          options={{title: 'Buy', headerShown: false}} />
-            <Stack.Screen name="newItem"
-                            options={{title: 'New item', headerShown: true, presentation: 'modal'}} />
-        </Stack>
+        <ItemsContext.Provider value={contextValue}>
+            <Stack>
+                <Stack.Screen name="index"
+                              options={{title: 'Buy', headerShown: false}} />
+                <Stack.Screen name="newItem"
+                              options={{title: 'New item', headerShown: true, presentation: 'modal'}} />
+            </Stack>
+        </ItemsContext.Provider>
     )
 }
