@@ -1,8 +1,9 @@
-import {SafeAreaView, ScrollView, StyleSheet, useColorScheme, Text, TextInput, Pressable} from "react-native";
+import {SafeAreaView, ScrollView, StyleSheet, useColorScheme, Text, TextInput, Pressable, Platform} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useState} from "react";
 import {router} from "expo-router";
 import axios from "@/scripts/axiosConfig";
+import {StatusBar} from "expo-status-bar";
 
 export default  function Register() {
 
@@ -36,6 +37,7 @@ export default  function Register() {
 
     return (
         <SafeAreaView>
+            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
             <ScrollView style={{height: '100%'}}>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Email:</Text>
                 <TextInput placeholder="abc@xyz.com"

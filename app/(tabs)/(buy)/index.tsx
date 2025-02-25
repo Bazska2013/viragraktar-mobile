@@ -2,7 +2,7 @@ import {SymbolView} from "expo-symbols";
 import {Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import axios from '../../scripts/axiosConfig';
+import axios from '../../../scripts/axiosConfig';
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 
@@ -51,7 +51,7 @@ export default  function Buy() {
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}}>
-                <Pressable style={styles.button}>
+                <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
                     <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
                 </Pressable>
                 {items.map((item: any) => (
