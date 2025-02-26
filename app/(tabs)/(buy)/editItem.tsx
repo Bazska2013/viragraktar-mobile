@@ -1,5 +1,15 @@
 import {useEffect, useState} from "react";
-import {Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, useColorScheme} from "react-native";
+import {
+    Platform,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    useColorScheme,
+    View
+} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useSearchParams} from "expo-router/build/hooks";
 import axios from '@/scripts/axiosConfig';
@@ -11,23 +21,21 @@ export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const {fetchItems} = useItemsContext();
+    const id = useSearchParams().get('id');
 
     const [item, setItem] = useState(null);
-    const [name, setName] = useState('');
     const [nameInputStyle, setNameInputStyle] = useState(styles.textInput);
-    const [description, setDescription] = useState('');
     const [descriptionInputStyle, setDescriptionInputStyle] = useState(styles.textInput);
-    const [price, setPrice] = useState('');
     const [priceInputStyle, setPriceInputStyle] = useState(styles.textInput);
-    const [stock, setStock] = useState('');
     const [stockInputStyle, setStockInputStyle] = useState(styles.textInput);
+    const [error, setError] = useState(null);
 
     const fetchItem = async () => {
         let response;
         try {
-            response = await axios.get('/api/item/' + useSearchParams());
+            response = await axios.get('/api/item/' + id);
         } catch (error: any) {
-            console.log(error.response.data.message);
+            setError(error.response.data.message);
         } finally {
             if (response?.status === 200) {
                 setItem(response.data);
@@ -38,15 +46,15 @@ export default function EditItem() {
     const handleSubmit = async () => {
         let response;
         try {
-            response = await axios.put('/api/item/' + item.id, {
-                name: name,
-                description: description,
-                price: price,
-                stock: stock,
+            response = await axios.put('/api/item/' + id, {
+                name: item.name,
+                description: item.description,
+                price: item.price,
+                stock: item.stock,
                 /*image: image*/
             });
         } catch (error: any) {
-            console.log(error.response.data.message);
+            setError(error.response.data.message);
         } finally {
             if (response?.status === 200) {
                 fetchItems();
@@ -59,64 +67,61 @@ export default function EditItem() {
         fetchItem();
     }, []);
 
-    useEffect(() => {
-        if (item) {
-            setName(item.name);
-            setDescription(item.description);
-            setPrice(item.price);
-            setStock(item.stock);
-        }
-    }, [item]);
-
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView style={{height: '100%'}}>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Name of the item</Text>
-                <TextInput value={name.toString()}
-                           onChangeText={setName}
-                           autoFocus
-                           autoCapitalize="words"
-                           style={[nameInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setNameInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setNameInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Description of the item</Text>
-                <TextInput value={description.toString()}
-                           onChangeText={setDescription}
-                           autoCapitalize="sentences"
-                           style={[descriptionInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setDescriptionInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setDescriptionInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Price of the item</Text>
-                <TextInput value={price.toString()}
-                           onChangeText={setPrice}
-                           keyboardType="numeric"
-                           style={[priceInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setPriceInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setPriceInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Stock of the item</Text>
-                <TextInput value={stock.toString()}
-                           onChangeText={setStock}
-                           keyboardType="numeric"
-                           style={[stockInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setStockInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setStockInputStyle(styles.textInput);
-                           }}
-                />
-                <Pressable style={styles.button} onPress={() => {handleSubmit()}}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Edit item</Text>
-                </Pressable>
-            </ScrollView>
+            {item ? <>
+                <ScrollView style={{height: '100%'}}>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Name of the item</Text>
+                    <TextInput value={item.name.toString()}
+                               onChangeText={(value) => setItem({...item, name: value})}
+                               autoFocus
+                               autoCapitalize="words"
+                               style={[nameInputStyle, {color: theme.colors.text}]}
+                               onFocus={() => setNameInputStyle({...styles.textInput, borderColor: 'blue'})}
+                               onBlur={() => {
+                                   setNameInputStyle(styles.textInput);
+                               }}
+                    />
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Description of the item</Text>
+                    <TextInput value={item.description.toString()}
+                               onChangeText={(value) => setItem({...item, description: value})}
+                               autoCapitalize="sentences"
+                               style={[descriptionInputStyle, {color: theme.colors.text}]}
+                               onFocus={() => setDescriptionInputStyle({...styles.textInput, borderColor: 'blue'})}
+                               onBlur={() => {
+                                   setDescriptionInputStyle(styles.textInput);
+                               }}
+                    />
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Price of the item</Text>
+                    <TextInput value={item.price.toString()}
+                               onChangeText={(value) => setItem({...item, price: value})}
+                               keyboardType="numeric"
+                               style={[priceInputStyle, {color: theme.colors.text}]}
+                               onFocus={() => setPriceInputStyle({...styles.textInput, borderColor: 'blue'})}
+                               onBlur={() => {
+                                   setPriceInputStyle(styles.textInput);
+                               }}
+                    />
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Stock of the item</Text>
+                    <TextInput value={item.stock.toString()}
+                               onChangeText={(value) => setItem({...item, stock: value})}
+                               keyboardType="numeric"
+                               style={[stockInputStyle, {color: theme.colors.text}]}
+                               onFocus={() => setStockInputStyle({...styles.textInput, borderColor: 'blue'})}
+                               onBlur={() => {
+                                   setStockInputStyle(styles.textInput);
+                               }}
+                    />
+                    <Pressable style={styles.button} onPress={() => {handleSubmit()}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Edit item</Text>
+                    </Pressable>
+                </ScrollView>
+            </> : <>
+                <View>
+                    <Text>{error}</Text>
+                </View>
+            </>}
         </SafeAreaView>
     )
 }

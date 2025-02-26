@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, useColorScheme, Pressable, TextInput} from "react-native";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -53,6 +53,10 @@ const Item = ({props}: {props: any}) => {
         setItem(props);
         setIsChanged(false);
     }
+
+    useEffect(() => {
+        setItem(props);
+    }, [props])
 
     if (error) {
         return <Text style={{color: 'red'}}>{error}</Text>
