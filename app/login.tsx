@@ -78,40 +78,40 @@ export default function Login() {
     }
 
     return (
-            <SafeAreaView>
-                <ScrollView style={{height: '100%'}}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Email:</Text>
-                    <TextInput placeholder="abc@xyz.com"
-                               onChangeText={setEmail}
-                               value={email}
-                               autoFocus
-                               style={[emailInputStyle, {color: theme.colors.text}]}
-                               autoCapitalize="none"
-                               onFocus={() => setEmailInputStyle({...styles.textInput, borderColor: 'blue'})}
-                               onBlur={() => {
-                                   setEmailInputStyle(styles.textInput);
-                               }}
-                    />
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Password:</Text>
-                    <TextInput placeholder="********"
-                               onChangeText={setPassword}
-                               value={password}
-                               secureTextEntry
-                               style={[passwordInputStyle, {color: theme.colors.text}]}
-                               autoCapitalize="none"
-                               onFocus={() => setPasswordInputStyle({...styles.textInput, borderColor: 'blue'})}
-                               onBlur={() => {
-                                   setPasswordInputStyle(styles.textInput);
-                               }}
-                    />
-                    <Pressable style={styles.button} onPress={() => {handleLogin()}}>
-                        <Text>Sign in</Text>
-                    </Pressable>
-                    {error && <Text style={{color: 'red'}}>{error}</Text>}
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Don't have an account yet?</Text>
-                    <Button title="Sign up" onPress={() => {router.push('/register')}} />
-                </ScrollView>
-            </SafeAreaView>
+        <SafeAreaView>
+            <ScrollView style={{height: '100%'}}>
+                <Text style={[styles.text, {color: theme.colors.text}]}>Email</Text>
+                <TextInput placeholder="abc@xyz.com"
+                           onChangeText={setEmail}
+                           value={email}
+                           autoFocus
+                           style={[emailInputStyle, {color: theme.colors.text}]}
+                           autoCapitalize="none"
+                           onFocus={() => setEmailInputStyle({...styles.textInput, borderColor: 'blue'})}
+                           onBlur={() => {
+                               setEmailInputStyle(styles.textInput);
+                           }}
+                />
+                <Text style={[styles.text, {color: theme.colors.text}]}>Password</Text>
+                <TextInput placeholder="********"
+                           onChangeText={setPassword}
+                           value={password}
+                           secureTextEntry
+                           style={[passwordInputStyle, {color: theme.colors.text}]}
+                           autoCapitalize="none"
+                           onFocus={() => setPasswordInputStyle({...styles.textInput, borderColor: 'blue'})}
+                           onBlur={() => {
+                               setPasswordInputStyle(styles.textInput);
+                           }}
+                />
+                <Pressable style={styles.button} onPress={() => {handleLogin()}}>
+                    <Text>Sign in</Text>
+                </Pressable>
+                {error && <Text style={{color: 'red'}}>{error}</Text>}
+                <Text style={[styles.text, {color: theme.colors.text}]}>Don't have an account yet?</Text>
+                <Button title="Sign up" onPress={() => {router.push('/register')}} />
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

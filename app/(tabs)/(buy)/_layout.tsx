@@ -43,6 +43,8 @@ export default function BuyLayout() {
                               options={{title: 'Buy', headerShown: false}} />
                 <Stack.Screen name="newItem"
                               options={{title: 'New item', headerShown: true, presentation: 'modal'}} />
+                <Stack.Screen name='editItem'
+                              options={{title: 'Edit item', headerShown: true, presentation: 'modal'}} />
             </Stack>
         </ItemsContext.Provider>
     )

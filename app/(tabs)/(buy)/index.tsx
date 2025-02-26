@@ -1,11 +1,13 @@
 import {SymbolView} from "expo-symbols";
-import {Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme} from "react-native";
+import {Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme, View} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import axios from '../../../scripts/axiosConfig';
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
+import {useUserContext} from "@/app/(tabs)/_layout";
+import Item from "@/app/(tabs)/(buy)/Item";
 
 export default  function Buy() {
 
@@ -13,53 +15,30 @@ export default  function Buy() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const [user, setUser] = useState(null);
-    const [store, setStore] = useState(null);
-
-    const getUserData = async () => {
-        const user = JSON.parse(await SecureStore.getItemAsync('user') as string);
-        const store = JSON.parse(await SecureStore.getItemAsync('store') as string);
-        if (user) {
-            if (user.is_buyer) {
-                setUser(user);
-                if (store) {
-                    setStore(store);
-                }
-            } else {
-                router.replace('/(tabs)/(profile)');
-            }
-        } else {
-            router.replace('/login');
-        }
-    }
-
-    // const fetchItems = async () => {
-    //     try {
-    //         const response = await axios.get('/api/items');
-    //         if (response.status === 200) {
-    //             setItems(response.data);
-    //         }
-    //     } catch (error: any) {
-    //         console.log(error.response.data.message);
-    //     }
-    // }
+    const {user, setUser, store, setStore, getUserData} = useUserContext();
 
     useEffect(() => {
-        getUserData().then(() => {
-            fetchItems();
-        });
+        getUserData()
+        fetchItems();
     }, []);
 
     return (
         <SafeAreaView>
-            <ScrollView style={{height: '100%'}}>
-                <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
-                </Pressable>
-                {items.map((item: any) => (
-                    <Text style={[styles.text, {color: theme.colors.text}]} key={item.id}>{item.name}</Text>
-                ))}
-            </ScrollView>
+            {user?.is_buyer ? <>
+                <ScrollView style={{height: '100%'}}>
+                    <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
+                    </Pressable>
+                    {items.map((item: any) => (
+                        <Item key={item.id} props={item} />
+                    ))}
+                </ScrollView>
+            </> : <>
+                <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                    <Text style={[styles.header, {color: theme.colors.text}]}>Permission denied</Text>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>You do not have permission to buy items. If you did not expect this message, please refer to your employer.</Text>
+                </View>
+            </>}
         </SafeAreaView>
     )
 }

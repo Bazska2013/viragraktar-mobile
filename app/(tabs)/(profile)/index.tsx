@@ -5,28 +5,15 @@ import {useEffect, useState} from "react";
 import {StyleSheet} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function Profile() {
-
-    const [user, setUser] = useState(null);
-    const [store, setStore] = useState(null);
     const [profit, setProfit] = useState(0);
     const [storeId, setStoreId] = useState(null);
 
-    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const {user, setUser, store, setStore, getUserData} = useUserContext();
 
-    const getUserData = async () => {
-        const user = JSON.parse(await SecureStore.getItemAsync('user') as string);
-        const store = JSON.parse(await SecureStore.getItemAsync('store') as string);
-        if (user) {
-            setUser(user);
-            if (store) {
-                setStore(store);
-            }
-        } else {
-            router.replace('/login');
-        }
-    }
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const getTodayProfit = async () => {
         let response;
@@ -55,12 +42,11 @@ export default function Profile() {
     }
 
     useEffect(() => {
-        getUserData().then(() => {
-            if (store) {
-                getStoreId();
-                getTodayProfit();
-            }
-        });
+        getUserData();
+        if (store) {
+            getTodayProfit();
+            getStoreId();
+        }
     }, []);
 
     const handleLogout = async () => {
@@ -70,7 +56,10 @@ export default function Profile() {
             console.log(error);
         } finally {
             await SecureStore.deleteItemAsync('token');
+            await SecureStore.deleteItemAsync('user');
+            await SecureStore.deleteItemAsync('store');
             setUser(null);
+            setStore(null);
             router.replace('/login');
         }
     }

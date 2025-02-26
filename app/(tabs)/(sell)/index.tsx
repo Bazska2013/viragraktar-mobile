@@ -1,4 +1,4 @@
-import {Pressable, SafeAreaView, ScrollView, StyleSheet, useColorScheme} from "react-native";
+import {Pressable, SafeAreaView, ScrollView, StyleSheet, useColorScheme, View} from "react-native";
 import {Text} from "react-native";
 import {SymbolView} from "expo-symbols";
 import {useEffect, useState} from "react";
@@ -7,31 +7,15 @@ import * as SecureStore from "expo-secure-store";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function Sell() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const [user, setUser] = useState(null);
-    const [store, setStore] = useState(null);
-    const [items, setItems] = useState([]);
+    const {user, setUser, store, setStore, getUserData} = useUserContext();
 
-    const getUserData = async () => {
-        const user = JSON.parse(await SecureStore.getItemAsync('user') as string);
-        const store = JSON.parse(await SecureStore.getItemAsync('store') as string);
-        if (user) {
-            if (user.is_seller) {
-                setUser(user);
-                if (store) {
-                    setStore(store);
-                }
-            } else {
-                router.replace('/(tabs)/(profile)');
-            }
-        } else {
-            router.replace('/login');
-        }
-    }
+    const [items, setItems] = useState([]);
 
     const fetchItems = async () => {
         try {
@@ -45,18 +29,24 @@ export default function Sell() {
     }
 
     useEffect(() => {
-        getUserData().then(() => {
-            fetchItems();
-        });
+        getUserData()
+        fetchItems();
     }, []);
 
     return (
         <SafeAreaView>
-            <ScrollView style={{height: '100%'}}>
-                {items.map((item: any) => (
-                    <Text key={item.id} style={[styles.text, {color: theme.colors.text}]}>{item.name}</Text>
-                ))}
-            </ScrollView>
+            {user?.is_seller ? <>
+                <ScrollView style={{height: '100%'}}>
+                    {items.map((item: any) => (
+                        <Text style={[styles.text, {color: theme.colors.text}]} key={item.id}>{item.name}</Text>
+                    ))}
+                </ScrollView>
+            </> : <>
+                <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                    <Text style={[styles.header, {color: theme.colors.text}]}>Permission denied</Text>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>You do not have permission to sell items. If you did not expect this message, please refer to your employer.</Text>
+                </View>
+            </>}
         </SafeAreaView>
     )
 }
