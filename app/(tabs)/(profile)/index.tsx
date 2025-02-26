@@ -49,6 +49,13 @@ export default function Profile() {
         }
     }, []);
 
+    useEffect(() => {
+        if (store) {
+            getTodayProfit();
+            getStoreId();
+        }
+    }, [store]);
+
     const handleLogout = async () => {
         try {
             await axios.post('/api/logout');
@@ -73,19 +80,30 @@ export default function Profile() {
                 <Pressable style={styles.button}>
                     <Text style={[styles.text, {color: theme.colors.text}]}>Edit profile</Text>
                 </Pressable>
-                <Text style={[styles.header, {color: theme.colors.text}]}>Store info</Text>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Store name: {store?.name}</Text>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Today's profit: {profit}</Text>
-                <Pressable style={styles.button} onPress={() => {getTodayProfit()}}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Refresh</Text>
-                </Pressable>
-                <Pressable style={styles.button} onPress={() => {getStoreId()}}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Show store id</Text>
-                </Pressable>
-                <Text style={[styles.text, {color: theme.colors.text}]}>{storeId}</Text>
-                <Pressable style={styles.button}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>
-                </Pressable>
+                {store ? <>
+                    <Text style={[styles.header, {color: theme.colors.text}]}>Store info</Text>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Store name: {store?.name}</Text>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>Today's profit: {profit}</Text>
+                    <Pressable style={styles.button} onPress={() => {getTodayProfit()}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Refresh</Text>
+                    </Pressable>
+                    <Pressable style={styles.button} onPress={() => {getStoreId()}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Show store id</Text>
+                    </Pressable>
+                    <Text style={[styles.text, {color: theme.colors.text}]}>{storeId}</Text>
+                    {user.is_admin && <>
+                        <Pressable style={styles.button}>
+                            <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>
+                        </Pressable>
+                    </>}
+                </> : <>
+                    <Pressable style={styles.button} onPress={() => {router.push('/joinStore')}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Join a store</Text>
+                    </Pressable>
+                    <Pressable style={styles.button} onPress={() => {router.push('/createStore')}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Create a store</Text>
+                    </Pressable>
+                </>}
                 <Button title="Log out" onPress={() => {handleLogout()}} />
             </ScrollView>
         </SafeAreaView>

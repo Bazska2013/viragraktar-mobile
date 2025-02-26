@@ -67,6 +67,7 @@ export default  function Register() {
                            onChangeText={setPassword}
                            value={password}
                            secureTextEntry
+                           textContentType='none'
                            style={[passwordInputStyle, {color: theme.colors.text}]}
                            autoCapitalize="none"
                            onFocus={() => setPasswordInputStyle({...styles.textInput, borderColor: 'blue'})}
@@ -79,6 +80,7 @@ export default  function Register() {
                            onChangeText={setPasswordConfirm}
                            value={passwordConfirm}
                            secureTextEntry
+                           textContentType='none'
                            style={[passwordConfirmInputStyle, {color: theme.colors.text}]}
                            autoCapitalize="none"
                            onFocus={() => setPasswordConfirmInputStyle({...styles.textInput, borderColor: 'blue'})}

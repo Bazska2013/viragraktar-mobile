@@ -5,6 +5,10 @@ export default function ProfileLayout() {
         <Stack>
             <Stack.Screen name="index"
                           options={{title: 'Profile', headerShown: false}} />
+            <Stack.Screen name="joinStore"
+                          options={{title: 'Join Store', headerShown: true, presentation: 'modal'}} />
+            <Stack.Screen name="createStore"
+                          options={{title: 'Create Store', headerShown: true, presentation: 'modal'}} />
         </Stack>
     )
 }
