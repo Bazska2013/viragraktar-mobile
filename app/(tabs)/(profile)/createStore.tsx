@@ -42,7 +42,7 @@ export default function CreateStore() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Name of your store</Text>
                 <TextInput value={name}
                            onChangeText={setName}

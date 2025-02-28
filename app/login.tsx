@@ -79,7 +79,7 @@ export default function Login() {
 
     return (
         <SafeAreaView>
-            <ScrollView style={{height: '100%'}}>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Email</Text>
                 <TextInput placeholder="abc@xyz.com"
                            onChangeText={setEmail}

@@ -10,6 +10,7 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 export default function Profile() {
     const [profit, setProfit] = useState(0);
     const [storeId, setStoreId] = useState(null);
+    const [storeIdShown, setStoreIdShown] = useState(false);
 
     const {user, setUser, store, setStore, getUserData} = useUserContext();
 
@@ -73,7 +74,7 @@ export default function Profile() {
 
     return (
         <SafeAreaView>
-            <ScrollView style={{height: '100%'}}>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <Text style={[styles.header, {color: theme.colors.text}]}>User info</Text>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Name: {user?.name}</Text>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Email: {user?.email}</Text>
@@ -87,10 +88,10 @@ export default function Profile() {
                     <Pressable style={styles.button} onPress={() => {getTodayProfit()}}>
                         <Text style={[styles.text, {color: theme.colors.text}]}>Refresh</Text>
                     </Pressable>
-                    <Pressable style={styles.button} onPress={() => {getStoreId()}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Show store id</Text>
+                    <Pressable style={styles.button} onPress={() => {setStoreIdShown(!storeIdShown)}}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>{storeIdShown ? "Hide" : "Show"} store ID</Text>
                     </Pressable>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>{storeId}</Text>
+                    {storeIdShown && <Text style={[styles.text, {color: theme.colors.text}]}>Store ID: {storeId}</Text>}
                     {user.is_admin && <>
                         <Pressable style={styles.button}>
                             <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>

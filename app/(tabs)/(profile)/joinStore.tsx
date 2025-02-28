@@ -35,7 +35,7 @@ export default function JoinStore() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <Text style={[styles.header, {color: theme.colors.text}]}>Enter the unique ID of the Store you want to join</Text>
                 <TextInput value={code}
                            onChangeText={setCode}

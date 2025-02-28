@@ -1,4 +1,13 @@
-import {Pressable, SafeAreaView, ScrollView, StyleSheet, useColorScheme, View} from "react-native";
+import {
+    FlatList,
+    Pressable,
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    useColorScheme,
+    View
+} from "react-native";
 import {Text} from "react-native";
 import {SymbolView} from "expo-symbols";
 import {useEffect, useState} from "react";
@@ -16,6 +25,7 @@ export default function Sell() {
     const {user, setUser, store, setStore, getUserData} = useUserContext();
 
     const [items, setItems] = useState([]);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const fetchItems = async () => {
         try {
@@ -28,6 +38,11 @@ export default function Sell() {
         }
     }
 
+    const handleRefresh = () => {
+        setIsRefreshing(true);
+        fetchItems().then(() => setIsRefreshing(false));
+    }
+
     useEffect(() => {
         getUserData()
         fetchItems();
@@ -36,11 +51,24 @@ export default function Sell() {
     return (
         <SafeAreaView>
             {user?.is_seller ? <>
-                <ScrollView style={{height: '100%'}}>
-                    {items.map((item: any) => (
-                        <Text style={[styles.text, {color: theme.colors.text}]} key={item.id}>{item.name}</Text>
-                    ))}
-                </ScrollView>
+                <FlatList data={items}
+                          style={{height: '100%'}}
+                          renderItem={({item}) =>
+                              <Text style={[styles.text, {color: theme.colors.text}]}>{item.name}</Text>
+                          }
+                          keyExtractor={(item) => item.id.toString()}
+                          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+                          keyboardDismissMode='interactive'
+                    // initialNumToRender={10}
+                    // onEndReached={handleLoadMore}
+                    // onEndReachedThreshold={0.5}
+                    //       ListHeaderComponent={
+                    //           <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
+                    //               <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
+                    //           </Pressable>
+                    //       }
+                          ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
+                />
             </> : <>
                 <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
                     <Text style={[styles.header, {color: theme.colors.text}]}>Permission denied</Text>

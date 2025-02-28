@@ -44,7 +44,7 @@ export default function NewItem() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView style={{height: '100%'}}>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Name of the item</Text>
                 <TextInput value={name}
                            onChangeText={setName}

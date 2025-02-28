@@ -71,7 +71,7 @@ export default function EditItem() {
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
             {item ? <>
-                <ScrollView style={{height: '100%'}}>
+                <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                     <Text style={[styles.text, {color: theme.colors.text}]}>Name of the item</Text>
                     <TextInput value={item.name.toString()}
                                onChangeText={(value) => setItem({...item, name: value})}

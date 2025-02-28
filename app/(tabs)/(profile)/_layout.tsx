@@ -1,4 +1,5 @@
-import {Stack} from "expo-router";
+import {router, Stack} from "expo-router";
+import {Button} from "react-native";
 
 export default function ProfileLayout() {
     return (
@@ -6,9 +7,9 @@ export default function ProfileLayout() {
             <Stack.Screen name="index"
                           options={{title: 'Profile', headerShown: false}} />
             <Stack.Screen name="joinStore"
-                          options={{title: 'Join Store', headerShown: true, presentation: 'modal'}} />
+                          options={{title: 'Join Store', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
             <Stack.Screen name="createStore"
-                          options={{title: 'Create Store', headerShown: true, presentation: 'modal'}} />
+                          options={{title: 'Create Store', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
         </Stack>
     )
 }

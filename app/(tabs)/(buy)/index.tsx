@@ -1,5 +1,15 @@
 import {SymbolView} from "expo-symbols";
-import {Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useColorScheme, View} from "react-native";
+import {
+    FlatList,
+    Pressable,
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
+} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import axios from '../../../scripts/axiosConfig';
@@ -17,6 +27,13 @@ export default  function Buy() {
 
     const {user, setUser, store, setStore, getUserData} = useUserContext();
 
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const handleRefresh = () => {
+        setIsRefreshing(true);
+        fetchItems().then(() => setIsRefreshing(false));
+    }
+
     useEffect(() => {
         getUserData()
         fetchItems();
@@ -25,14 +42,21 @@ export default  function Buy() {
     return (
         <SafeAreaView>
             {user?.is_buyer ? <>
-                <ScrollView style={{height: '100%'}}>
-                    <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
-                    </Pressable>
-                    {items.map((item: any) => (
-                        <Item key={item.id} props={item} />
-                    ))}
-                </ScrollView>
+                <FlatList data={items}
+                          renderItem={({item}) => <Item props={item} />}
+                          keyExtractor={(item) => item.id.toString()}
+                          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+                          keyboardDismissMode='interactive'
+                          // initialNumToRender={10}
+                          // onEndReached={handleLoadMore}
+                          // onEndReachedThreshold={0.5}
+                          ListHeaderComponent={
+                                <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
+                                    <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
+                                </Pressable>
+                          }
+                          ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
+                />
             </> : <>
                 <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
                     <Text style={[styles.header, {color: theme.colors.text}]}>Permission denied</Text>
@@ -44,6 +68,15 @@ export default  function Buy() {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    scrollView: {
+        flex: 1,
+        backgroundColor: 'pink',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     text: {
         fontSize: 20,
         padding: 10,

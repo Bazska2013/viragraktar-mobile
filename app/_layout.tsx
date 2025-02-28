@@ -1,9 +1,10 @@
 import {SplashScreen, Stack} from "expo-router";
-import {useColorScheme} from "react-native";
+import {useColorScheme, Button} from "react-native";
 import {useEffect} from "react";
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
 import {StyleSheet} from "react-native";
+import {router} from "expo-router";
 
 export default function RootLayout() {
 
@@ -15,7 +16,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{headerShown: false}} />
           <Stack.Screen name="+not-found" />
           <Stack.Screen name="login" options={{headerBackTitle: 'Back', title: 'Sign in'}} />
-          <Stack.Screen name="register" options={{headerBackTitle: 'Sign in', title: 'Sign up', presentation: 'modal'}} />
+          <Stack.Screen name="register" options={{headerBackTitle: 'Sign in', title: 'Sign up', presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
