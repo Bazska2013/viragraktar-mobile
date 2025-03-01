@@ -93,7 +93,7 @@ export default function Profile() {
                     </Pressable>
                     {storeIdShown && <Text style={[styles.text, {color: theme.colors.text}]}>Store ID: {storeId}</Text>}
                     {user.is_admin && <>
-                        <Pressable style={styles.button}>
+                        <Pressable style={styles.button} onPress={() => {router.push('/editStore')}}>
                             <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>
                         </Pressable>
                     </>}

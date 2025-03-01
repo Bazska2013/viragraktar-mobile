@@ -10,6 +10,8 @@ export default function ProfileLayout() {
                           options={{title: 'Join Store', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
             <Stack.Screen name="createStore"
                           options={{title: 'Create Store', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
+            <Stack.Screen name='editStore'
+                          options={{title: 'Edit Store', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
         </Stack>
     )
 }
