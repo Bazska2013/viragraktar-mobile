@@ -1,4 +1,5 @@
 import {
+    Dimensions,
     FlatList,
     Pressable,
     RefreshControl,
@@ -53,6 +54,7 @@ export default function Sell() {
             {user?.is_seller ? <>
                 <FlatList data={items}
                           style={{height: '100%'}}
+                          numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
                           renderItem={({item}) =>
                               <Text style={[styles.text, {color: theme.colors.text}]}>{item.name}</Text>
                           }

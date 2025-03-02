@@ -1,5 +1,6 @@
 import {SymbolView} from "expo-symbols";
 import {
+    Dimensions,
     FlatList,
     Pressable,
     RefreshControl,
@@ -43,6 +44,8 @@ export default  function Buy() {
         <SafeAreaView>
             {user?.is_buyer ? <>
                 <FlatList data={items}
+                          style={{height: '100%'}}
+                          numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
                           renderItem={({item}) => <Item props={item} />}
                           keyExtractor={(item) => item.id.toString()}
                           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
