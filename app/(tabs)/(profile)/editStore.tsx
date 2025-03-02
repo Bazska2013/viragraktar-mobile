@@ -77,7 +77,7 @@ export default function EditStore() {
                                setNameInputStyle(styles.textInput);
                            }}
                 />
-                <OpeningHours setFieldValue={setOpeningHours} defaultValue={store.opening_hours} />
+                {/*<OpeningHours setFieldValue={setOpeningHours} defaultValue={store.opening_hours} />*/}
                 <Text style={[styles.text, {color: theme.colors.text}]}>Enable price calculation</Text>
                 <Checkbox style={styles.checkbox} value={calculation_enabled} onValueChange={setCalculationEnabled} />
                 {isLoading ? <>

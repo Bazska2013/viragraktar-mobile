@@ -57,6 +57,15 @@ export default function Profile() {
         }
     }, [store]);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            getStoreId();
+        }, 30000); // 30000 milliseconds = 30 seconds
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
     const handleLogout = async () => {
         try {
             await axios.post('/api/logout');
