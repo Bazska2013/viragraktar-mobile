@@ -1,6 +1,16 @@
-import {SafeAreaView, ScrollView, StyleSheet, useColorScheme, Text, TextInput, Pressable, Platform} from "react-native";
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    useColorScheme,
+    Text,
+    TextInput,
+    Pressable,
+    Platform,
+    ActivityIndicator
+} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import axios from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
@@ -18,9 +28,12 @@ export default  function Register() {
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [passwordConfirmInputStyle, setPasswordConfirmInputStyle] = useState(styles.textInput);
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(false);
 
     const handleRegister = async () => {
         let response;
+        setIsLoading(true);
         try {
             response = await axios.post('/api/register', {
                 email: email,
@@ -29,11 +42,21 @@ export default  function Register() {
                 password_confirmation: passwordConfirm,
             });
         } catch (error: any) {
+            setIsLoading(false);
             setError(error.response?.data?.message);
         } finally {
+            setIsLoading(false);
             router.back();
         }
     }
+
+    useEffect(() => {
+        if (email.length > 0 && name.length > 0 && password.length > 7 && password === passwordConfirm && email.includes('@') && email.includes('.')) {
+            setValidInput(true);
+        } else {
+            setValidInput(false);
+        }
+    }, [email, name, password, passwordConfirm]);
 
     return (
         <SafeAreaView>
@@ -68,6 +91,7 @@ export default  function Register() {
                            value={password}
                            secureTextEntry
                            textContentType='none'
+                           autoComplete='off'
                            style={[passwordInputStyle, {color: theme.colors.text}]}
                            autoCapitalize="none"
                            onFocus={() => setPasswordInputStyle({...styles.textInput, borderColor: 'blue'})}
@@ -81,6 +105,7 @@ export default  function Register() {
                            value={passwordConfirm}
                            secureTextEntry
                            textContentType='none'
+                           autoComplete='off'
                            style={[passwordConfirmInputStyle, {color: theme.colors.text}]}
                            autoCapitalize="none"
                            onFocus={() => setPasswordConfirmInputStyle({...styles.textInput, borderColor: 'blue'})}
@@ -88,9 +113,13 @@ export default  function Register() {
                                setPasswordConfirmInputStyle(styles.textInput);
                            }}
                 />
-                <Pressable style={styles.button} onPress={() => {handleRegister()}}>
-                    <Text>Sign up</Text>
-                </Pressable>
+                {isLoading ? <>
+                    <ActivityIndicator size='large' />
+                </> : <>
+                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleRegister()}} disabled={!validInput}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Sign up</Text>
+                    </Pressable>
+                </>}
                 {error && <Text style={{color: 'red'}}>{error}</Text>}
             </ScrollView>
         </SafeAreaView>
@@ -116,4 +145,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
     },
+    defaultButton: {
+        backgroundColor: 'lightgrey',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    }
 });

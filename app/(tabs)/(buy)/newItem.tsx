@@ -1,6 +1,16 @@
-import {Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, useColorScheme} from "react-native";
+import {
+    ActivityIndicator,
+    Platform,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    useColorScheme
+} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
@@ -20,9 +30,12 @@ export default function NewItem() {
     const [priceInputStyle, setPriceInputStyle] = useState(styles.textInput);
     const [stock, setStock] = useState('');
     const [stockInputStyle, setStockInputStyle] = useState(styles.textInput);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(false);
 
     const handleSubmit = async () => {
         let response;
+        setIsLoading(true);
         try {
             response = await axios.post('/api/item', {
                 name: name,
@@ -32,14 +45,24 @@ export default function NewItem() {
                 /*image: values.image*/
             });
         } catch (error: any) {
+            setIsLoading(false);
             console.log(error.response.data.message);
         } finally {
+            setIsLoading(false);
             if (response?.status === 201) {
                 fetchItems();
                 router.back();
             }
         }
     }
+
+    useEffect(() => {
+        if (name.length > 0 && description.length > 0 && price.length > 0 && stock.length > 0) {
+            setValidInput(true);
+        } else {
+            setValidInput(false);
+        }
+    }, [name, description, price, stock]);
 
     return (
         <SafeAreaView>
@@ -86,9 +109,13 @@ export default function NewItem() {
                                setStockInputStyle(styles.textInput);
                            }}
                 />
-                <Pressable style={styles.button} onPress={() => {handleSubmit()}}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Add new item</Text>
-                </Pressable>
+                {isLoading ? <>
+                    <ActivityIndicator size='large' />
+                </> : <>
+                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleSubmit()}} disabled={!validInput}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Add new item</Text>
+                    </Pressable>
+                </>}
             </ScrollView>
         </SafeAreaView>
     )
@@ -113,4 +140,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
     },
+    defaultButton: {
+        backgroundColor: 'lightgrey',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    }
 });

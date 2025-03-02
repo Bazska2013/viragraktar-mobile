@@ -7,9 +7,9 @@ import {
     ScrollView,
     useColorScheme,
     Platform,
-    Button
+    Button, ActivityIndicator
 } from "react-native";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -22,6 +22,8 @@ export default function Login() {
     const [emailInputStyle, setEmailInputStyle] = useState(styles.textInput);
     const [passwordInputStyle, setPasswordInputStyle] = useState(styles.textInput);
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -31,6 +33,8 @@ export default function Login() {
 
     const handleLogin = async () => {
         let response;
+        setIsLoading(true);
+        setError('');
         await CookieManager.clearAll();
         try {
             response = await axios.post('/api/login', {
@@ -39,9 +43,11 @@ export default function Login() {
                 device_name: Platform.OS,
             });
         } catch (error: any) {
+            setIsLoading(false);
             setError(error.response?.data?.message);
         } finally {
             let token;
+            setIsLoading(false);
             if (typeof response?.data === 'string') {
                 token = response.data.split('|')[1];
             } else {
@@ -77,6 +83,14 @@ export default function Login() {
         }
     }
 
+    useEffect(() => {
+        if (email.length > 0 && password.length > 7 && email.includes('@') && email.includes('.')) {
+            setValidInput(true);
+        } else {
+            setValidInput(false);
+        }
+    }, [email, password]);
+
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
@@ -104,9 +118,13 @@ export default function Login() {
                                setPasswordInputStyle(styles.textInput);
                            }}
                 />
-                <Pressable style={styles.button} onPress={() => {handleLogin()}}>
-                    <Text>Sign in</Text>
-                </Pressable>
+                {isLoading ? <>
+                    <ActivityIndicator size='large' />
+                </> : <>
+                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleLogin()}} disabled={!validInput}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Sign in</Text>
+                    </Pressable>
+                </>}
                 {error && <Text style={{color: 'red'}}>{error}</Text>}
                 <Text style={[styles.text, {color: theme.colors.text}]}>Don't have an account yet?</Text>
                 <Button title="Sign up" onPress={() => {router.push('/register')}} />
@@ -134,4 +152,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
     },
+    defaultButton: {
+        backgroundColor: 'lightgrey',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    }
 });

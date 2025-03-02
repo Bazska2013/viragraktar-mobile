@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {
+    ActivityIndicator,
     Platform,
     Pressable,
     SafeAreaView,
@@ -29,6 +30,8 @@ export default function EditItem() {
     const [priceInputStyle, setPriceInputStyle] = useState(styles.textInput);
     const [stockInputStyle, setStockInputStyle] = useState(styles.textInput);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(true);
 
     const fetchItem = async () => {
         let response;
@@ -45,6 +48,7 @@ export default function EditItem() {
 
     const handleSubmit = async () => {
         let response;
+        setIsLoading(true);
         try {
             response = await axios.put('/api/item/' + id, {
                 name: item.name,
@@ -54,8 +58,10 @@ export default function EditItem() {
                 /*image: image*/
             });
         } catch (error: any) {
+            setIsLoading(false);
             setError(error.response.data.message);
         } finally {
+            setIsLoading(false);
             if (response?.status === 200) {
                 fetchItems();
                 router.back();
@@ -66,6 +72,16 @@ export default function EditItem() {
     useEffect(() => {
         fetchItem();
     }, []);
+
+    useEffect(() => {
+        if (item) {
+            if (item.name.toString().length > 0 && item.description.toString().length > 0 && item.price.toString().length > 0 && item.stock.toString().length > 0) {
+                setValidInput(true);
+            } else {
+                setValidInput(false);
+            }
+        }
+    }, [item]);
 
     return (
         <SafeAreaView>
@@ -113,9 +129,13 @@ export default function EditItem() {
                                    setStockInputStyle(styles.textInput);
                                }}
                     />
-                    <Pressable style={styles.button} onPress={() => {handleSubmit()}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Edit item</Text>
-                    </Pressable>
+                    {isLoading ? <>
+                        <ActivityIndicator size='large' />
+                    </> : <>
+                        <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleSubmit()}} disabled={!validInput}>
+                            <Text style={[styles.text, {color: theme.colors.text}]}>Edit item</Text>
+                        </Pressable>
+                    </>}
                 </ScrollView>
             </> : <>
                 <View>
@@ -145,4 +165,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
     },
+    defaultButton: {
+        backgroundColor: 'lightgrey',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    }
 });

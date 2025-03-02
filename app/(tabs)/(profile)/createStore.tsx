@@ -1,6 +1,16 @@
-import {Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, useColorScheme} from "react-native";
+import {
+    ActivityIndicator,
+    Platform,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    useColorScheme
+} from "react-native";
 import {StatusBar} from "expo-status-bar";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -19,9 +29,12 @@ export default function CreateStore() {
     const [nameInputStyle, setNameInputStyle] = useState(styles.textInput);
     const [opening_hours, setOpeningHours] = useState(null);
     const [calculation_enabled, setCalculationEnabled] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(true);
 
     const handleSubmit = async () => {
         let response;
+        setIsLoading(true);
         try {
             response = await axios.post('/api/store', {
                 name: name,
@@ -29,8 +42,10 @@ export default function CreateStore() {
                 calculation_enabled: calculation_enabled,
             });
         } catch (error: any) {
+            setIsLoading(false);
             setError(error.response.data.message);
         } finally {
+            setIsLoading(false);
             if (response?.status === 201) {
                 getUserData();
                 setStore(response.data);
@@ -38,6 +53,14 @@ export default function CreateStore() {
             }
         }
     }
+
+    useEffect(() => {
+        if (name.length > 0 && opening_hours && opening_hours.length > 0) {
+            setValidInput(true);
+        } else {
+            setValidInput(false);
+        }
+    }, [name, opening_hours]);
 
     return (
         <SafeAreaView>
@@ -58,9 +81,13 @@ export default function CreateStore() {
                 <OpeningHours setFieldValue={setOpeningHours} />
                 <Text style={[styles.text, {color: theme.colors.text}]}>Enable price calculation</Text>
                 <Checkbox style={styles.checkbox} value={calculation_enabled} onValueChange={setCalculationEnabled} />
-                <Pressable style={styles.button} onPress={() => handleSubmit()}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Create store</Text>
-                </Pressable>
+                {isLoading ? <>
+                    <ActivityIndicator size='large' />
+                </> : <>
+                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => handleSubmit()} disabled={!validInput}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Create store</Text>
+                    </Pressable>
+                </>}
                 {error && <Text style={[styles.text, {color: 'red'}]}>{error}</Text>}
             </ScrollView>
         </SafeAreaView>
@@ -81,6 +108,13 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'lightblue',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    defaultButton: {
+        backgroundColor: 'lightgrey',
         padding: 10,
         margin: 10,
         alignItems: 'center',

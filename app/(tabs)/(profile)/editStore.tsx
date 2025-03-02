@@ -1,9 +1,19 @@
-import {Platform, SafeAreaView, ScrollView, useColorScheme, Text, TextInput, Pressable, StyleSheet} from "react-native";
+import {
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    useColorScheme,
+    Text,
+    TextInput,
+    Pressable,
+    StyleSheet,
+    ActivityIndicator
+} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
 import OpeningHours from "@/app/(tabs)/(profile)/OpeningHours";
 import Checkbox from "expo-checkbox";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
@@ -18,8 +28,11 @@ export default function EditStore() {
     const [nameInputStyle, setNameInputStyle] = useState(styles.textInput);
     const [opening_hours, setOpeningHours] = useState(store.opening_hours);
     const [calculation_enabled, setCalculationEnabled] = useState(store.calculation_enabled);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(true);
 
     const handleSubmit = async () => {
+        setIsLoading(true);
         let response;
         try {
             response = await axios.put('/api/store', {
@@ -28,8 +41,10 @@ export default function EditStore() {
                 calculation_enabled: calculation_enabled,
             });
         } catch (error: any) {
+            setIsLoading(false);
             setError(error.response.data.message);
         } finally {
+            setIsLoading(false);
             if (response?.status === 200) {
                 getUserData();
                 setStore(response.data);
@@ -37,6 +52,14 @@ export default function EditStore() {
             }
         }
     }
+
+    useEffect(() => {
+        if (name.length > 0 /*&& opening_hours && opening_hours.length > 0*/) {
+            setValidInput(true);
+        } else {
+            setValidInput(false);
+        }
+    }, []);
 
     return (
         <SafeAreaView>
@@ -57,9 +80,13 @@ export default function EditStore() {
                 <OpeningHours setFieldValue={setOpeningHours} defaultValue={store.opening_hours} />
                 <Text style={[styles.text, {color: theme.colors.text}]}>Enable price calculation</Text>
                 <Checkbox style={styles.checkbox} value={calculation_enabled} onValueChange={setCalculationEnabled} />
-                <Pressable style={styles.button} onPress={() => handleSubmit()}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Create store</Text>
-                </Pressable>
+                {isLoading ? <>
+                    <ActivityIndicator size='large' />
+                </> : <>
+                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => handleSubmit()} disabled={!validInput}>
+                        <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>
+                    </Pressable>
+                </>}
                 {error && <Text style={[styles.text, {color: 'red'}]}>{error}</Text>}
             </ScrollView>
         </SafeAreaView>
@@ -80,6 +107,13 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'lightblue',
+        padding: 10,
+        margin: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    defaultButton: {
+        backgroundColor: 'lightgrey',
         padding: 10,
         margin: 10,
         alignItems: 'center',
