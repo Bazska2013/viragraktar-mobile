@@ -19,6 +19,7 @@ import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
+import {BigButton} from "@/tamagui.config";
 
 export default  function Buy() {
 
@@ -54,9 +55,7 @@ export default  function Buy() {
                           // onEndReached={handleLoadMore}
                           // onEndReachedThreshold={0.5}
                           ListHeaderComponent={
-                                <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
-                                    <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
-                                </Pressable>
+                              <BigButton onPress={() => {router.push('/newItem')}}>New Item</BigButton>
                           }
                           ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
                 />

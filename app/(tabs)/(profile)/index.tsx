@@ -1,4 +1,4 @@
-import {Button, Pressable, SafeAreaView, ScrollView, Text, useColorScheme} from "react-native";
+import { Pressable, SafeAreaView, ScrollView, Text, useColorScheme} from "react-native";
 import {Link, router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
@@ -6,6 +6,7 @@ import {StyleSheet} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import { Button } from 'tamagui';
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
@@ -87,6 +88,7 @@ export default function Profile() {
                 <Text style={[styles.header, {color: theme.colors.text}]}>User info</Text>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Name: {user?.name}</Text>
                 <Text style={[styles.text, {color: theme.colors.text}]}>Email: {user?.email}</Text>
+                <Button>Edit profile</Button>
                 <Pressable style={styles.button}>
                     <Text style={[styles.text, {color: theme.colors.text}]}>Edit profile</Text>
                 </Pressable>
@@ -114,7 +116,7 @@ export default function Profile() {
                         <Text style={[styles.text, {color: theme.colors.text}]}>Create a store</Text>
                     </Pressable>
                 </>}
-                <Button title="Log out" onPress={() => {handleLogout()}} />
+                <Button onPress={() => {handleLogout()}}>Log out</Button>
             </ScrollView>
         </SafeAreaView>
     )

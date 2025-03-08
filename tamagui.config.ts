@@ -1,0 +1,81 @@
+import { defaultConfig } from '@tamagui/config/v4'
+import {Button, createTamagui, styled, XStack, YStack} from 'tamagui'
+
+export const VerticalContainer = styled(YStack, {
+    flex: 1,
+    gap: "$5",
+    padding: "$1",
+});
+
+export const HorizontalContainer = styled(XStack, {
+    flex: 1,
+    gap: "$5",
+    padding: "$1",
+});
+
+export const BigButton = styled(Button, {
+    backgroundColor: '#292023',
+    color: 'white',
+    hoverStyle: {
+        backgroundColor: '#392D31',
+    },
+    focusStyle: {
+        backgroundColor: '#392D31',
+    },
+    pressStyle: {
+        backgroundColor: '#838072'
+    },
+    disabledStyle: {
+        backgroundColor: '#44363A',
+        border: 'none',
+    },
+    size: "$6",
+});
+
+export const SmallButtonWithAccent = styled(Button, {
+    backgroundColor: '#8e8b7c',
+    color: 'white',
+    hoverStyle: {
+        backgroundColor: '#979487',
+    },
+    focusStyle: {
+        backgroundColor: '#979487',
+    },
+    pressStyle: {
+        backgroundColor: '#838072'
+    },
+    disabledStyle: {
+        backgroundColor: '#A09E92',
+        border: 'none',
+    },
+    size: "$3",
+});
+
+export const SmallButton = styled(Button, {
+    backgroundColor: '#f2f6d5',
+    color: 'black',
+    hoverStyle: {
+        backgroundColor: '#fafbee',
+    },
+    focusStyle: {
+        backgroundColor: '#fafbee',
+    },
+    pressStyle: {
+        backgroundColor: '#F0F3CD'
+    },
+    disabledStyle: {
+        backgroundColor: '#FFFFFF',
+        border: 'none',
+    },
+    size: "$3",
+});
+
+export const tamaguiConfig = createTamagui(defaultConfig)
+
+export default tamaguiConfig
+
+export type Conf = typeof tamaguiConfig
+
+declare module 'tamagui' {
+    interface TamaguiCustomConfig extends Conf {}
+}

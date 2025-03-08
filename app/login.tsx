@@ -6,8 +6,7 @@ import {
     Pressable,
     ScrollView,
     useColorScheme,
-    Platform,
-    Button, ActivityIndicator
+    Platform, ActivityIndicator
 } from "react-native";
 import {useEffect, useState} from "react";
 import * as SecureStore from 'expo-secure-store';
@@ -15,6 +14,8 @@ import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from '../scripts/axiosConfig';
 import CookieManager from '@react-native-cookies/cookies';
+import {Button} from 'tamagui';
+import {BigButton, SmallButton} from "@/tamagui.config";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -121,13 +122,11 @@ export default function Login() {
                 {isLoading ? <>
                     <ActivityIndicator size='large' />
                 </> : <>
-                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleLogin()}} disabled={!validInput}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Sign in</Text>
-                    </Pressable>
+                    <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>Sign in</BigButton>
                 </>}
                 {error && <Text style={{color: 'red'}}>{error}</Text>}
                 <Text style={[styles.text, {color: theme.colors.text}]}>Don't have an account yet?</Text>
-                <Button title="Sign up" onPress={() => {router.push('/register')}} />
+                <SmallButton onPress={() => {router.push('/register')}}>Sign up</SmallButton>
             </ScrollView>
         </SafeAreaView>
     )

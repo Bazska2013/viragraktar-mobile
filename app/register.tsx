@@ -14,6 +14,7 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import axios from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
+import {BigButton} from "@/tamagui.config";
 
 export default  function Register() {
 
@@ -116,9 +117,7 @@ export default  function Register() {
                 {isLoading ? <>
                     <ActivityIndicator size='large' />
                 </> : <>
-                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleRegister()}} disabled={!validInput}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Sign up</Text>
-                    </Pressable>
+                    <BigButton onPress={() => {handleRegister()}} disabled={!validInput}>Sign up</BigButton>
                 </>}
                 {error && <Text style={{color: 'red'}}>{error}</Text>}
             </ScrollView>
