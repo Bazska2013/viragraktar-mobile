@@ -21,7 +21,13 @@ const Item = ({props}: {props: any}) => {
     const handleSubmit = async () => {
         let response;
         try {
-            response = await axios.post('/api/item/edit/' + item.id, item);
+            response = await axios.post('/api/item/edit/' + item.id, {
+                name: item.name,
+                description: item.description,
+                price: item.price,
+                stock: item.stock,
+                /*image: image*/
+            });
         } catch (error: any) {
             setError(error.response.data.message);
         } finally {
