@@ -3,7 +3,6 @@ import {
     Platform,
     Pressable,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -14,9 +13,11 @@ import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import Checkbox from 'expo-checkbox';
 import OpeningHours from "@/app/(tabs)/(profile)/OpeningHours";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
+import {Input, Label, ScrollView, Checkbox, Spinner, SizableText} from "tamagui";
+import {Check} from "@tamagui/lucide-icons";
 
 export default function CreateStore() {
 
@@ -55,7 +56,7 @@ export default function CreateStore() {
     }
 
     useEffect(() => {
-        if (name.length > 0 && opening_hours && opening_hours.length > 0) {
+        if (name && name.length > 0 && opening_hours && opening_hours.length > 0) {
             setValidInput(true);
         } else {
             setValidInput(false);
@@ -65,30 +66,39 @@ export default function CreateStore() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Name of your store</Text>
-                <TextInput value={name}
-                           onChangeText={setName}
-                           autoCapitalize='words'
-                           autoFocus
-                           autoCorrect={false}
-                           style={[nameInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setNameInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setNameInputStyle(styles.textInput);
-                           }}
-                />
-                <OpeningHours setFieldValue={setOpeningHours} />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Enable price calculation</Text>
-                <Checkbox style={styles.checkbox} value={calculation_enabled} onValueChange={setCalculationEnabled} />
-                {isLoading ? <>
-                    <ActivityIndicator size='large' />
-                </> : <>
-                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => handleSubmit()} disabled={!validInput}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Create store</Text>
-                    </Pressable>
-                </>}
-                {error && <Text style={[styles.text, {color: 'red'}]}>{error}</Text>}
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
+                        automaticallyAdjustKeyboardInsets={true}
+            >
+                <EditContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="name">Name of your store</Label>
+                        <Input
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            value={name}
+                            id="name"
+                            onChangeText={setName}
+                            autoCapitalize='words'
+                            autoFocus
+                            autoCorrect={false}
+                        />
+                    </VerticalContainer>
+                    <OpeningHours setFieldValue={setOpeningHours} />
+                    <VerticalContainer>
+                        <Label htmlFor="calculation_enabled">Enable price calculation</Label>
+                        <Checkbox
+                            id="calculation_enabled"
+                            value={calculation_enabled} onValueChange={setCalculationEnabled}>
+                            <Checkbox.Indicator>
+                                <Check />
+                            </Checkbox.Indicator>
+                        </Checkbox>
+                    </VerticalContainer>
+                    <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Create store"}</BigButton>
+                </EditContainer>
+                {error && <SizableText>{error}</SizableText>}
             </ScrollView>
         </SafeAreaView>
     )

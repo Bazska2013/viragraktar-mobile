@@ -3,7 +3,6 @@ import {
     Platform,
     Pressable,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -15,6 +14,8 @@ import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import axios from "@/scripts/axiosConfig";
+import {Input, Label, ScrollView, SizableText, Spinner} from "tamagui";
+import {BigButton, VerticalContainer} from "@/tamagui.config";
 
 export default function NewItem() {
 
@@ -68,54 +69,65 @@ export default function NewItem() {
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Name of the item</Text>
-                <TextInput value={name}
-                           onChangeText={setName}
-                           autoFocus
-                           autoCapitalize="words"
-                           style={[nameInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setNameInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setNameInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Description of the item</Text>
-                <TextInput value={description}
-                           onChangeText={setDescription}
-                           autoCapitalize="sentences"
-                           style={[descriptionInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setDescriptionInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setDescriptionInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Price of the item</Text>
-                <TextInput value={price}
-                           onChangeText={setPrice}
-                           keyboardType="numeric"
-                           style={[priceInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setPriceInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setPriceInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Stock of the item</Text>
-                <TextInput value={stock}
-                           onChangeText={setStock}
-                           keyboardType="numeric"
-                           style={[stockInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setStockInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setStockInputStyle(styles.textInput);
-                           }}
-                />
-                {isLoading ? <>
-                    <ActivityIndicator size='large' />
-                </> : <>
-                    <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleSubmit()}} disabled={!validInput}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Add new item</Text>
-                    </Pressable>
-                </>}
+                <VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="name">
+                            Name of the item
+                        </Label>
+                        <Input
+                            id="name"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            value={name}
+                            onChangeText={setName}
+                            autoFocus
+                            autoCapitalize="words"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="description" >Description of the item</Label>
+                        <Input
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            id="description"
+                            // isInvalid={!!errors.description}
+                            value={description}
+                            onChangeText={setDescription}
+                            autoCapitalize="sentences"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="price">Price of the item</Label>
+                        <Input
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            id="price"
+                            // isInvalid={!!errors.price}
+                            value={price}
+                            onChangeText={setPrice}
+                            keyboardType="numeric"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="stock">Stock of the item</Label>
+                        <Input
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            id="stock"
+                            // isInvalid={!!errors.stock}
+                            value={stock}
+                            onChangeText={setStock}
+                            keyboardType="numeric"
+                        />
+                    </VerticalContainer>
+                    <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "New item"}</BigButton>
+                    {/*<SizableText>{error}</SizableText>*/}
+                </VerticalContainer>
             </ScrollView>
         </SafeAreaView>
     )

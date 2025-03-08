@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, ScrollView, Text, useColorScheme} from "react-native";
+import { Pressable, SafeAreaView, Text, useColorScheme} from "react-native";
 import {Link, router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
@@ -6,7 +6,8 @@ import {StyleSheet} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import { Button } from 'tamagui';
+import {Button, H2, ScrollView, SizableText} from 'tamagui';
+import {BigButton, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
@@ -84,39 +85,30 @@ export default function Profile() {
 
     return (
         <SafeAreaView>
-            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                <Text style={[styles.header, {color: theme.colors.text}]}>User info</Text>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Name: {user?.name}</Text>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Email: {user?.email}</Text>
-                <Button>Edit profile</Button>
-                <Pressable style={styles.button}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Edit profile</Text>
-                </Pressable>
-                {store ? <>
-                    <Text style={[styles.header, {color: theme.colors.text}]}>Store info</Text>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Store name: {store?.name}</Text>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Today's profit: {profit}</Text>
-                    <Pressable style={styles.button} onPress={() => {getTodayProfit()}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Refresh</Text>
-                    </Pressable>
-                    <Pressable style={styles.button} onPress={() => {setStoreIdShown(!storeIdShown)}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>{storeIdShown ? "Hide" : "Show"} store ID</Text>
-                    </Pressable>
-                    {storeIdShown && <Text style={[styles.text, {color: theme.colors.text}]}>Store ID: {storeId}</Text>}
-                    {user.is_admin && <>
-                        <Pressable style={styles.button} onPress={() => {router.push('/editStore')}}>
-                            <Text style={[styles.text, {color: theme.colors.text}]}>Edit store</Text>
-                        </Pressable>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
+                        automaticallyAdjustKeyboardInsets={true}
+            >
+                <VerticalContainer>
+                    <H2>User info</H2>
+                    <SizableText>Name: {user?.name}</SizableText>
+                    <SizableText>Email: {user?.email}</SizableText>
+                    <SmallButtonWithAccent>Edit profile</SmallButtonWithAccent>
+                    {store ? <>
+                        <H2>Store info</H2>
+                        <SizableText>Store name: {store?.name}</SizableText>
+                        <SizableText>Today's profit: {profit}</SizableText>
+                        <SmallButton onPress={() => {getTodayProfit()}}>Refresh</SmallButton>
+                        <SmallButtonWithAccent onPress={() => {setStoreIdShown(!storeIdShown)}}>{storeIdShown ? "Hide" : "Show"} store ID</SmallButtonWithAccent>
+                        {storeIdShown && <SizableText>Store ID: {storeId}</SizableText>}
+                        {user.is_admin && <>
+                            <SmallButtonWithAccent onPress={() => {router.push('/editStore')}}>Edit store</SmallButtonWithAccent>
+                        </>}
+                    </> : <>
+                        <BigButton onPress={() => {router.push('/joinStore')}}>Join a store</BigButton>
+                        <BigButton onPress={() => {router.push('/createStore')}}>Create a store</BigButton>
                     </>}
-                </> : <>
-                    <Pressable style={styles.button} onPress={() => {router.push('/joinStore')}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Join a store</Text>
-                    </Pressable>
-                    <Pressable style={styles.button} onPress={() => {router.push('/createStore')}}>
-                        <Text style={[styles.text, {color: theme.colors.text}]}>Create a store</Text>
-                    </Pressable>
-                </>}
-                <Button onPress={() => {handleLogout()}}>Log out</Button>
+                    <BigButton onPress={() => {handleLogout()}}>Log out</BigButton>
+                </VerticalContainer>
             </ScrollView>
         </SafeAreaView>
     )

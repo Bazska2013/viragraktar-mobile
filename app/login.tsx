@@ -4,7 +4,6 @@ import {
     TextInput,
     StyleSheet,
     Pressable,
-    ScrollView,
     useColorScheme,
     Platform, ActivityIndicator
 } from "react-native";
@@ -14,8 +13,9 @@ import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from '../scripts/axiosConfig';
 import CookieManager from '@react-native-cookies/cookies';
-import {Button} from 'tamagui';
-import {BigButton, SmallButton} from "@/tamagui.config";
+import {Button, Input, Label, SizableText, Spinner} from 'tamagui';
+import {BigButton, EditContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
+import {ScrollView} from "tamagui";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -94,39 +94,47 @@ export default function Login() {
 
     return (
         <SafeAreaView>
-            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Email</Text>
-                <TextInput placeholder="abc@xyz.com"
-                           onChangeText={setEmail}
-                           value={email}
-                           autoFocus
-                           style={[emailInputStyle, {color: theme.colors.text}]}
-                           autoCapitalize="none"
-                           onFocus={() => setEmailInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setEmailInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Password</Text>
-                <TextInput placeholder="********"
-                           onChangeText={setPassword}
-                           value={password}
-                           secureTextEntry
-                           style={[passwordInputStyle, {color: theme.colors.text}]}
-                           autoCapitalize="none"
-                           onFocus={() => setPasswordInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setPasswordInputStyle(styles.textInput);
-                           }}
-                />
-                {isLoading ? <>
-                    <ActivityIndicator size='large' />
-                </> : <>
-                    <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>Sign in</BigButton>
-                </>}
-                {error && <Text style={{color: 'red'}}>{error}</Text>}
-                <Text style={[styles.text, {color: theme.colors.text}]}>Don't have an account yet?</Text>
-                <SmallButton onPress={() => {router.push('/register')}}>Sign up</SmallButton>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
+                        automaticallyAdjustKeyboardInsets={true}
+            >
+                <EditContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            placeholder="abc@xyz.com"
+                            onChangeText={setEmail}
+                            value={email}
+                            autoFocus
+                            autoCapitalize="none"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            placeholder="********"
+                            onChangeText={setPassword}
+                            value={password}
+                            secureTextEntry
+                            autoCapitalize="none"
+                        />
+                    </VerticalContainer>
+                    {/*<SizableText>{error}</SizableText>*/}
+                    <VerticalContainer marginTop={240}>
+                        <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign in"}</BigButton>
+                        <SizableText>Don't have an account yet?</SizableText>
+                        <SmallButton onPress={() => {router.push('/register')}}>Sign up</SmallButton>
+                    </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

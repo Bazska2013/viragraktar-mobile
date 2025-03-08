@@ -1,7 +1,7 @@
 import {router, Stack} from "expo-router";
 import React, {createContext, useContext, useState} from "react";
 import axios from "@/scripts/axiosConfig";
-import {Button} from "react-native";
+import {Button, Dimensions} from "react-native";
 
 const ItemsContext = createContext<{
     items: any,
@@ -43,9 +43,9 @@ export default function BuyLayout() {
                 <Stack.Screen name="index"
                               options={{title: 'Buy', headerShown: false}} />
                 <Stack.Screen name="newItem"
-                              options={{title: 'New item', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
+                              options={{title: 'New item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
                 <Stack.Screen name='editItem'
-                              options={{title: 'Edit item', headerShown: true, presentation: 'modal', headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
+                              options={{title: 'Edit item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
             </Stack>
         </ItemsContext.Provider>
     )

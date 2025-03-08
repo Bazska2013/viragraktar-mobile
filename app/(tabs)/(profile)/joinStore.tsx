@@ -1,10 +1,12 @@
-import {Platform, SafeAreaView, ScrollView, useColorScheme, Text, Pressable, StyleSheet, TextInput} from "react-native";
+import {Platform, SafeAreaView, useColorScheme, Text, Pressable, StyleSheet, TextInput} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {H2, Input, ScrollView, SizableText, Spinner} from "tamagui";
+import {BigButton, EditContainer} from "@/tamagui.config";
 
 export default function JoinStore() {
 
@@ -14,16 +16,21 @@ export default function JoinStore() {
     const [error, setError] = useState(null);
     const [code, setCode] = useState(null);
     const [codeInputStyle, setCodeInputStyle] = useState(styles.textInput);
+    const [isLoading, setIsLoading] = useState(false);
+    const [validInput, setValidInput] = useState(false);
 
     const handleSubmit = async () => {
         let response;
+        setIsLoading(true);
         try {
             response = await axios.post('/api/join', {
                 unique_id: code,
             });
         } catch (error: any) {
-            setError(error.response.data.message);
+            setIsLoading(false);
+            setError(error.response.data.error);
         } finally {
+            setIsLoading(false);
             if (response?.status === 200) {
                 getUserData();
                 setStore(response.data);
@@ -32,25 +39,35 @@ export default function JoinStore() {
         }
     }
 
+    useEffect(() => {
+        if (code && code.length === 6) {
+            setValidInput(true);
+        } else {
+            setValidInput(false);
+        }
+    }, [code]);
+
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                <Text style={[styles.header, {color: theme.colors.text}]}>Enter the unique ID of the Store you want to join</Text>
-                <TextInput value={code}
-                           onChangeText={setCode}
-                           autoCapitalize='characters'
-                           autoFocus
-                           style={[codeInputStyle, {color: theme.colors.text}]}
-                           onFocus={() => setCodeInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setCodeInputStyle(styles.textInput);
-                           }}
-                />
-                <Pressable style={styles.button} onPress={() => handleSubmit()}>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Join Store</Text>
-                </Pressable>
-                {error && <Text style={[styles.text, {color: 'red'}]}>{error}</Text>}
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
+                        automaticallyAdjustKeyboardInsets={true}
+            >
+                <EditContainer>
+                    <H2>Enter the unique ID of the Store you want to join</H2>
+                    <Input
+                        flex={1}
+                        // size="$3"
+                        borderWidth={2}
+                        // isInvalid={!!errors.name}
+                        value={code ? code.toString() : ''}
+                        onChangeText={setCode}
+                        autoCapitalize='characters'
+                        autoFocus
+                    />
+                    <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Join store"}</BigButton>
+                    {error && <SizableText>{error}</SizableText>}
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

@@ -1,16 +1,27 @@
 import { defaultConfig } from '@tamagui/config/v4'
 import {Button, createTamagui, styled, XStack, YStack} from 'tamagui'
+import {Dimensions} from "react-native";
 
 export const VerticalContainer = styled(YStack, {
     flex: 1,
     gap: "$5",
     padding: "$1",
+    elevation: "$10"
 });
 
 export const HorizontalContainer = styled(XStack, {
     flex: 1,
     gap: "$5",
     padding: "$1",
+    elevation: "$10"
+});
+
+export const EditContainer = styled(YStack, {
+    flex: 1,
+    gap: "$5",
+    padding: "$5",
+    width: Dimensions.get('window').width > 1280 ? '50%' : Dimensions.get('window').width > 768 ? '75%' : '100%',
+    alignSelf: 'center',
 });
 
 export const BigButton = styled(Button, {

@@ -5,7 +5,6 @@ import {
     Pressable,
     RefreshControl,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     useColorScheme,
@@ -19,7 +18,8 @@ import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
-import {BigButton} from "@/tamagui.config";
+import {BigButton, HorizontalContainer} from "@/tamagui.config";
+import {ScrollView} from "tamagui";
 
 export default  function Buy() {
 
@@ -45,7 +45,6 @@ export default  function Buy() {
         <SafeAreaView>
             {user?.is_buyer ? <>
                 <FlatList data={items}
-                          style={{height: '100%'}}
                           numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
                           renderItem={({item}) => <Item props={item} />}
                           keyExtractor={(item) => item.id.toString()}
@@ -57,7 +56,6 @@ export default  function Buy() {
                           ListHeaderComponent={
                               <BigButton onPress={() => {router.push('/newItem')}}>New Item</BigButton>
                           }
-                          ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
                 />
             </> : <>
                 <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>

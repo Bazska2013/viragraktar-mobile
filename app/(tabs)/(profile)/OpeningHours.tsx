@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react";
 import {View, Text, StyleSheet} from "react-native";
-import Checkbox from "expo-checkbox";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {HorizontalContainer, VerticalContainer} from "@/tamagui.config";
+import {H4, Label, Checkbox} from "tamagui";
+import {Check} from "@tamagui/lucide-icons";
 
 const OpeningHours = ({ setFieldValue, defaultValue }: { setFieldValue: (field: string, value: any) => void, defaultValue: string }) => {
 
@@ -70,35 +72,39 @@ const OpeningHours = ({ setFieldValue, defaultValue }: { setFieldValue: (field: 
     };
 
     return (
-        <View>
+        <HorizontalContainer flexWrap="wrap">
             {Object.keys(openingHours).map((day, index) => (
-                <View key={index}>
-                    <Text>{day}</Text>
-                    <Text>From</Text>
+                <VerticalContainer key={index}>
+                    <H4>{day}</H4>
+                    <Label htmlFor="from">From</Label>
                     <DateTimePicker
+                        id="from"
                         testID="dateTimePickerFrom"
                         value={openingHours[day].from}
                         mode='time'
                         is24Hour={true}
                         onChange={(event, selectedDate) => handleSelectFrom(day as keyof typeof openingHours, event, selectedDate)}
                     />
-                    <Text>To</Text>
+                    <Label htmlFor="to">To</Label>
                     <DateTimePicker
+                        id="to"
                         testID="dateTimePickerTo"
                         value={openingHours[day].to}
                         mode='time'
                         is24Hour={true}
                         onChange={(event, selectedDate) => handleSelectTo(day as keyof typeof openingHours, event, selectedDate)}
                     />
-                    <Text>Closed</Text>
+                    <Label htmlFor="closed">Closed</Label>
                     <Checkbox
-                        style={styles.checkbox}
-                        value={openingHours[day].closed}
-                        onValueChange={() => handleClick(day as keyof typeof openingHours)}
-                    />
-                </View>
+                        id="closed"
+                        value={openingHours[day].closed} onValueChange={() => handleClick(day as keyof typeof openingHours)}>
+                        <Checkbox.Indicator>
+                            <Check />
+                        </Checkbox.Indicator>
+                    </Checkbox>
+                </VerticalContainer>
             ))}
-        </View>
+        </HorizontalContainer>
     )
 }
 

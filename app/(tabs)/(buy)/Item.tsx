@@ -67,69 +67,43 @@ const Item = ({props}: {props: any}) => {
     }
 
     return (
-        <View style={{padding: 10, flex: 3}}>
-            <HorizontalContainer
-                borderColor="#292023"
-                borderWidth={2}
-                borderRadius="$3"
-                boxShadow="0 0 10px 0 rgba(0, 0, 0, 0.2)"
-            >
-                <VerticalContainer>
-                    <Image source={{
-                        uri: item.image ? "http://localhost:8000/images/" + item.image : flowerImage,
-                        width: 100,
-                        height: 100,
-                    }} />
-                    <H4>{item.name}</H4>
-                    <SizableText>{item.description}</SizableText>
-                    <SizableText>{item.price}</SizableText>
-                </VerticalContainer>
-                <VerticalContainer>
-                    <Group orientation='vertical'>
-                        <SmallButtonWithAccent icon={Plus} onPress={() => handleChange('', 'add')} />
-                        <Input flex={1}
-                               borderWidth={2}
-                               keyboardType='numeric'
-                               value={item.stock.toString()}
-                               onChangeText={(value) => handleChange(value, 'field')}
-                        />
-                        <SmallButtonWithAccent icon={Minus} onPress={() => handleChange('', 'remove')} />
-                    </Group>
-                    <Group orientation='horizontal'>
-                        <SmallButton icon={X} disabled={!isChanged} chromeless={!isChanged} onPress={() => handleCancel()} width="50%" />
-                        <SmallButton icon={Check} disabled={!isChanged} chromeless={!isChanged} onPress={() => handleSubmit()} width="50%" />
-                    </Group>
-                    <SmallButtonWithAccent onPress={() => {router.push(`/editItem?id=${item.id}`);}}>
-                        Edit Item
-                    </SmallButtonWithAccent>
-                </VerticalContainer>
-            </HorizontalContainer>
-            {/*<Text style={[styles.header, {color: theme.colors.text}]}>{item.name}</Text>*/}
-            {/*<View>*/}
-            {/*    <Text style={[styles.text, {color: theme.colors.text}]}>{item.description}</Text>*/}
-            {/*    <Text style={[styles.text, {color: theme.colors.text}]}>{item.price}</Text>*/}
-            {/*</View>*/}
-            {/*<View>*/}
-            {/*    <SmallButton icon={Plus} onPress={() => handleChange('', 'add')} />*/}
-            {/*    <TextInput value={item.stock.toString()}*/}
-            {/*               keyboardType='numeric'*/}
-            {/*               onChangeText={(value) => handleChange(value, 'field')}*/}
-            {/*               style={[styles.textInput, {color: theme.colors.text}]}*/}
-            {/*    />*/}
-            {/*    {isChanged ? <>*/}
-            {/*        <Pressable style={styles.button} onPress={() => handleSubmit()}>*/}
-            {/*            <Text style={[styles.text, {color: theme.colors.text}]}>Save changes</Text>*/}
-            {/*        </Pressable>*/}
-            {/*        <Pressable style={styles.button} onPress={() => handleCancel()}>*/}
-            {/*            <Text style={[styles.text, {color: theme.colors.text}]}>Cancel changes</Text>*/}
-            {/*        </Pressable>*/}
-            {/*    </> : <></>}*/}
-            {/*    <SmallButton icon={Minus} onPress={() => handleChange('', 'remove')} />*/}
-            {/*</View>*/}
-            {/*<Pressable style={styles.button} onPress={() => {router.push(`/editItem?id=${item.id}`);}}>*/}
-            {/*    <Text style={[styles.text, {color: theme.colors.text}]}>Edit item</Text>*/}
-            {/*</Pressable>*/}
-        </View>
+        <HorizontalContainer
+            borderColor="#292023"
+            borderWidth={2}
+            borderRadius="$3"
+            boxShadow="0 0 10px 0 rgba(0, 0, 0, 0.2)"
+            margin={10}
+        >
+            <VerticalContainer>
+                <Image source={{
+                    uri: item.image ? "http://localhost:8000/images/" + item.image : flowerImage,
+                    width: 100,
+                    height: 100,
+                }} />
+                <H4>{item.name}</H4>
+                <SizableText>{item.description}</SizableText>
+                <SizableText>{item.price}</SizableText>
+            </VerticalContainer>
+            <VerticalContainer>
+                <Group orientation='vertical'>
+                    <SmallButtonWithAccent icon={Plus} onPress={() => handleChange('', 'add')} />
+                    <Input flex={1}
+                           borderWidth={2}
+                           keyboardType='numeric'
+                           value={item.stock.toString()}
+                           onChangeText={(value) => handleChange(value, 'field')}
+                    />
+                    <SmallButtonWithAccent icon={Minus} onPress={() => handleChange('', 'remove')} />
+                </Group>
+                <Group orientation='horizontal'>
+                    <SmallButton icon={X} disabled={!isChanged} chromeless={!isChanged} onPress={() => handleCancel()} width="50%" />
+                    <SmallButton icon={Check} disabled={!isChanged} chromeless={!isChanged} onPress={() => handleSubmit()} width="50%" />
+                </Group>
+                <SmallButtonWithAccent onPress={() => {router.push(`/editItem?id=${item.id}`);}}>
+                    Edit Item
+                </SmallButtonWithAccent>
+            </VerticalContainer>
+        </HorizontalContainer>
     )
 }
 

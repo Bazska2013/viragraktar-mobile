@@ -4,7 +4,6 @@ import {
     Platform,
     Pressable,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -17,6 +16,8 @@ import axios from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
+import {H2, H4, ScrollView, Label, Input, Spinner, SizableText} from "tamagui";
+import {BigButton, VerticalContainer} from "@/tamagui.config";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
@@ -50,7 +51,7 @@ export default function EditItem() {
         let response;
         setIsLoading(true);
         try {
-            response = await axios.put('/api/item/' + id, {
+            response = await axios.post('/api/item/edit/' + id, {
                 name: item.name,
                 description: item.description,
                 price: item.price,
@@ -86,62 +87,75 @@ export default function EditItem() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            {item ? <>
+            {item &&
                 <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Name of the item</Text>
-                    <TextInput value={item.name.toString()}
-                               onChangeText={(value) => setItem({...item, name: value})}
-                               autoFocus
-                               autoCapitalize="words"
-                               style={[nameInputStyle, {color: theme.colors.text}]}
-                               onFocus={() => setNameInputStyle({...styles.textInput, borderColor: 'blue'})}
-                               onBlur={() => {
-                                   setNameInputStyle(styles.textInput);
-                               }}
-                    />
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Description of the item</Text>
-                    <TextInput value={item.description.toString()}
-                               onChangeText={(value) => setItem({...item, description: value})}
-                               autoCapitalize="sentences"
-                               style={[descriptionInputStyle, {color: theme.colors.text}]}
-                               onFocus={() => setDescriptionInputStyle({...styles.textInput, borderColor: 'blue'})}
-                               onBlur={() => {
-                                   setDescriptionInputStyle(styles.textInput);
-                               }}
-                    />
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Price of the item</Text>
-                    <TextInput value={item.price.toString()}
-                               onChangeText={(value) => setItem({...item, price: value})}
-                               keyboardType="numeric"
-                               style={[priceInputStyle, {color: theme.colors.text}]}
-                               onFocus={() => setPriceInputStyle({...styles.textInput, borderColor: 'blue'})}
-                               onBlur={() => {
-                                   setPriceInputStyle(styles.textInput);
-                               }}
-                    />
-                    <Text style={[styles.text, {color: theme.colors.text}]}>Stock of the item</Text>
-                    <TextInput value={item.stock.toString()}
-                               onChangeText={(value) => setItem({...item, stock: value})}
-                               keyboardType="numeric"
-                               style={[stockInputStyle, {color: theme.colors.text}]}
-                               onFocus={() => setStockInputStyle({...styles.textInput, borderColor: 'blue'})}
-                               onBlur={() => {
-                                   setStockInputStyle(styles.textInput);
-                               }}
-                    />
-                    {isLoading ? <>
-                        <ActivityIndicator size='large' />
-                    </> : <>
-                        <Pressable style={validInput ? styles.button : styles.defaultButton} onPress={() => {handleSubmit()}} disabled={!validInput}>
-                            <Text style={[styles.text, {color: theme.colors.text}]}>Edit item</Text>
-                        </Pressable>
-                    </>}
+                    <VerticalContainer>
+                        <VerticalContainer>
+                            <Label htmlFor="name">
+                                Name of the item
+                            </Label>
+                            <Input
+                                flex={1}
+                                // size="$3"
+                                borderWidth={2}
+                                id="name"
+                                // isInvalid={!!errors.name}
+                                value={item.name.toString()}
+                                onChangeText={(value) => setItem({...item, name: value})}
+                                autoFocus
+                                autoCapitalize="words"
+                            />
+                        </VerticalContainer>
+                        <VerticalContainer>
+                            <Label htmlFor="description">
+                                Description of the item
+                            </Label>
+                            <Input
+                                flex={1}
+                                // size="$3"
+                                borderWidth={2}
+                                id="description"
+                                // isInvalid={!!errors.description}
+                                value={item.description.toString()}
+                                onChangeText={(value) => setItem({...item, description: value})}
+                                autoCapitalize="sentences"
+                            />
+                        </VerticalContainer>
+                        <VerticalContainer>
+                            <Label htmlFor="price">
+                                Price of the item
+                            </Label>
+                            <Input
+                                flex={1}
+                                // size="$3"
+                                borderWidth={2}
+                                id="price"
+                                // isInvalid={!!errors.price}
+                                value={item.price.toString()}
+                                onChangeText={(value) => setItem({...item, price: value})}
+                                keyboardType="numeric"
+                            />
+                        </VerticalContainer>
+                        <VerticalContainer>
+                            <Label htmlFor="stock">
+                                Stock of the item
+                            </Label>
+                            <Input
+                                flex={1}
+                                // size="$3"
+                                borderWidth={2}
+                                id="stock"
+                                // isInvalid={!!errors.stock}
+                                value={item.stock.toString()}
+                                onChangeText={(value) => setItem({...item, stock: value})}
+                                keyboardType="numeric"
+                            />
+                        </VerticalContainer>
+                        <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Edit item"}</BigButton>
+                        <SizableText>{error}</SizableText>
+                    </VerticalContainer>
                 </ScrollView>
-            </> : <>
-                <View>
-                    <Text>{error}</Text>
-                </View>
-            </>}
+            }
         </SafeAreaView>
     )
 }

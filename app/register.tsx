@@ -1,6 +1,5 @@
 import {
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     useColorScheme,
     Text,
@@ -14,7 +13,8 @@ import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import axios from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
-import {BigButton} from "@/tamagui.config";
+import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
+import {Input, Label, ScrollView, Spinner} from "tamagui";
 
 export default  function Register() {
 
@@ -62,64 +62,74 @@ export default  function Register() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                <Text style={[styles.text, {color: theme.colors.text}]}>Email:</Text>
-                <TextInput placeholder="abc@xyz.com"
-                           onChangeText={setEmail}
-                           value={email}
-                           autoFocus
-                           style={[emailInputStyle, {color: theme.colors.text}]}
-                           autoCapitalize="none"
-                           onFocus={() => setEmailInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setEmailInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Name:</Text>
-                <TextInput placeholder="John Doe"
-                           onChangeText={setName}
-                           value={name}
-                           style={[nameInputStyle, {color: theme.colors.text}]}
-                           autoCapitalize="none"
-                           onFocus={() => setNameInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setNameInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Password:</Text>
-                <TextInput placeholder="********"
-                           onChangeText={setPassword}
-                           value={password}
-                           secureTextEntry
-                           textContentType='none'
-                           autoComplete='off'
-                           style={[passwordInputStyle, {color: theme.colors.text}]}
-                           autoCapitalize="none"
-                           onFocus={() => setPasswordInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setPasswordInputStyle(styles.textInput);
-                           }}
-                />
-                <Text style={[styles.text, {color: theme.colors.text}]}>Password again:</Text>
-                <TextInput placeholder="********"
-                           onChangeText={setPasswordConfirm}
-                           value={passwordConfirm}
-                           secureTextEntry
-                           textContentType='none'
-                           autoComplete='off'
-                           style={[passwordConfirmInputStyle, {color: theme.colors.text}]}
-                           autoCapitalize="none"
-                           onFocus={() => setPasswordConfirmInputStyle({...styles.textInput, borderColor: 'blue'})}
-                           onBlur={() => {
-                               setPasswordConfirmInputStyle(styles.textInput);
-                           }}
-                />
-                {isLoading ? <>
-                    <ActivityIndicator size='large' />
-                </> : <>
-                    <BigButton onPress={() => {handleRegister()}} disabled={!validInput}>Sign up</BigButton>
-                </>}
-                {error && <Text style={{color: 'red'}}>{error}</Text>}
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
+                        automaticallyAdjustKeyboardInsets={true}
+            >
+                <EditContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            placeholder="abc@xyz.com"
+                            onChangeText={setEmail}
+                            value={email}
+                            autoFocus
+                            autoCapitalize="none"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            placeholder="John Doe"
+                            onChangeText={setName}
+                            value={name}
+                            autoCapitalize="words"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            placeholder="********"
+                            onChangeText={setPassword}
+                            value={password}
+                            secureTextEntry
+                            autoCapitalize="none"
+                        />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <Label htmlFor="password2">Password again</Label>
+                        <Input
+                            id="password2"
+                            flex={1}
+                            // size="$3"
+                            borderWidth={2}
+                            // isInvalid={!!errors.name}
+                            placeholder="********"
+                            onChangeText={setPasswordConfirm}
+                            value={passwordConfirm}
+                            secureTextEntry
+                            autoCapitalize="none"
+                        />
+                    </VerticalContainer>
+                    {/*<SizableText>{error}</SizableText>*/}
+                    <VerticalContainer marginTop={40}>
+                        <BigButton onPress={() => {handleRegister()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign up"}</BigButton>
+                    </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )
