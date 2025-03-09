@@ -46,11 +46,14 @@ export default  function Buy() {
             {user?.is_buyer ? <>
                 <FlatList data={items}
                           numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
-                          renderItem={({item}) => <Item props={item} />}
+                          renderItem={({item}) => <Item key={item.id} props={item} />}
                           keyExtractor={(item) => item.id.toString()}
                           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                           keyboardDismissMode='interactive'
-                          // initialNumToRender={10}
+                          initialNumToRender={3}
+                          maxToRenderPerBatch={3}
+                          windowSize={3}
+                          removeClippedSubviews
                           // onEndReached={handleLoadMore}
                           // onEndReachedThreshold={0.5}
                           ListHeaderComponent={

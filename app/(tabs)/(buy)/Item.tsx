@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, useColorScheme, Pressable, TextInput} from "react-native";
-import {useEffect, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -19,7 +19,7 @@ const Item = ({props}: {props: any}) => {
     const {fetchItems} = useItemsContext();
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
         let response;
         try {
             response = await axios.post('/api/item/edit/' + item.id, {
@@ -38,9 +38,9 @@ const Item = ({props}: {props: any}) => {
                 fetchItems();
             }
         }
-    }
+    }, [item])
 
-    const handleChange = (value: string, type: string) => {
+    const handleChange = useCallback((value: string, type: string) => {
         switch (type) {
             case 'add':
                 setItem({...item, stock: item.stock + 1});
@@ -58,12 +58,12 @@ const Item = ({props}: {props: any}) => {
                 break;
         }
         setIsChanged(true);
-    }
+    }, [item])
 
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         setItem(props);
         setIsChanged(false);
-    }
+    }, [props])
 
     useEffect(() => {
         setItem(props);
@@ -114,7 +114,7 @@ const Item = ({props}: {props: any}) => {
     )
 }
 
-export default Item;
+export default memo(Item);
 
 const styles = StyleSheet.create({
     text: {

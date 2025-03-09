@@ -18,6 +18,10 @@ import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import Item from "@/app/(tabs)/(sell)/Item";
+import {BigButton} from "@/tamagui.config";
+import {ShoppingBasket} from "@tamagui/lucide-icons";
+import {AnimatePresence} from "tamagui";
 
 export default function Sell() {
 
@@ -27,6 +31,7 @@ export default function Sell() {
 
     const [items, setItems] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [cart, setCart] = useState([]);
 
     const fetchItems = async () => {
         try {
@@ -37,6 +42,26 @@ export default function Sell() {
         } catch (error: any) {
             console.log(error.response.data.message);
         }
+    }
+
+    const addToCart = (item) => {
+        setCart([...cart, item]);
+    }
+
+    const removeFromCart = (item) => {
+        setCart(cart.filter((i) => i.id !== item.id));
+    }
+
+    const emptyCart = () => {
+        setCart([]);
+    }
+
+    const editCart = (item) => {
+        setCart(cart.map((i) => i.id === item.id ? item : i));
+    }
+
+    const isItemInCart = (item) => {
+        return cart.some((i) => i.id === item.id);
     }
 
     const handleRefresh = () => {
@@ -50,17 +75,18 @@ export default function Sell() {
     }, []);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{height: '100%'}}>
             {user?.is_seller ? <>
                 <FlatList data={items}
-                          style={{height: '100%'}}
                           numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
                           renderItem={({item}) =>
-                              <Text style={[styles.text, {color: theme.colors.text}]}>{item.name}</Text>
-                          }
+                                  <Item item={item} addToCart={addToCart} selected={isItemInCart(item)} />}
                           keyExtractor={(item) => item.id.toString()}
                           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                           keyboardDismissMode='interactive'
+                          initialNumToRender={3}
+                          maxToRenderPerBatch={3}
+                          windowSize={10}
                     // initialNumToRender={10}
                     // onEndReached={handleLoadMore}
                     // onEndReachedThreshold={0.5}
@@ -71,6 +97,23 @@ export default function Sell() {
                     //       }
                           ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
                 />
+                <AnimatePresence>
+                    {(cart && cart.length) > 0 &&
+                        <BigButton
+                            animation="bouncy"
+                            enterStyle={{
+                                x: 20,
+                                y: 20,
+                                scale: 1,
+                            }}
+                            position="absolute"
+                            bottom={10}
+                            right={10}
+                            icon={ShoppingBasket}
+                            onPress={() => setCart([])}
+                        />
+                    }
+                </AnimatePresence>
             </> : <>
                 <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
                     <Text style={[styles.header, {color: theme.colors.text}]}>Permission denied</Text>
