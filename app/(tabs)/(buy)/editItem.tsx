@@ -16,8 +16,9 @@ import axios from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
-import {H2, H4, ScrollView, Label, Input, Spinner, SizableText} from "tamagui";
-import {BigButton, VerticalContainer} from "@/tamagui.config";
+import {H2, H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image} from "tamagui";
+import {BigButton, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import * as ImagePicker from "expo-image-picker";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
@@ -26,13 +27,27 @@ export default function EditItem() {
     const id = useSearchParams().get('id');
 
     const [item, setItem] = useState(null);
-    const [nameInputStyle, setNameInputStyle] = useState(styles.textInput);
-    const [descriptionInputStyle, setDescriptionInputStyle] = useState(styles.textInput);
-    const [priceInputStyle, setPriceInputStyle] = useState(styles.textInput);
-    const [stockInputStyle, setStockInputStyle] = useState(styles.textInput);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(true);
+    const [imageModal, setImageModal] = useState(false);
+
+    const [image, setImage] = useState<string | null>(null);
+
+    const pickImage = async () => {
+        setImageModal(false);
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.5,
+            base64: true,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
 
     const fetchItem = async () => {
         let response;
@@ -51,12 +66,22 @@ export default function EditItem() {
         let response;
         setIsLoading(true);
         try {
-            response = await axios.post('/api/item/edit/' + id, {
-                name: item.name,
-                description: item.description,
-                price: item.price,
-                stock: item.stock,
-                /*image: image*/
+            const formDataForEdit = new FormData();
+            formDataForEdit.set('name', item.name);
+            formDataForEdit.set('description', item.description);
+            formDataForEdit.set('price', item.price);
+            formDataForEdit.set('stock', item.stock);
+            if (image) {
+                formDataForEdit.append('image', {
+                    uri: image,
+                    name: 'image.jpg',
+                    type: 'image/jpeg'
+                } as any);
+            }
+            response = await axios.post('/api/item/edit/' + id, formDataForEdit, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
         } catch (error: any) {
             setIsLoading(false);
@@ -87,6 +112,30 @@ export default function EditItem() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+            <Sheet
+                modal={false}
+                open={imageModal}
+                onOpenChange={setImageModal}
+                snapPoints={[20]}
+                snapPointsMode='percent'
+                dismissOnSnapToBottom
+                position={0}
+                zIndex={100_000}
+                animation='medium'
+            >
+                <Sheet.Overlay
+                    animation="lazy"
+                    backgroundColor="$shadow2"
+                    enterStyle={{ opacity: 0 }}
+                    exitStyle={{ opacity: 0 }}
+                />
+                <Sheet.Frame>
+                    <HorizontalContainer width="100%" justifyContent="space-around">
+                        <SmallButtonWithAccent onPress={pickImage}>Pick an image</SmallButtonWithAccent>
+                        {/*<SmallButtonWithAccent onPress={handleOpenCamera}>Take a picture</SmallButtonWithAccent>*/}
+                    </HorizontalContainer>
+                </Sheet.Frame>
+            </Sheet>
             {item &&
                 <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                     <VerticalContainer>
@@ -150,6 +199,14 @@ export default function EditItem() {
                                 onChangeText={(value) => setItem({...item, stock: value})}
                                 keyboardType="numeric"
                             />
+                        </VerticalContainer>
+                        <VerticalContainer>
+                            <SmallButtonWithAccent onPress={setImageModal}>{item.image ? 'Change image' : 'Pick an image'}</SmallButtonWithAccent>
+                            {(item.image || image) && <Image alignSelf="center" borderRadius={5} source={{
+                                uri: image ? image : item.image ? "http://localhost:8000/images/" + item.image : '',
+                                width: 200,
+                                height: 200,
+                            }} />}
                         </VerticalContainer>
                         <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Edit item"}</BigButton>
                         <SizableText>{error}</SizableText>
