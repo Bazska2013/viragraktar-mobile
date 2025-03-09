@@ -1,12 +1,12 @@
 import {
-    ActivityIndicator,
+    ActivityIndicator, Alert,
     Platform,
     Pressable,
     SafeAreaView,
     StyleSheet,
     Text,
-    TextInput,
-    useColorScheme
+    TextInput, TouchableOpacity,
+    useColorScheme, View
 } from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
@@ -14,8 +14,10 @@ import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import axios from "@/scripts/axiosConfig";
-import {Input, Label, ScrollView, SizableText, Spinner} from "tamagui";
-import {BigButton, VerticalContainer} from "@/tamagui.config";
+import {Input, Label, ScrollView, SizableText, Spinner, Image, Sheet} from "tamagui";
+import {BigButton, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import * as ImagePicker from 'expo-image-picker';
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 
 export default function NewItem() {
 
@@ -24,26 +26,72 @@ export default function NewItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [name, setName] = useState('');
-    const [nameInputStyle, setNameInputStyle] = useState(styles.textInput);
     const [description, setDescription] = useState('');
-    const [descriptionInputStyle, setDescriptionInputStyle] = useState(styles.textInput);
     const [price, setPrice] = useState('');
-    const [priceInputStyle, setPriceInputStyle] = useState(styles.textInput);
     const [stock, setStock] = useState('');
-    const [stockInputStyle, setStockInputStyle] = useState(styles.textInput);
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(false);
+    const [imageModal, setImageModal] = useState(false);
+    const [openCamera, setOpenCamera] = useState(false);
+
+    const [image, setImage] = useState<string | null>(null);
+
+    // const [facing, setFacing] = useState<CameraType>('back');
+    // const [permission, requestPermission] = useCameraPermissions();
+
+    const pickImage = async () => {
+        setImageModal(false);
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.5,
+            base64: true,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
+    // function toggleCameraFacing() {
+    //     setFacing(current => (current === 'back' ? 'front' : 'back'));
+    // }
+    //
+    // const handleOpenCamera = () => {
+    //     setImageModal(false);
+    //     if (!permission.granted) {
+    //         Alert.alert('Grant permissions', 'You need to grant permissions to use the camera', [
+    //             {
+    //                 text: 'OK',
+    //                 onPress: () => requestPermission()
+    //             }
+    //         ])
+    //     } else {
+    //         setOpenCamera(true);
+    //     }
+    // }
 
     const handleSubmit = async () => {
         let response;
         setIsLoading(true);
         try {
-            response = await axios.post('/api/item', {
-                name: name,
-                description: description,
-                price: price,
-                stock: stock,
-                /*image: values.image*/
+            const formDataForNew = new FormData();
+            formDataForNew.set('name', name);
+            formDataForNew.set('description', description);
+            formDataForNew.set('price', price);
+            formDataForNew.set('stock', stock);
+            if (image) {
+                formDataForNew.append('image', {
+                    uri: image,
+                    name: 'image.jpg',
+                    type: 'image/jpeg'
+                } as any);
+            }
+            response = await axios.post('/api/item', formDataForNew, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
         } catch (error: any) {
             setIsLoading(false);
@@ -65,9 +113,47 @@ export default function NewItem() {
         }
     }, [name, description, price, stock]);
 
+    // if (openCamera) {
+    //     return (<>
+    //             <SmallButtonWithAccent onPress={() => setOpenCamera(false)}>Close camera</SmallButtonWithAccent>
+    //             <CameraView facing={facing}>
+    //                 <View>
+    //                     <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+    //                         <Text style={styles.text}>Flip Camera</Text>
+    //                     </TouchableOpacity>
+    //                 </View>
+    //             </CameraView>
+    //     </>
+    //     )
+    // }
+
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+            <Sheet
+                modal={false}
+                open={imageModal}
+                onOpenChange={setImageModal}
+                snapPoints={[20]}
+                snapPointsMode='percent'
+                dismissOnSnapToBottom
+                position={0}
+                zIndex={100_000}
+                animation='medium'
+            >
+                <Sheet.Overlay
+                    animation="lazy"
+                    backgroundColor="$shadow2"
+                    enterStyle={{ opacity: 0 }}
+                    exitStyle={{ opacity: 0 }}
+                />
+                <Sheet.Frame>
+                    <HorizontalContainer width="100%" justifyContent="space-around">
+                        <SmallButtonWithAccent onPress={pickImage}>Pick an image</SmallButtonWithAccent>
+                        {/*<SmallButtonWithAccent onPress={handleOpenCamera}>Take a picture</SmallButtonWithAccent>*/}
+                    </HorizontalContainer>
+                </Sheet.Frame>
+            </Sheet>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <VerticalContainer>
                     <VerticalContainer>
@@ -124,6 +210,14 @@ export default function NewItem() {
                             onChangeText={setStock}
                             keyboardType="numeric"
                         />
+                    </VerticalContainer>
+                    <VerticalContainer>
+                        <SmallButtonWithAccent onPress={setImageModal}>Pick an image</SmallButtonWithAccent>
+                        {image && <Image alignSelf="center" borderRadius={5} source={{
+                            uri: image ? image : '',
+                            width: 200,
+                            height: 200,
+                        }} />}
                     </VerticalContainer>
                     <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "New item"}</BigButton>
                     {/*<SizableText>{error}</SizableText>*/}

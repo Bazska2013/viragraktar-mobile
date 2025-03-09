@@ -75,5 +75,7 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSCameraUsageDescription</key>
+    <string>This app uses the camera to take picture of the items you want to upload.</string>
   </dict>
 </plist>

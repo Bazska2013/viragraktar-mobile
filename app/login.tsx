@@ -110,6 +110,7 @@ export default function Login() {
                             onChangeText={setEmail}
                             value={email}
                             autoFocus
+                            keyboardType="email-address"
                             autoCapitalize="none"
                         />
                     </VerticalContainer>

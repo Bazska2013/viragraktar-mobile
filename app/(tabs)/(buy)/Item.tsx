@@ -6,8 +6,9 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {router} from "expo-router";
 import {HorizontalContainer, SmallButton, VerticalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {Minus, Plus, X, Check} from "@tamagui/lucide-icons";
-import flowerImage from "../../../assets/images/defaultFlower.svg";
+import flowerImage from "../../../assets/images/defaultFlower.png";
 import {Group, H4, SizableText, Input, Image} from "tamagui";
+import {Svg} from "react-native-svg"
 
 const Item = ({props}: {props: any}) => {
 

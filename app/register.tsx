@@ -78,6 +78,7 @@ export default  function Register() {
                             onChangeText={setEmail}
                             value={email}
                             autoFocus
+                            keyboardType="email-address"
                             autoCapitalize="none"
                         />
                     </VerticalContainer>
