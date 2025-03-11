@@ -4,11 +4,14 @@ import flowerImage from "@/assets/images/defaultFlower.png";
 import {memo, useCallback, useEffect, useState} from "react";
 import {Check, FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
+import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
-const Item = ({item, addToCart, selected}) => {
+const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState(null);
     const [amount, setAmount] = useState(0);
+
+    const {addToCart, isItemInCart, removeFromCart} = useItemsContext();
 
     const handleChange = useCallback((value, type) => {
         switch (type) {
@@ -34,13 +37,13 @@ const Item = ({item, addToCart, selected}) => {
     useEffect(() => {
         if (amount === 0) {
             setIsChanged(false);
+            removeFromCart(item)
         }
     }, [amount]);
 
     const handleAddToCart = useCallback(() => {
         let newItem = {...item, amount: amount};
         addToCart(newItem);
-        setAmount(0);
     }, [amount]);
 
     return (
@@ -50,7 +53,7 @@ const Item = ({item, addToCart, selected}) => {
             borderRadius="$3"
             boxShadow="0 0 10px 0 rgba(0, 0, 0, 0.2)"
             margin={10}
-            backgroundColor={selected ? '#f2f6d5' : 'white'}
+            backgroundColor={isItemInCart(item) ? '#f2f6d5' : 'white'}
         >
             <VerticalContainer>
                 <Image source={{

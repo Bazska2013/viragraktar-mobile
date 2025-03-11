@@ -6,6 +6,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Drawer} from "expo-router/drawer";
+import {ShoppingCart, Store, User} from "@tamagui/lucide-icons";
 
 const UserContext = createContext<{
     user: any,
@@ -69,13 +70,14 @@ export default function TabLayout() {
         <UserContext.Provider value={contextValue}>
             {isWideScreen ? <>
                 <GestureHandlerRootView style={{ flex: 1 }}>
-                    <Drawer>
+                    <Drawer screenOptions={{drawerActiveBackgroundColor: colorScheme === 'light' ? "rgba(1,1,1,0.1)" : "rgba(255,255,255,0.1)", drawerInactiveTintColor: colorScheme === 'light' ? "black" : "white", drawerActiveTintColor: colorScheme === 'light' ? "black" : "white", drawerStyle: {width: 200}}}>
                         <Drawer.Screen
                             name="(sell)"
                             options={{
                                 drawerLabel: 'Sell',
                                 title: 'Sell',
-                                drawerIcon: ({ color }) => <SymbolView name="storefront.fill" tintColor={color} />,
+                                // drawerIcon: ({ color }) => <SymbolView name="storefront.fill" tintColor={color} />,
+                                drawerIcon: ({ color }) => <Store />,
                                 drawerType: 'front'
                             }}
                         />
@@ -84,7 +86,8 @@ export default function TabLayout() {
                             options={{
                                 drawerLabel: 'Buy',
                                 title: 'Buy',
-                                drawerIcon: ({ color }) => <SymbolView name="cart.fill" tintColor={color} />,
+                                // drawerIcon: ({ color }) => <SymbolView name="cart.fill" tintColor={color} />,
+                                drawerIcon: ({ color }) => <ShoppingCart />,
                                 drawerType: 'front'
                             }}
                         />
@@ -93,7 +96,8 @@ export default function TabLayout() {
                             options={{
                                 drawerLabel: 'Profile',
                                 title: 'Profile',
-                                drawerIcon: ({ color }) => <SymbolView name="person.crop.square.fill" tintColor={color} />,
+                                // drawerIcon: ({ color }) => <SymbolView name="person.crop.square.fill" tintColor={color} />,
+                                drawerIcon: ({ color }) => <User />,
                                 drawerType: 'front'
                             }}
                         />

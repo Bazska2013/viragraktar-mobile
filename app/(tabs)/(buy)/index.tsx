@@ -54,6 +54,9 @@ export default  function Buy() {
                           maxToRenderPerBatch={3}
                           windowSize={3}
                           removeClippedSubviews
+                          getItemLayout={(data, index) => (
+                              {length: 100, width: 100, offset: 100 * index, index}
+                          )}
                           // onEndReached={handleLoadMore}
                           // onEndReachedThreshold={0.5}
                           ListHeaderComponent={

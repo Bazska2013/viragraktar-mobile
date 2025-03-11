@@ -22,47 +22,18 @@ import Item from "@/app/(tabs)/(sell)/Item";
 import {BigButton} from "@/tamagui.config";
 import {ShoppingBasket} from "@tamagui/lucide-icons";
 import {AnimatePresence} from "tamagui";
+import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 export default function Sell() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const {user, setUser, store, setStore, getUserData} = useUserContext();
+    const {items, fetchItems, cartItems, addToCart, removeFromCart, emptyCart, editCart, isItemInCart, setCartItems} = useItemsContext();
 
-    const [items, setItems] = useState([]);
+    const [showCartButton, setShowCartButton] = useState(false);
+
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [cart, setCart] = useState([]);
-
-    const fetchItems = async () => {
-        try {
-            const response = await axios.get('/api/items');
-            if (response.status === 200) {
-                setItems(response.data);
-            }
-        } catch (error: any) {
-            console.log(error.response.data.message);
-        }
-    }
-
-    const addToCart = (item) => {
-        setCart([...cart, item]);
-    }
-
-    const removeFromCart = (item) => {
-        setCart(cart.filter((i) => i.id !== item.id));
-    }
-
-    const emptyCart = () => {
-        setCart([]);
-    }
-
-    const editCart = (item) => {
-        setCart(cart.map((i) => i.id === item.id ? item : i));
-    }
-
-    const isItemInCart = (item) => {
-        return cart.some((i) => i.id === item.id);
-    }
 
     const handleRefresh = () => {
         setIsRefreshing(true);
@@ -74,19 +45,30 @@ export default function Sell() {
         fetchItems();
     }, []);
 
+    useEffect(() => {
+        if (cartItems.length > 0) {
+            setShowCartButton(true);
+        } else {
+            setShowCartButton(false);
+        }
+    }, [cartItems]);
+
     return (
         <SafeAreaView style={{height: '100%'}}>
             {user?.is_seller ? <>
                 <FlatList data={items}
                           numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
                           renderItem={({item}) =>
-                                  <Item item={item} addToCart={addToCart} selected={isItemInCart(item)} />}
+                                  <Item item={item} />}
                           keyExtractor={(item) => item.id.toString()}
                           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                           keyboardDismissMode='interactive'
                           initialNumToRender={3}
                           maxToRenderPerBatch={3}
                           windowSize={10}
+                          getItemLayout={(data, index) => (
+                                {length: 100, width: 100, offset: 100 * index, index}
+                          )}
                     // initialNumToRender={10}
                     // onEndReached={handleLoadMore}
                     // onEndReachedThreshold={0.5}
@@ -98,7 +80,7 @@ export default function Sell() {
                           ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
                 />
                 <AnimatePresence>
-                    {(cart && cart.length) > 0 &&
+                    {showCartButton &&
                         <BigButton
                             animation="bouncy"
                             enterStyle={{
@@ -110,7 +92,7 @@ export default function Sell() {
                             bottom={10}
                             right={10}
                             icon={ShoppingBasket}
-                            onPress={() => setCart([])}
+                            onPress={() => router.push('/cart')}
                         />
                     }
                 </AnimatePresence>
