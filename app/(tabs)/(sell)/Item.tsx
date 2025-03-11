@@ -67,19 +67,21 @@ const Item = ({item}) => {
             backgroundColor={isItemInCart(item) ? '#f2f6d5' : ''}
             opacity={item.stock === 0 ? '0.5' : '1'}
             flex={1}
+            padding="$3"
         >
             <VerticalContainer
                 flex={3}
+                alignItems="center"
             >
                 <Image borderRadius="$5" source={{
                     uri: item.image ? "http://localhost:8000/images/" + item.image : flowerImage,
-                    width: 100,
-                    height: 100,
+                    width: 120,
+                    height: 120,
                 }} />
                 <H4>{item.name}</H4>
-                <SizableText>{item.description}</SizableText>
-                <SizableText>{item.price}</SizableText>
-                <SizableText>{item.stock}</SizableText>
+                {/*<SizableText>{item.description}</SizableText>*/}
+                <SizableText>Price: HUF {item.price}</SizableText>
+                <SizableText>Stock: {item.stock}</SizableText>
             </VerticalContainer>
             <VerticalContainer
                 flex={2}

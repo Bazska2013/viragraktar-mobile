@@ -90,7 +90,13 @@ export default function Profile() {
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
                 <VerticalContainer>
-                    <VerticalContainer width="90%" alignSelf="center">
+                    <H2 width="90%" alignSelf="center">Profile</H2>
+                    <VerticalContainer
+                        borderRadius="$5"
+                        width="90%"
+                        alignSelf="center"
+                        boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                    >
                         <H4>Hello {user?.name}!</H4>
                         <H6>Today's profit of {store?.name} is HUF {profit}</H6>
                     </VerticalContainer>

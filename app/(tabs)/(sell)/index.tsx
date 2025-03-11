@@ -104,7 +104,7 @@ export default function Sell() {
                 <AnimatePresence>
                     {showCartButton &&
                         <BigButton
-                            animation="bouncy"
+                            animation="quick"
                             enterStyle={{
                                 x: 100,
                             }}
