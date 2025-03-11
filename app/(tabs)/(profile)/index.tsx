@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, Text, useColorScheme} from "react-native";
+import {Pressable, RefreshControl, SafeAreaView, Text, useColorScheme} from "react-native";
 import {Link, router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
@@ -6,14 +6,32 @@ import {StyleSheet} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {Button, Group, H1, H2, ListItem, ScrollView, SizableText} from 'tamagui';
-import {BigButton, EditContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
-import {ChevronRight, UserPen} from "@tamagui/lucide-icons";
+import {Button, Group, H1, H2, H4, H6, ListItem, ScrollView, Separator, SizableText} from 'tamagui';
+import {
+    BigButton,
+    EditContainer,
+    SmallButton,
+    SmallButtonWithAccent,
+    StyledListItem,
+    VerticalContainer
+} from "@/tamagui.config";
+import {
+    BookKey, BookUser,
+    Calendar,
+    ChevronRight,
+    DollarSign,
+    FilePen, LogOut,
+    TextSearch,
+    UserPen,
+    UserSearch
+} from "@tamagui/lucide-icons";
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
     const [storeId, setStoreId] = useState(null);
     const [storeIdShown, setStoreIdShown] = useState(false);
+
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const {user, setUser, store, setStore, getUserData} = useUserContext();
 
@@ -32,42 +50,18 @@ export default function Profile() {
         }
     };
 
-    const getStoreId = async () => {
-        let response;
-        try {
-            response = await axios.get('/api/store/id');
-        } catch (error) {
-            console.log(error);
-        } finally {
-            if (response?.status === 200) {
-                setStoreId(response.data);
-            }
-        }
-    }
-
     useEffect(() => {
         getUserData();
         if (store) {
             getTodayProfit();
-            getStoreId();
         }
     }, []);
 
     useEffect(() => {
         if (store) {
             getTodayProfit();
-            getStoreId();
         }
     }, [store]);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            getStoreId();
-        }, 30000); // 30000 milliseconds = 30 seconds
-
-        // Cleanup interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []);
 
     const handleLogout = async () => {
         try {
@@ -84,107 +78,103 @@ export default function Profile() {
         }
     }
 
+    const handleRefresh = () => {
+        setIsRefreshing(true);
+        getTodayProfit().then(() => setIsRefreshing(false));
+    }
+
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
+                        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
                 <VerticalContainer>
-                    <Group orientation="vertical">
-                        <Group.Item>
-                            <H2>{user?.name}</H2>
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="View profile details"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Change profile name"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Change password"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                    </Group>
-                    <Group orientation="vertical">
-                        <Group.Item>
-                            <H2>{store?.name}</H2>
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="View store details"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Change store name"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Change opening hours"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Enable/Disable price calculation"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Manage users"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                        <Group.Item>
-                            <ListItem
-                                title="Leave store"
-                                icon={UserPen}
-                                iconAfter={ChevronRight}
-                            />
-                        </Group.Item>
-                    </Group>
-                    <BigButton onPress={() => {handleLogout()}}>Log out</BigButton>
-                </VerticalContainer>
-                <VerticalContainer>
-                    <H2>User info</H2>
-                    <SizableText>Name: {user?.name}</SizableText>
-                    <SizableText>Email: {user?.email}</SizableText>
-                    <SmallButtonWithAccent>Edit profile</SmallButtonWithAccent>
-                    {store ? <>
-                        <H2>Store info</H2>
-                        <SizableText>Store name: {store?.name}</SizableText>
-                        <SizableText>Today's profit: {profit}</SizableText>
-                        <SmallButton onPress={() => {getTodayProfit()}}>Refresh</SmallButton>
-                        <SmallButtonWithAccent onPress={() => {setStoreIdShown(!storeIdShown)}}>{storeIdShown ? "Hide" : "Show"} store ID</SmallButtonWithAccent>
-                        {storeIdShown && <SizableText>Store ID: {storeId}</SizableText>}
-                        {user.is_admin && <>
-                            <SmallButtonWithAccent onPress={() => {router.push('/editStore')}}>Edit store</SmallButtonWithAccent>
-                        </>}
-                    </> : <>
-                        <BigButton onPress={() => {router.push('/joinStore')}}>Join a store</BigButton>
-                        <BigButton onPress={() => {router.push('/createStore')}}>Create a store</BigButton>
-                    </>}
-                    <BigButton onPress={() => {handleLogout()}}>Log out</BigButton>
+                    <VerticalContainer width="90%" alignSelf="center">
+                        <H4>Hello {user?.name}!</H4>
+                        <H6>Today's profit of {store?.name} is HUF {profit}</H6>
+                    </VerticalContainer>
+                    <VerticalContainer width="90%" alignSelf="center">
+                        <SizableText>User settings</SizableText>
+                        <Group orientation="vertical"
+                               boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                               separator={<Separator />}
+                        >
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Profile details"
+                                    icon={UserSearch}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Change profile name"
+                                    icon={UserPen}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Change password"
+                                    icon={BookKey}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                        </Group>
+                    </VerticalContainer>
+                    <VerticalContainer width="90%" alignSelf="center">
+                        <SizableText>Store settings</SizableText>
+                        <Group orientation="vertical"
+                               boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                               separator={<Separator />}
+                        >
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Store details"
+                                    icon={TextSearch}
+                                    iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/storeDetails')}}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Change store name"
+                                    icon={FilePen}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Change opening hours"
+                                    icon={Calendar}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Enable/Disable price calculation"
+                                    icon={DollarSign}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Manage users"
+                                    icon={BookUser}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                            <Group.Item>
+                                <StyledListItem
+                                    title="Leave store"
+                                    icon={LogOut}
+                                    iconAfter={ChevronRight}
+                                />
+                            </Group.Item>
+                        </Group>
+                    </VerticalContainer>
+                    <BigButton width="90%" alignSelf="center" onPress={() => {handleLogout()}}>Log out</BigButton>
                 </VerticalContainer>
             </ScrollView>
         </SafeAreaView>

@@ -1,5 +1,5 @@
 import { defaultConfig } from '@tamagui/config/v4'
-import {Button, createTamagui, styled, XStack, YStack} from 'tamagui'
+import {Button, createTamagui, Group, ListItem, styled, XStack, YStack} from 'tamagui'
 import {Dimensions} from "react-native";
 
 export const VerticalContainer = styled(YStack, {
@@ -27,6 +27,7 @@ export const EditContainer = styled(YStack, {
 export const BigButton = styled(Button, {
     backgroundColor: '#292023',
     color: 'white',
+    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
     hoverStyle: {
         backgroundColor: '#392D31',
     },
@@ -80,6 +81,16 @@ export const SmallButton = styled(Button, {
     },
     size: "$3",
 });
+
+export const StyledListItem = styled(ListItem, {
+    pressStyle: {
+        backgroundColor: '#ffffff',
+    }
+})
+
+export const StyledGroup = styled(Group, {
+    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
+})
 
 export const tamaguiConfig = createTamagui(defaultConfig)
 

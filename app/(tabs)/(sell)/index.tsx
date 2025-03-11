@@ -19,9 +19,9 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
-import {BigButton} from "@/tamagui.config";
-import {ShoppingBasket} from "@tamagui/lucide-icons";
-import {AnimatePresence} from "tamagui";
+import {BigButton, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
+import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
+import {AnimatePresence, H2, Input} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 export default function Sell() {
@@ -34,6 +34,8 @@ export default function Sell() {
     const [showCartButton, setShowCartButton] = useState(false);
 
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [openSearch, setOpenSearch] = useState(false);
+    const [search, setSearch] = useState("");
 
     const handleRefresh = () => {
         setIsRefreshing(true);
@@ -59,17 +61,37 @@ export default function Sell() {
                 <FlatList data={items}
                           numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
                           renderItem={({item}) =>
-                                  <Item item={item} />}
+                                  <Item key={item.id} item={item} />}
                           keyExtractor={(item) => item.id.toString()}
                           refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                           keyboardDismissMode='interactive'
-                          initialNumToRender={3}
-                          maxToRenderPerBatch={3}
+                          initialNumToRender={10}
+                          maxToRenderPerBatch={10}
                           windowSize={10}
-                          getItemLayout={(data, index) => (
-                                {length: 100, width: 100, offset: 100 * index, index}
-                          )}
-                    // initialNumToRender={10}
+                          ListHeaderComponent={
+                            <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
+                                <AnimatePresence mode="wait" initial="false">
+                                    {openSearch ? <>
+                                        <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
+                                            <Input
+                                                flex={1}
+                                                // size="$3"
+                                                borderWidth={2}
+                                                id="search"
+                                                // isInvalid={!!errors.name}
+                                                value={search}
+                                                onChangeText={setSearch}
+                                                autoFocus
+                                                autoCapitalize="words"
+                                            />
+                                        </HorizontalContainer>
+                                    </> : <>
+                                        <H2 animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>Sell</H2>
+                                    </>}
+                                </AnimatePresence>
+                                <SmallButtonWithAccent height="100%" icon={openSearch ? X : Search} onPress={() => setOpenSearch(!openSearch)}>{!openSearch && 'Search'}</SmallButtonWithAccent>
+                            </HorizontalContainer>
+                          }
                     // onEndReached={handleLoadMore}
                     // onEndReachedThreshold={0.5}
                     //       ListHeaderComponent={
@@ -77,16 +99,17 @@ export default function Sell() {
                     //               <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
                     //           </Pressable>
                     //       }
-                          ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
+                    //       ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
                 />
                 <AnimatePresence>
                     {showCartButton &&
                         <BigButton
                             animation="bouncy"
                             enterStyle={{
-                                x: 20,
-                                y: 20,
-                                scale: 1,
+                                x: 100,
+                            }}
+                            exitStyle={{
+                                x: 100,
                             }}
                             position="absolute"
                             bottom={10}

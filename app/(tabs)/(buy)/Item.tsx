@@ -4,7 +4,13 @@ import axios from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {router} from "expo-router";
-import {HorizontalContainer, SmallButton, VerticalContainer, SmallButtonWithAccent} from "@/tamagui.config";
+import {
+    HorizontalContainer,
+    SmallButton,
+    VerticalContainer,
+    SmallButtonWithAccent,
+    StyledGroup
+} from "@/tamagui.config";
 import {Minus, Plus, X, Check} from "@tamagui/lucide-icons";
 import flowerImage from "../../../assets/images/defaultFlower.png";
 import {Group, H4, SizableText, Input, Image} from "tamagui";
@@ -75,14 +81,18 @@ const Item = ({props}: {props: any}) => {
 
     return (
         <HorizontalContainer
-            borderColor="#292023"
-            borderWidth={2}
-            borderRadius="$3"
-            boxShadow="0 0 10px 0 rgba(0, 0, 0, 0.2)"
-            margin={10}
+            borderRadius="$5"
+            boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+            width='90%'
+            marginBottom='5%'
+            marginTop='5%'
+            alignSelf="center"
+            flex={1}
         >
-            <VerticalContainer>
-                <Image source={{
+            <VerticalContainer
+                flex={2}
+            >
+                <Image borderRadius="$5" source={{
                     uri: item.image ? "http://localhost:8000/images/" + item.image : flowerImage,
                     width: 100,
                     height: 100,
@@ -91,8 +101,10 @@ const Item = ({props}: {props: any}) => {
                 <SizableText>{item.description}</SizableText>
                 <SizableText>{item.price}</SizableText>
             </VerticalContainer>
-            <VerticalContainer>
-                <Group orientation='vertical'>
+            <VerticalContainer
+                flex={1}
+            >
+                <StyledGroup orientation='vertical'>
                     <SmallButtonWithAccent icon={Plus} onPress={() => handleChange('', 'add')} />
                     <Input flex={1}
                            borderWidth={2}
@@ -101,12 +113,18 @@ const Item = ({props}: {props: any}) => {
                            onChangeText={(value) => handleChange(value, 'field')}
                     />
                     <SmallButtonWithAccent icon={Minus} onPress={() => handleChange('', 'remove')} />
+                </StyledGroup>
+                <Group
+                    orientation='horizontal'
+                    boxShadow={isChanged ? "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)" : "none"}
+                >
+                    <SmallButton icon={X} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleCancel()} width="50%" />
+                    <SmallButton icon={Check} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleSubmit()} width="50%" />
                 </Group>
-                <Group orientation='horizontal'>
-                    <SmallButton icon={X} disabled={!isChanged} chromeless={!isChanged} onPress={() => handleCancel()} width="50%" />
-                    <SmallButton icon={Check} disabled={!isChanged} chromeless={!isChanged} onPress={() => handleSubmit()} width="50%" />
-                </Group>
-                <SmallButtonWithAccent onPress={() => {router.push(`/editItem?id=${item.id}`);}}>
+                <SmallButtonWithAccent
+                    boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                    onPress={() => {router.push(`/editItem?id=${item.id}`);}}
+                >
                     Edit Item
                 </SmallButtonWithAccent>
             </VerticalContainer>
