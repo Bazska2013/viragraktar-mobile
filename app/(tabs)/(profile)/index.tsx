@@ -6,8 +6,9 @@ import {StyleSheet} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {Button, H2, ScrollView, SizableText} from 'tamagui';
-import {BigButton, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import {Button, Group, H1, H2, ListItem, ScrollView, SizableText} from 'tamagui';
+import {BigButton, EditContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import {ChevronRight, UserPen} from "@tamagui/lucide-icons";
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
@@ -88,6 +89,82 @@ export default function Profile() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
             >
+                <VerticalContainer>
+                    <Group orientation="vertical">
+                        <Group.Item>
+                            <H2>{user?.name}</H2>
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="View profile details"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Change profile name"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Change password"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                    </Group>
+                    <Group orientation="vertical">
+                        <Group.Item>
+                            <H2>{store?.name}</H2>
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="View store details"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Change store name"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Change opening hours"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Enable/Disable price calculation"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Manage users"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                        <Group.Item>
+                            <ListItem
+                                title="Leave store"
+                                icon={UserPen}
+                                iconAfter={ChevronRight}
+                            />
+                        </Group.Item>
+                    </Group>
+                    <BigButton onPress={() => {handleLogout()}}>Log out</BigButton>
+                </VerticalContainer>
                 <VerticalContainer>
                     <H2>User info</H2>
                     <SizableText>Name: {user?.name}</SizableText>

@@ -18,20 +18,22 @@ const Item = ({item}) => {
             case 'minus':
                 if (amount > 0) {
                     setAmount(amount - 1);
+                    setIsChanged(true);
                 }
                 break;
             case 'plus':
                 if (amount < item.stock) {
                     setAmount(amount + 1);
+                    setIsChanged(true);
                 }
                 break;
             default: {
                 if (Number(value) >= 0 && Number(value) <= item.stock) {
                     setAmount(Number(value));
+                    setIsChanged(true);
                 }}
                 break;
         }
-        setIsChanged(true);
     }, [amount]);
 
     useEffect(() => {
@@ -42,8 +44,10 @@ const Item = ({item}) => {
     }, [amount]);
 
     const handleAddToCart = useCallback(() => {
-        let newItem = {...item, amount: amount};
-        addToCart(newItem);
+        if (amount > 0) {
+            let newItem = {...item, amount: amount};
+            addToCart(newItem);
+        }
     }, [amount]);
 
     return (

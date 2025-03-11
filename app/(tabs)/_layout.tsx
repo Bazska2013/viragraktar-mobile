@@ -108,13 +108,13 @@ export default function TabLayout() {
                         <TouchableOpacity {...props} onPress={() => {Haptics.selectionAsync(); props.onPress();}} />
                     )}}>
                     <Tabs.Screen name="(sell)"
-                                 options={{title: 'Sell', headerShown: false,tabBarIcon: ({ color }) => <SymbolView name="storefront.fill" tintColor={color} />,}}
+                                 options={{title: 'Sell', headerShown: false,tabBarIcon: ({ color }) => <Store />,}}
                     />
                     <Tabs.Screen name="(buy)"
-                                 options={{title: 'Buy', headerShown: false, tabBarIcon: ({ color }) => <SymbolView name="cart.fill" tintColor={color} />,}}
+                                 options={{title: 'Buy', headerShown: false, tabBarIcon: ({ color }) => <ShoppingCart />,}}
                     />
                     <Tabs.Screen name="(profile)"
-                                 options={{title: 'Profile', headerShown: false, tabBarIcon: ({color}) => <SymbolView name="person.crop.square.fill" tintColor={color} />}}
+                                 options={{title: 'Profile', headerShown: false, tabBarIcon: ({color}) => <User />}}
                     />
                 </Tabs>
             </>}
