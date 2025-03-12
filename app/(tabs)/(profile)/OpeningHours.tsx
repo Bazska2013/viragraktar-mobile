@@ -1,14 +1,14 @@
 import {useEffect, useState} from "react";
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet, Dimensions} from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {H4, Label, Checkbox} from "tamagui";
 import {Check} from "@tamagui/lucide-icons";
 import Hours from "@/app/(tabs)/(profile)/Hours";
 
-const OpeningHours = ({ setFieldValue, defaultValue }: { setFieldValue: (field: string, value: any) => void, defaultValue: string }) => {
+const OpeningHours = (props) => {
 
-    const [openingHours, setOpeningHours] = useState({
+    const [openingHours, setOpeningHours] = useState(props.openingHours ? props.openingHours : {
         Mon: { from: "00:00", to: "00:00", closed: false },
         Tue: { from: "00:00", to: "00:00", closed: false },
         Wed: { from: "00:00", to: "00:00", closed: false },
@@ -19,24 +19,25 @@ const OpeningHours = ({ setFieldValue, defaultValue }: { setFieldValue: (field: 
     });
 
     useEffect(() => {
-        setFieldValue('opening_hours', JSON.stringify(openingHours));
-    }, [openingHours, setFieldValue]);
+        props.setFieldValue(openingHours);
+        console.log(openingHours);
+    }, [openingHours]);
 
-    const handleSelectFrom = (day, value) => {
+    const handleSelectFrom = (day: string, value: string) => {
         setOpeningHours(prev => ({
             ...prev,
             [day]: { ...prev[day], from: value }
         }));
     };
 
-    const handleSelectTo = (day, value) => {
+    const handleSelectTo = (day: string, value: string) => {
         setOpeningHours(prev => ({
             ...prev,
             [day]: { ...prev[day], to: value }
         }));
     };
 
-    const handleClick = (day) => {
+    const handleClick = (day: string) => {
         setOpeningHours(prev => ({
             ...prev,
             [day]: { ...prev[day], closed: !prev[day].closed }
@@ -44,7 +45,7 @@ const OpeningHours = ({ setFieldValue, defaultValue }: { setFieldValue: (field: 
     };
 
     return (
-        <HorizontalContainer flexWrap="wrap">
+        <HorizontalContainer flexWrap="wrap" flexDirection={Dimensions.get('window').width >= 768 ? 'row' : 'column'} width="90%" alignSelf="center">
             {Object.keys(openingHours).map((day, index) => (
                 <Hours
                     key={index}

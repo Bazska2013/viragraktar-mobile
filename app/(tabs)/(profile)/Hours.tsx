@@ -1,41 +1,66 @@
-import {StyledGroup, VerticalContainer} from "@/tamagui.config";
-import {Group, H4} from "tamagui";
+import {HorizontalContainer, StyledGroup, VerticalContainer} from "@/tamagui.config";
+import {Checkbox, Group, H4, H6, Label} from "tamagui";
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {useState} from "react";
+import {Check} from "@tamagui/lucide-icons";
 
 const Hours = (props) => {
-    const [fromDate] = useState(new Date(props.from.split(':')[0], props.from.split(':')[1]));
-    const [toDate] = useState(new Date(props.to.split(':')[0], props.to.split(':')[1]));
+    const [fromDate, setFromDate] = useState(() => {
+        const [hours, minutes] = (props.from || "00:00").split(':').map(Number);
+        return new Date(1970, 0, 1, hours, minutes); // Year: 1970, Month: 0 (Jan), Day: 1
+    });
+    const [toDate, setToDate] = useState(() => {
+        const [hours, minutes] = (props.to || "00:00").split(':').map(Number);
+        return new Date(1970, 0, 1, hours, minutes); // Year: 1970, Month: 0 (Jan), Day: 1
+    });
 
-    const setFromDate = (event: DateTimePickerEvent, date: Date) => {
+    const handleFrom = (event: DateTimePickerEvent, date: Date) => {
         const {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        setFromDate(new Date(date));
         props.onSelectFrom(date.getHours() + ':' + date.getMinutes());
     }
 
-    const setToDate = (event: DateTimePickerEvent, date: Date) => {
+    const handleTo = (event: DateTimePickerEvent, date: Date) => {
         const {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        setToDate(new Date(date));
         props.onSelectTo(date.getHours() + ':' + date.getMinutes());
     }
 
     return (
-        <VerticalContainer>
+        <VerticalContainer width="100%">
             <H4>
                 {props.day}
             </H4>
-            <StyledGroup orientation="vertical">
+
+            <StyledGroup orientation="horizontal" width="100%" padding="$3" justifyContent="space-between">
                 <Group.Item>
-                    <RNDateTimePicker minimumDate={new Date(0,0)} value={fromDate} onChange={setFromDate} mode="time" />
+                    <H6>From</H6>
+                    <RNDateTimePicker style={{width: '100%'}} alignSelf="center" value={fromDate} onChange={handleFrom} mode="time" />
                 </Group.Item>
                 <Group.Item>
-                    <RNDateTimePicker minimumDate={new Date(0,0)} value={toDate} onChange={setToDate} mode="time" />
+                    <H6>To</H6>
+                    <RNDateTimePicker alignSelf="center" value={toDate} onChange={handleTo} mode="time" />
                 </Group.Item>
             </StyledGroup>
+            <HorizontalContainer width="50%"
+                                 boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                 justifyContent="space-evenly"
+                                 borderRadius="$5"
+                                 alignItems="center"
+            >
+                <Label htmlFor={'closed' + props.day}>Closed</Label>
+                <Checkbox id={'closed' + props.day} name="closed" /*size="$3"*/ checked={!!props.closed} onCheckedChange={props.onClick}>
+                    <Checkbox.Indicator>
+                        <Check />
+                    </Checkbox.Indicator>
+                </Checkbox>
+            </HorizontalContainer>
         </VerticalContainer>
     )
 }

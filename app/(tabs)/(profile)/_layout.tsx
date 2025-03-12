@@ -16,7 +16,7 @@ export default function ProfileLayout() {
                           options={{title: 'Edit Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
             <Stack.Screen name='storeDetails'
                           options={{title: 'Store details', headerShown: true }} />
-            <Stack.Screen name="profieDetails"
+            <Stack.Screen name="profileDetails"
                           options={{title: 'Profile details', headerShown: true }} />
             <Stack.Screen name="changeName"
                           options={{title: 'Change name', headerShown: true}} />
