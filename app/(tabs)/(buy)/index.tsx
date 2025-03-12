@@ -19,7 +19,7 @@ import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
 import {BigButton, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
-import {AnimatePresence, H2, Input, ScrollView} from "tamagui";
+import {AnimatePresence, H2, Input, ScrollView, Spinner} from "tamagui";
 import {Plus, Search, X} from "@tamagui/lucide-icons";
 
 export default  function Buy() {
@@ -70,6 +70,7 @@ export default  function Buy() {
                           // onEndReachedThreshold={0.5}
                           onScroll={handleScroll}
                           scrollEventThrottle={16}
+                          ListEmptyComponent={<Spinner />}
                           ListHeaderComponent={
                               <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
                                   <AnimatePresence mode="wait" initial="false">

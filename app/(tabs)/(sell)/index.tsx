@@ -21,7 +21,7 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
 import {BigButton, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
-import {AnimatePresence, H2, Input} from "tamagui";
+import {AnimatePresence, H2, Input, Spinner} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 export default function Sell() {
@@ -68,6 +68,7 @@ export default function Sell() {
                           initialNumToRender={10}
                           maxToRenderPerBatch={10}
                           windowSize={10}
+                          ListEmptyComponent={<Spinner />}
                           ListHeaderComponent={
                             <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
                                 <AnimatePresence mode="wait" initial="false">

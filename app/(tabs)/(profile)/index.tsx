@@ -80,6 +80,7 @@ export default function Profile() {
 
     const handleRefresh = () => {
         setIsRefreshing(true);
+        getUserData();
         getTodayProfit().then(() => setIsRefreshing(false));
     }
 
@@ -111,6 +112,7 @@ export default function Profile() {
                                     title="Profile details"
                                     icon={UserSearch}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/profileDetails')}}
                                 />
                             </Group.Item>
                             <Group.Item>
@@ -118,6 +120,7 @@ export default function Profile() {
                                     title="Change profile name"
                                     icon={UserPen}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/changeName')}}
                                 />
                             </Group.Item>
                             <Group.Item>
@@ -125,6 +128,7 @@ export default function Profile() {
                                     title="Change password"
                                     icon={BookKey}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/changePassword')}}
                                 />
                             </Group.Item>
                         </Group>
@@ -148,6 +152,7 @@ export default function Profile() {
                                     title="Change store name"
                                     icon={FilePen}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/changeStoreName')}}
                                 />
                             </Group.Item>
                             <Group.Item>
@@ -155,6 +160,7 @@ export default function Profile() {
                                     title="Change opening hours"
                                     icon={Calendar}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/changeOpeningHours')}}
                                 />
                             </Group.Item>
                             <Group.Item>
