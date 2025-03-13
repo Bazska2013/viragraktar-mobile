@@ -168,6 +168,7 @@ export default function Profile() {
                                     title="Enable/Disable price calculation"
                                     icon={DollarSign}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/changePriceCalculation')}}
                                 />
                             </Group.Item>
                             <Group.Item>
@@ -175,6 +176,7 @@ export default function Profile() {
                                     title="Manage users"
                                     icon={BookUser}
                                     iconAfter={ChevronRight}
+                                    onPress={() => {router.push('/manageUsers')}}
                                 />
                             </Group.Item>
                             <Group.Item>

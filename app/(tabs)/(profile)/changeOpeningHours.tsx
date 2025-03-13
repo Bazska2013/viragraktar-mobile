@@ -9,7 +9,7 @@ import {router} from "expo-router";
 import {Calendar} from "@tamagui/lucide-icons";
 
 export default function ChangeOpeningHours () {
-    const {store} = useUserContext()
+    const {store, setStore} = useUserContext()
     const [openingHours, setOpeningHours] = useState(JSON.parse(store.opening_hours));
 
     const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +27,7 @@ export default function ChangeOpeningHours () {
             setError(error.response.data.message);
         } finally {
             if (response?.status === 200) {
+                setStore(response.data);
                 router.back()
             }
         }

@@ -8,7 +8,7 @@ import {BigButton, VerticalContainer} from "@/tamagui.config";
 import {FilePen} from "@tamagui/lucide-icons";
 
 export default function ChangeStoreName() {
-    const {store} = useUserContext()
+    const {store, setStore} = useUserContext()
 
     const [name, setName] = useState(store?.name)
 
@@ -27,6 +27,7 @@ export default function ChangeStoreName() {
             setError(error.response.data.message);
         } finally {
             if (response?.status === 200) {
+                setStore(response.data);
                 router.back()
             }
         }
@@ -47,7 +48,6 @@ export default function ChangeStoreName() {
                         autoCapitalize="words"
                         autoFocus
                     />
-                    <SizableText>Changes appear only after you log in again</SizableText>
                     <BigButton icon={FilePen} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change store name'}</BigButton>
                     <SizableText>{error}</SizableText>
                 </VerticalContainer>

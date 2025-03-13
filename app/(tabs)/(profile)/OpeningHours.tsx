@@ -20,7 +20,6 @@ const OpeningHours = (props) => {
 
     useEffect(() => {
         props.setFieldValue(openingHours);
-        console.log(openingHours);
     }, [openingHours]);
 
     const handleSelectFrom = (day: string, value: string) => {

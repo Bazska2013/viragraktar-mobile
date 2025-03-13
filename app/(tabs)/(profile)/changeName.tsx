@@ -8,7 +8,7 @@ import {router} from "expo-router";
 import {UserPen} from "@tamagui/lucide-icons";
 
 export default function ChangeName() {
-    const {user, getUserData} = useUserContext();
+    const {user, getUserData, setUser} = useUserContext();
 
     const [name, setName] = useState(user?.name);
     const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +27,7 @@ export default function ChangeName() {
         } finally {
             setIsLoading(false);
             if (response?.status === 200) {
+                setUser(response.data);
                 router.back();
             }
         }
