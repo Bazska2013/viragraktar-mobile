@@ -1,7 +1,7 @@
 import {SafeAreaView} from "react-native";
 import {ScrollView, SizableText, Spinner} from "tamagui";
 import {BigButton, VerticalContainer} from "@/tamagui.config";
-import OpeningHours from "@/app/(tabs)/(profile)/OpeningHours";
+import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";

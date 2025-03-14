@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {H4, Label, Checkbox} from "tamagui";
 import {Check} from "@tamagui/lucide-icons";
-import Hours from "@/app/(tabs)/(profile)/Hours";
+import Hours from "@/app/(tabs)/(profile)/components/Hours";
 
 const OpeningHours = (props) => {
 

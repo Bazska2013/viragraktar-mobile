@@ -12,7 +12,7 @@ import {
 } from "@/tamagui.config";
 import {ChevronDown, ChevronRight, Save, Trash, User, UserSearch} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
-import ManageUser from "@/app/(tabs)/(profile)/ManageUser";
+import ManageUser from "@/app/(tabs)/(profile)/components/ManageUser";
 
 export default function ManageUsers() {
     const [users, setUsers] = useState([]);

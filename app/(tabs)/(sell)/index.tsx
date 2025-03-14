@@ -21,7 +21,7 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
 import {BigButton, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
-import {AnimatePresence, H2, Input, Spinner} from "tamagui";
+import {AnimatePresence, H2, Input, Paragraph, Spinner} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 export default function Sell() {
@@ -57,73 +57,81 @@ export default function Sell() {
 
     return (
         <SafeAreaView style={{height: '100%'}}>
-            {user?.is_seller ? <>
-                <FlatList data={items}
-                          numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
-                          renderItem={({item}) =>
+            {store ? <>
+                {user?.is_seller ? <>
+                    <FlatList data={items}
+                              numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
+                              renderItem={({item}) =>
                                   <Item key={item.id} item={item} />}
-                          keyExtractor={(item) => item.id.toString()}
-                          refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
-                          keyboardDismissMode='interactive'
-                          initialNumToRender={10}
-                          maxToRenderPerBatch={10}
-                          windowSize={10}
-                          ListEmptyComponent={<Spinner />}
-                          ListHeaderComponent={
-                            <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
-                                <AnimatePresence mode="wait" initial="false">
-                                    {openSearch ? <>
-                                        <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
-                                            <Input
-                                                flex={1}
-                                                // size="$3"
-                                                borderWidth={2}
-                                                id="search"
-                                                // isInvalid={!!errors.name}
-                                                value={search}
-                                                onChangeText={setSearch}
-                                                autoFocus
-                                                autoCapitalize="words"
-                                            />
-                                        </HorizontalContainer>
-                                    </> : <>
-                                        <H2 animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>Sell</H2>
-                                    </>}
-                                </AnimatePresence>
-                                <SmallButtonWithAccent height="100%" icon={openSearch ? X : Search} onPress={() => setOpenSearch(!openSearch)}>{!openSearch && 'Search'}</SmallButtonWithAccent>
-                            </HorizontalContainer>
-                          }
-                    // onEndReached={handleLoadMore}
-                    // onEndReachedThreshold={0.5}
-                    //       ListHeaderComponent={
-                    //           <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
-                    //               <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
-                    //           </Pressable>
-                    //       }
-                    //       ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
-                />
-                <AnimatePresence>
-                    {showCartButton &&
-                        <BigButton
-                            animation="quick"
-                            enterStyle={{
-                                x: 100,
-                            }}
-                            exitStyle={{
-                                x: 100,
-                            }}
-                            position="absolute"
-                            bottom={10}
-                            right={10}
-                            icon={ShoppingBasket}
-                            onPress={() => router.push('/cart')}
-                        />
-                    }
-                </AnimatePresence>
+                              keyExtractor={(item) => item.id.toString()}
+                              refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+                              keyboardDismissMode='interactive'
+                              initialNumToRender={10}
+                              maxToRenderPerBatch={10}
+                              windowSize={10}
+                              ListEmptyComponent={<Spinner />}
+                              ListHeaderComponent={
+                                  <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
+                                      <AnimatePresence mode="wait" initial="false">
+                                          {openSearch ? <>
+                                              <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
+                                                  <Input
+                                                      flex={1}
+                                                      // size="$3"
+                                                      borderWidth={2}
+                                                      id="search"
+                                                      // isInvalid={!!errors.name}
+                                                      value={search}
+                                                      onChangeText={setSearch}
+                                                      autoFocus
+                                                      autoCapitalize="words"
+                                                  />
+                                              </HorizontalContainer>
+                                          </> : <>
+                                              <H2 animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>Sell</H2>
+                                          </>}
+                                      </AnimatePresence>
+                                      <SmallButtonWithAccent height="100%" icon={openSearch ? X : Search} onPress={() => setOpenSearch(!openSearch)}>{!openSearch && 'Search'}</SmallButtonWithAccent>
+                                  </HorizontalContainer>
+                              }
+                        // onEndReached={handleLoadMore}
+                        // onEndReachedThreshold={0.5}
+                        //       ListHeaderComponent={
+                        //           <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
+                        //               <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
+                        //           </Pressable>
+                        //       }
+                        //       ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
+                    />
+                    <AnimatePresence>
+                        {showCartButton &&
+                            <BigButton
+                                animation="quick"
+                                enterStyle={{
+                                    x: 100,
+                                }}
+                                exitStyle={{
+                                    x: 100,
+                                }}
+                                position="absolute"
+                                bottom={10}
+                                right={10}
+                                icon={ShoppingBasket}
+                                onPress={() => router.push('/cart')}
+                            />
+                        }
+                    </AnimatePresence>
+                </> : <>
+                    <View justifyContent="center" alignItems="center" alignSelf="center" height="100%">
+                        <H2>Permission denied</H2>
+                        <Paragraph>You do not have permission to sell items. If you did not expect this message, please refer to your employer.</Paragraph>
+                    </View>
+                </>}
             </> : <>
-                <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                    <Text style={[styles.header, {color: theme.colors.text}]}>Permission denied</Text>
-                    <Text style={[styles.text, {color: theme.colors.text}]}>You do not have permission to sell items. If you did not expect this message, please refer to your employer.</Text>
+                <View justifyContent="center" alignItems="center" alignSelf="center" height="100%">
+                    <H2>No store membership found</H2>
+                    <Paragraph>You are not yet a part of a store. Navigate to the Profile page to join or create one.</Paragraph>
+                    <SmallButtonWithAccent onPress={() => router.replace('/(tabs)/(profile)')}>Go to Profile</SmallButtonWithAccent>
                 </View>
             </>}
         </SafeAreaView>

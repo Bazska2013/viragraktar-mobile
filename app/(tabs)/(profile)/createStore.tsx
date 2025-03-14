@@ -13,7 +13,7 @@ import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import OpeningHours from "@/app/(tabs)/(profile)/OpeningHours";
+import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import {Input, Label, ScrollView, Checkbox, Spinner, SizableText} from "tamagui";

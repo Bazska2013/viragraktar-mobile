@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
-import OpeningHours from "@/app/(tabs)/(profile)/OpeningHours";
+import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
 import Checkbox from "expo-checkbox";
 import {useEffect, useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
