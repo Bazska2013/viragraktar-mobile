@@ -1,14 +1,17 @@
 import {RefreshControl, SafeAreaView} from "react-native";
 import {H4, ScrollView, SizableText} from "tamagui";
-import {VerticalContainer} from "@/tamagui.config";
+import {SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 import {useEffect, useState} from "react";
+import * as Clipboard from 'expo-clipboard';
+import {ClipboardCopy} from "@tamagui/lucide-icons";
 
 export default function StoreDetails() {
     const {store, } = useUserContext();
     const [storeId, setStoreId] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     const getStoreId = async () => {
         let response;
@@ -41,6 +44,17 @@ export default function StoreDetails() {
         getStoreId().then(() => setIsRefreshing(false));
     }
 
+    const copyToClipboard = async () => {
+        await Clipboard.setStringAsync('hello world');
+        setCopied(true);
+        const intervalId = setInterval(() => {
+            setCopied(false);
+        }, 2000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    };
+
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
@@ -54,8 +68,8 @@ export default function StoreDetails() {
                     <SizableText>{store?.opening_hours}</SizableText>
                     <H4>Is calculation enabled?</H4>
                     <SizableText>{store?.calculation_enabled ? 'Yes' : 'No'}</SizableText>
-                    <H4>Store ID:</H4>
-                    <SizableText>{storeId}</SizableText>
+                    <H4>Press the button to copy the Store ID</H4>
+                    <SmallButtonWithAccent icon={ClipboardCopy} onPress={copyToClipboard}>{copied? 'Copied!' : storeId}</SmallButtonWithAccent>
                 </VerticalContainer>
             </ScrollView>
         </SafeAreaView>

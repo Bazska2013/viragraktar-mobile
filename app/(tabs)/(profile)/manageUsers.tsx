@@ -12,6 +12,7 @@ import {
 } from "@/tamagui.config";
 import {ChevronDown, ChevronRight, Save, Trash, User, UserSearch} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
+import ManageUser from "@/app/(tabs)/(profile)/ManageUser";
 
 export default function ManageUsers() {
     const [users, setUsers] = useState([]);
@@ -72,38 +73,15 @@ export default function ManageUsers() {
                             </Accordion.Trigger>
                             <Accordion.HeightAnimator animation="medium">
                                 <Accordion.Content animation="medium" exitStyle={{ opacity: 0 }}>
-                                    <VerticalContainer>
-                                        <HorizontalContainer flex={1} alignItems="center">
-                                            <H6 flex={1}>Name</H6>
-                                            <SizableText flex={2}>{users[user].name}</SizableText>
-                                        </HorizontalContainer>
-                                        <HorizontalContainer flex={1} alignItems="center">
-                                            <H6 flex={1}>Email</H6>
-                                            <SizableText flex={2}>{users[user].email}</SizableText>
-                                        </HorizontalContainer>
-                                        <HorizontalContainer flex={1} alignItems="center">
-                                            <Label htmlFor={users[user].name + 'seller'}>Seller</Label>
-                                            <Switch checked={users[user].is_seller} id={users[user].name + 'seller'} size="$3">
-                                                <Switch.Thumb animation="bouncy" />
-                                            </Switch>
-                                        </HorizontalContainer>
-                                        <HorizontalContainer flex={1} alignItems="center">
-                                            <Label htmlFor={users[user].name + 'buyer'}>Buyer</Label>
-                                            <Switch checked={users[user].is_buyer} id={users[user].name + 'buyer'} size="$3">
-                                                <Switch.Thumb animation="bouncy" />
-                                            </Switch>
-                                        </HorizontalContainer>
-                                        <HorizontalContainer flex={1} alignItems="center">
-                                            <Label htmlFor={users[user].name + 'admin'}>Admin</Label>
-                                            <Switch checked={users[user].is_admin} id={users[user].name + 'admin'} size="$3">
-                                                <Switch.Thumb animation="bouncy" />
-                                            </Switch>
-                                        </HorizontalContainer>
-                                        <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
-                                            <SmallButtonWithAccent icon={Save} >Save changes</SmallButtonWithAccent>
-                                            <SmallButtonWithAccent icon={Trash} >Remove user</SmallButtonWithAccent>
-                                        </StyledGroup>
-                                    </VerticalContainer>
+                                    <ManageUser
+                                        name={users[user].name}
+                                        email={users[user].email}
+                                        isSeller={users[user].is_seller}
+                                        isBuyer={users[user].is_buyer}
+                                        isAdmin={users[user].is_admin}
+                                        id={users[user].id}
+                                        refetchUsers={fetchUsers}
+                                    />
                                 </Accordion.Content>
                             </Accordion.HeightAnimator>
                         </Accordion.Item>
