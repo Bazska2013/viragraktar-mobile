@@ -3,8 +3,8 @@ import {useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {SafeAreaView} from "react-native";
-import {Input, Label, ScrollView, SizableText, Spinner} from "tamagui";
-import {BigButton, VerticalContainer} from "@/tamagui.config";
+import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
+import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import {FilePen} from "@tamagui/lucide-icons";
 
 export default function ChangeStoreName() {
@@ -37,8 +37,10 @@ export default function ChangeStoreName() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <VerticalContainer>
-                    <Label htmlFor="name">Store name</Label>
+                <EditContainer>
+                    <Label htmlFor="name">
+                        <H4>Store name</H4>
+                    </Label>
                     <Input
                         id="name"
                         flex={1}
@@ -48,9 +50,10 @@ export default function ChangeStoreName() {
                         autoCapitalize="words"
                         autoFocus
                     />
+                    <Separator />
                     <BigButton icon={FilePen} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change store name'}</BigButton>
                     <SizableText>{error}</SizableText>
-                </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

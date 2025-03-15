@@ -14,7 +14,7 @@ import {router} from "expo-router";
 import axios from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
-import {Input, Label, ScrollView, Spinner} from "tamagui";
+import {H4, Input, Label, ScrollView, Separator, Spinner} from "tamagui";
 
 export default  function Register() {
 
@@ -67,7 +67,9 @@ export default  function Register() {
             >
                 <EditContainer>
                     <VerticalContainer>
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">
+                            <H4>Email</H4>
+                        </Label>
                         <Input
                             id="email"
                             flex={1}
@@ -82,8 +84,11 @@ export default  function Register() {
                             autoCapitalize="none"
                         />
                     </VerticalContainer>
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="name">
+                            <H4>Name</H4>
+                        </Label>
                         <Input
                             id="name"
                             flex={1}
@@ -96,8 +101,11 @@ export default  function Register() {
                             autoCapitalize="words"
                         />
                     </VerticalContainer>
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">
+                            <H4>Password</H4>
+                        </Label>
                         <Input
                             id="password"
                             flex={1}
@@ -109,10 +117,14 @@ export default  function Register() {
                             value={password}
                             secureTextEntry
                             autoCapitalize="none"
+                            textContentType='oneTimeCode'
                         />
                     </VerticalContainer>
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="password2">Password again</Label>
+                        <Label htmlFor="password2">
+                            <H4>Password again</H4>
+                        </Label>
                         <Input
                             id="password2"
                             flex={1}
@@ -124,12 +136,12 @@ export default  function Register() {
                             value={passwordConfirm}
                             secureTextEntry
                             autoCapitalize="none"
+                            textContentType='oneTimeCode'
                         />
                     </VerticalContainer>
                     {/*<SizableText>{error}</SizableText>*/}
-                    <VerticalContainer marginTop={40}>
-                        <BigButton onPress={() => {handleRegister()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign up"}</BigButton>
-                    </VerticalContainer>
+                    <Separator />
+                    <BigButton onPress={() => {handleRegister()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign up"}</BigButton>
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>

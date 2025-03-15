@@ -1,6 +1,6 @@
 import {SafeAreaView} from "react-native";
-import {Input, Label, ScrollView, SizableText, Spinner} from "tamagui";
-import {VerticalContainer, BigButton} from "@/tamagui.config";
+import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
+import {VerticalContainer, BigButton, EditContainer} from "@/tamagui.config";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
@@ -37,8 +37,10 @@ export default function ChangeName() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <VerticalContainer>
-                    <Label htmlFor="name">Name</Label>
+                <EditContainer>
+                    <Label htmlFor="name">
+                        <H4>Name</H4>
+                    </Label>
                     <Input
                         flex={1}
                         borderWidth={2}
@@ -48,10 +50,10 @@ export default function ChangeName() {
                         autoFocus
                         autoCapitalize="words"
                     />
-                    <SizableText>Changes appear only after you log in again</SizableText>
+                    <Separator />
                     <BigButton icon={UserPen} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> : 'Change name'}</BigButton>
                     <SizableText>{error}</SizableText>
-                </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

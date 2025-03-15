@@ -33,7 +33,7 @@ export default function Profile() {
 
     const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const {user, setUser, store, setStore, getUserData} = useUserContext();
+    const {user, setUser, store, setStore, getUserData, fetchUserData} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -80,8 +80,12 @@ export default function Profile() {
 
     const handleRefresh = () => {
         setIsRefreshing(true);
+        fetchUserData();
         getUserData();
-        getTodayProfit().then(() => setIsRefreshing(false));
+        if (store) {
+            getTodayProfit();
+        }
+        setIsRefreshing(false);
     }
 
     const handleLeaveStore = async () => {
@@ -125,6 +129,7 @@ export default function Profile() {
                         width="90%"
                         alignSelf="center"
                         boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                        padding="$3"
                     >
                         <H4>Hello {user?.name}!</H4>
                         {store &&

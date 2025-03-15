@@ -1,6 +1,6 @@
 import {SafeAreaView} from "react-native";
-import {ScrollView, SizableText, Spinner} from "tamagui";
-import {BigButton, VerticalContainer} from "@/tamagui.config";
+import {ScrollView, Separator, SizableText, Spinner} from "tamagui";
+import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {useEffect, useState} from "react";
@@ -37,11 +37,12 @@ export default function ChangeOpeningHours () {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <VerticalContainer>
+                <EditContainer>
                     <OpeningHours openingHours={openingHours} setFieldValue={(value)=> setOpeningHours(value)} />
+                    <Separator />
                     <BigButton icon={Calendar} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> :'Change opening hours'}</BigButton>
                     <SizableText>{error}</SizableText>
-                </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

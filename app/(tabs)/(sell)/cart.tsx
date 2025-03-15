@@ -1,6 +1,6 @@
-import {Platform, SafeAreaView} from "react-native";
+import {Dimensions, Platform, SafeAreaView} from "react-native";
 import {StatusBar} from "expo-status-bar";
-import {Group, H3, Input, ScrollView, SizableText, Spinner} from "tamagui";
+import {Group, H3, H4, Input, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {
     BigButton,
     EditContainer,
@@ -90,44 +90,88 @@ export default function Cart() {
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
 
             <ScrollView style={{height: '100%'}}>
-                <EditContainer>
-                    <HorizontalContainer>
-                        <H3>#</H3>
-                        <H3>Name</H3>
-                        <H3>Amount</H3>
-                        <H3>Price</H3>
-                        <H3>Total</H3>
-                    </HorizontalContainer>
-                    {cartItems.map((item, index) => (
-                        <HorizontalContainer key={index}>
-                            <SizableText>{index + 1}</SizableText>
-                            <SizableText>{item.name}</SizableText>
-                            <Group orientation="horizontal">
-                                <SmallButton icon={Minus} onPress={() => handleChange('minus', item, 0)} />
-                                <Input
-                                    value={item.amount.toString()}
-                                    keyboardType='numeric'
-                                    onChangeText={(value) => handleChange('', item, value)}
-                                />
-                                <SmallButton icon={Plus} onPress={() => handleChange('plus', item, 0)} />
-                            </Group>
-                            <SizableText>{item.price}</SizableText>
-                            <SizableText>{item.price * item.amount}</SizableText>
-                            <SmallButtonWithAccent icon={Trash} onPress={() => removeFromCart(item)} />
-                        </HorizontalContainer>
-                    ))}
-                    <HorizontalContainer>
-                        <Group orientation='horizontal'>
-                            <SmallButton icon={Banknote} onPress={() => setCash(!cash)}>Cash</SmallButton>
-                            <SmallButton icon={CreditCard} onPress={() => setCash(!cash)}>Credit</SmallButton>
-                        </Group>
-                        <H3>
-                            Total: {total} HUF
-                        </H3>
-                        <BigButton icon={DollarSign} onPress={() => handleCheckout()}>{isLoading ? <Spinner /> : 'Sell'}</BigButton>
-                    </HorizontalContainer>
-                    {error && <SizableText color='red' >{error}</SizableText>}
-                </EditContainer>
+                    {Dimensions.get('window').width >= 768 ? <>
+                        <EditContainer>
+                            <HorizontalContainer>
+                                <H3>#</H3>
+                                <H3>Name</H3>
+                                <H3>Amount</H3>
+                                <H3>Price</H3>
+                                <H3>Total</H3>
+                            </HorizontalContainer>
+                            {cartItems.map((item, index) => (
+                                <HorizontalContainer key={index}>
+                                    <SizableText>{index + 1}</SizableText>
+                                    <SizableText>{item.name}</SizableText>
+                                    <Group orientation="horizontal">
+                                        <SmallButton icon={Minus} onPress={() => handleChange('minus', item, 0)} />
+                                        <Input
+                                            value={item.amount.toString()}
+                                            keyboardType='numeric'
+                                            onChangeText={(value) => handleChange('', item, value)}
+                                        />
+                                        <SmallButton icon={Plus} onPress={() => handleChange('plus', item, 0)} />
+                                    </Group>
+                                    <SizableText>{item.price}</SizableText>
+                                    <SizableText>{item.price * item.amount}</SizableText>
+                                    <SmallButtonWithAccent icon={Trash} onPress={() => removeFromCart(item)} />
+                                </HorizontalContainer>
+                            ))}
+                            <HorizontalContainer>
+                                <Group orientation='horizontal'>
+                                    <SmallButton icon={Banknote} onPress={() => setCash(!cash)}>Cash</SmallButton>
+                                    <SmallButton icon={CreditCard} onPress={() => setCash(!cash)}>Credit</SmallButton>
+                                </Group>
+                                <H3>
+                                    Total: {total} HUF
+                                </H3>
+                                <BigButton icon={DollarSign} onPress={() => handleCheckout()}>{isLoading ? <Spinner /> : 'Sell'}</BigButton>
+                                {error && <SizableText color='red' >{error}</SizableText>}
+                            </HorizontalContainer>
+                        </EditContainer>
+                    </> : <>
+                        <EditContainer>
+                            {cartItems.map((item, index) => (
+                                <VerticalContainer key={index}>
+                                    <HorizontalContainer>
+                                        <H4>{item.name}</H4>
+                                    </HorizontalContainer>
+                                    <Separator />
+                                    <Group orientation="horizontal" flex={1} alignItems="center">
+                                        <SmallButton flex={1} icon={Minus} onPress={() => handleChange('minus', item, 0)} />
+                                        <Input
+                                            flex={3}
+                                            value={item.amount.toString()}
+                                            keyboardType='numeric'
+                                            onChangeText={(value) => handleChange('', item, value)}
+                                        />
+                                        <SmallButton flex={1} icon={Plus} onPress={() => handleChange('plus', item, 0)} />
+                                    </Group>
+                                    <Separator />
+                                    <HorizontalContainer>
+                                        <H4>HUF {item.price * item.amount}</H4>
+                                    </HorizontalContainer>
+                                    <Separator />
+                                    <SmallButtonWithAccent icon={Trash} onPress={() => removeFromCart(item)}>Remove from cart</SmallButtonWithAccent>
+                                </VerticalContainer>
+                            ))}
+                        </EditContainer>
+                        <EditContainer>
+                            <VerticalContainer>
+                                <Group orientation='horizontal' flex={1}>
+                                    <SmallButton flex={1} icon={Banknote} onPress={() => setCash(!cash)}>Cash</SmallButton>
+                                    <SmallButton flex={1} icon={CreditCard} onPress={() => setCash(!cash)}>Credit</SmallButton>
+                                </Group>
+                                <Separator />
+                                <H4>
+                                    Total: {total} HUF
+                                </H4>
+                                <Separator />
+                                <BigButton icon={DollarSign} onPress={() => handleCheckout()}>{isLoading ? <Spinner /> : 'Sell'}</BigButton>
+                                {error && <SizableText color='red' >{error}</SizableText>}
+                            </VerticalContainer>
+                        </EditContainer>
+                    </>}
             </ScrollView>
         </SafeAreaView>
     )

@@ -19,9 +19,9 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
-import {BigButton, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
-import {AnimatePresence, H2, Input, Paragraph, Spinner} from "tamagui";
+import {AnimatePresence, H2, H4, Input, Paragraph, Spinner} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 export default function Sell() {
@@ -69,7 +69,12 @@ export default function Sell() {
                               initialNumToRender={10}
                               maxToRenderPerBatch={10}
                               windowSize={10}
-                              ListEmptyComponent={<Spinner />}
+                              ListEmptyComponent={
+                                  <EditContainer marginBottom="$5">
+                                      <H4>Oops!</H4>
+                                      <Paragraph>It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!</Paragraph>
+                                  </EditContainer>
+                              }
                               ListHeaderComponent={
                                   <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
                                       <AnimatePresence mode="wait" initial="false">

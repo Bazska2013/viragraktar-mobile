@@ -1,5 +1,5 @@
 import {HorizontalContainer, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
-import {H6, Label, SizableText, Switch} from "tamagui";
+import {H4, H6, Label, Separator, SizableText, Switch} from "tamagui";
 import {Save, Trash} from "@tamagui/lucide-icons";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -92,31 +92,42 @@ const ManageUser = (props) => {
     return (
         <VerticalContainer>
             <HorizontalContainer flex={1} alignItems="center">
-                <H6 flex={1}>Name</H6>
+                <H4 flex={1}>Name</H4>
                 <SizableText flex={2}>{props.name}</SizableText>
             </HorizontalContainer>
+            <Separator />
             <HorizontalContainer flex={1} alignItems="center">
-                <H6 flex={1}>Email</H6>
+                <H4 flex={1}>Email</H4>
                 <SizableText flex={2}>{props.email}</SizableText>
             </HorizontalContainer>
-            <HorizontalContainer flex={1} alignItems="center">
-                <Label htmlFor={props.name + 'seller'}>Seller</Label>
+            <Separator />
+            <HorizontalContainer flex={1} alignItems="center" justifyContent="space-between">
+                <Label htmlFor={props.name + 'seller'}>
+                    <H4>Seller</H4>
+                </Label>
                 <Switch checked={isSeller} id={props.name + 'seller'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'seller')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
-            <HorizontalContainer flex={1} alignItems="center">
-                <Label htmlFor={props.name + 'buyer'}>Buyer</Label>
+            <Separator />
+            <HorizontalContainer flex={1} alignItems="center" justifyContent="space-between">
+                <Label htmlFor={props.name + 'buyer'}>
+                    <H4>Buyer</H4>
+                </Label>
                 <Switch checked={isBuyer} id={props.name + 'buyer'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'buyer')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
-            <HorizontalContainer flex={1} alignItems="center">
-                <Label htmlFor={props.name + 'admin'}>Admin</Label>
+            <Separator />
+            <HorizontalContainer flex={1} alignItems="center" justifyContent="space-between">
+                <Label htmlFor={props.name + 'admin'}>
+                    <H4>Admin</H4>
+                </Label>
                 <Switch checked={isAdmin} disabled={user.id === props.id} opacity={user.id !== props.id ? "1" : "0.5"} id={props.name + 'admin'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'admin')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
+            <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
                 <SmallButtonWithAccent icon={Save} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleSave()} >Save changes</SmallButtonWithAccent>
                 <SmallButtonWithAccent icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? "1" : "0.5"} onPress={() => handleDelete()} >Remove user</SmallButtonWithAccent>

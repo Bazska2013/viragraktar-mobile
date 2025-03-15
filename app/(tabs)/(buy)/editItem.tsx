@@ -16,8 +16,14 @@ import axios from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
-import {H2, H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image} from "tamagui";
-import {BigButton, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import {H2, H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator} from "tamagui";
+import {
+    BigButton,
+    EditContainer,
+    HorizontalContainer,
+    SmallButtonWithAccent,
+    VerticalContainer
+} from "@/tamagui.config";
 import * as ImagePicker from "expo-image-picker";
 
 export default function EditItem() {
@@ -138,10 +144,10 @@ export default function EditItem() {
             </Sheet>
             {item &&
                 <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                    <VerticalContainer>
+                    <EditContainer>
                         <VerticalContainer>
                             <Label htmlFor="name">
-                                Name of the item
+                                <H4>Name of the item</H4>
                             </Label>
                             <Input
                                 flex={1}
@@ -155,9 +161,10 @@ export default function EditItem() {
                                 autoCapitalize="words"
                             />
                         </VerticalContainer>
+                        <Separator />
                         <VerticalContainer>
                             <Label htmlFor="description">
-                                Description of the item
+                                <H4>Description of the item</H4>
                             </Label>
                             <Input
                                 flex={1}
@@ -170,9 +177,10 @@ export default function EditItem() {
                                 autoCapitalize="sentences"
                             />
                         </VerticalContainer>
+                        <Separator />
                         <VerticalContainer>
                             <Label htmlFor="price">
-                                Price of the item
+                                <H4>Price of the item</H4>
                             </Label>
                             <Input
                                 flex={1}
@@ -185,9 +193,10 @@ export default function EditItem() {
                                 keyboardType="numeric"
                             />
                         </VerticalContainer>
+                        <Separator />
                         <VerticalContainer>
                             <Label htmlFor="stock">
-                                Stock of the item
+                                <H4>Stock of the item</H4>
                             </Label>
                             <Input
                                 flex={1}
@@ -200,6 +209,7 @@ export default function EditItem() {
                                 keyboardType="numeric"
                             />
                         </VerticalContainer>
+                        <Separator />
                         <VerticalContainer>
                             <SmallButtonWithAccent onPress={setImageModal}>{item.image ? 'Change image' : 'Pick an image'}</SmallButtonWithAccent>
                             {(item.image || image) && <Image alignSelf="center" borderRadius={5} source={{
@@ -208,9 +218,10 @@ export default function EditItem() {
                                 height: 200,
                             }} />}
                         </VerticalContainer>
+                        <Separator />
                         <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Edit item"}</BigButton>
                         <SizableText>{error}</SizableText>
-                    </VerticalContainer>
+                    </EditContainer>
                 </ScrollView>
             }
         </SafeAreaView>

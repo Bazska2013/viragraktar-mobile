@@ -13,7 +13,7 @@ import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from '../scripts/axiosConfig';
 import CookieManager from '@react-native-cookies/cookies';
-import {Button, Input, Label, SizableText, Spinner} from 'tamagui';
+import {Button, H4, Input, Label, Separator, SizableText, Spinner} from 'tamagui';
 import {BigButton, EditContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import {ScrollView} from "tamagui";
 
@@ -99,7 +99,9 @@ export default function Login() {
             >
                 <EditContainer>
                     <VerticalContainer>
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">
+                            <H4>Email</H4>
+                        </Label>
                         <Input
                             id="email"
                             flex={1}
@@ -114,8 +116,11 @@ export default function Login() {
                             autoCapitalize="none"
                         />
                     </VerticalContainer>
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">
+                            <H4>Password</H4>
+                        </Label>
                         <Input
                             id="password"
                             flex={1}
@@ -129,12 +134,12 @@ export default function Login() {
                             autoCapitalize="none"
                         />
                     </VerticalContainer>
+                    <Separator />
                     {/*<SizableText>{error}</SizableText>*/}
-                    <VerticalContainer marginTop={240}>
-                        <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign in"}</BigButton>
-                        <SizableText>Don't have an account yet?</SizableText>
-                        <SmallButton onPress={() => {router.push('/register')}}>Sign up</SmallButton>
-                    </VerticalContainer>
+                    <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign in"}</BigButton>
+                    <Separator />
+                    <SizableText>Don't have an account yet?</SizableText>
+                    <SmallButton onPress={() => {router.push('/register')}}>Sign up</SmallButton>
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>

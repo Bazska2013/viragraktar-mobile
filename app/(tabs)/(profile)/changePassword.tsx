@@ -1,6 +1,6 @@
 import {SafeAreaView} from "react-native";
-import {Input, Label, ScrollView, SizableText, Spinner} from "tamagui";
-import {BigButton, VerticalContainer} from "@/tamagui.config";
+import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
+import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import {useEffect, useState} from "react";
 import {BookKey} from "@tamagui/lucide-icons";
 import axios from '@/scripts/axiosConfig';
@@ -49,9 +49,11 @@ export default function ChangePassword() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <VerticalContainer>
+                <EditContainer>
                     <VerticalContainer>
-                        <Label htmlFor="current">Current password</Label>
+                        <Label htmlFor="current">
+                            <H4>Current password</H4>
+                        </Label>
                         <Input
                             id="current"
                             flex={1}
@@ -64,8 +66,11 @@ export default function ChangePassword() {
                             autoFocus
                         />
                     </VerticalContainer>
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="new">New password</Label>
+                        <Label htmlFor="new">
+                            <H4>New password</H4>
+                        </Label>
                         <Input
                             id="new"
                             flex={1}
@@ -77,8 +82,11 @@ export default function ChangePassword() {
                             autoCapitalize="none"
                         />
                     </VerticalContainer>
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="confirm">Password confirmation</Label>
+                        <Label htmlFor="confirm">
+                            <H4>Password confirmation</H4>
+                        </Label>
                         <Input
                             id="confirm"
                             flex={1}
@@ -90,9 +98,10 @@ export default function ChangePassword() {
                             autoCapitalize="none"
                         />
                     </VerticalContainer>
+                    <Separator />
                     <BigButton disabled={!validData} icon={BookKey} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> : 'Change password'}</BigButton>
                     <SizableText>{error}</SizableText>
-                </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

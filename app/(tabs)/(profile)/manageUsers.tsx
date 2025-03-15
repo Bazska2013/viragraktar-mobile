@@ -1,5 +1,5 @@
 import {RefreshControl, SafeAreaView} from "react-native";
-import {Accordion, Group, H6, Label, Paragraph, ScrollView, Separator, SizableText, Square, Switch} from "tamagui";
+import {Accordion, Group, H4, H6, Label, Paragraph, ScrollView, Separator, SizableText, Square, Switch} from "tamagui";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {
@@ -63,7 +63,7 @@ export default function ManageUsers() {
                             <Accordion.Trigger flexDirection="row" justifyContent="space-between">
                                 {({open}: {open: boolean}) => (
                                     <>
-                                        <Paragraph>{users[user].name}</Paragraph>
+                                        <H4>{users[user].name}</H4>
                                         <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
                                             <ChevronDown size="$1" />
                                         </Square>

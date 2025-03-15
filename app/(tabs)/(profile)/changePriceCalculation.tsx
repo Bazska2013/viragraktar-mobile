@@ -1,5 +1,5 @@
-import {Checkbox, Input, Label, ScrollView, SizableText, Spinner} from "tamagui";
-import {BigButton, VerticalContainer} from "@/tamagui.config";
+import {Checkbox, H4, Input, Label, ScrollView, Separator, SizableText, Spinner, Switch} from "tamagui";
+import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import {Check, DollarSign, FilePen} from "@tamagui/lucide-icons";
 import {SafeAreaView} from "react-native";
 import {useState} from "react";
@@ -38,16 +38,17 @@ export default function ChangePriceCalculation() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <VerticalContainer>
-                    <Label htmlFor="calculation">Calculation enabled</Label>
-                    <Checkbox id="calculation" name="calculation" checked={calculation} onCheckedChange={() => setCalculation(!calculation)}>
-                        <Checkbox.Indicator>
-                            <Check />
-                        </Checkbox.Indicator>
-                    </Checkbox>
+                <EditContainer>
+                    <Label htmlFor="calculation">
+                        <H4>Calculation enabled</H4>
+                    </Label>
+                    <Switch id="calculation" checked={calculation} onCheckedChange={() => setCalculation(!calculation)}>
+                        <Switch.Thumb animation="bouncy" />
+                    </Switch>
+                    <Separator />
                     <BigButton icon={DollarSign} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change price calculation'}</BigButton>
                     <SizableText>{error}</SizableText>
-                </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )

@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {H2, Input, ScrollView, SizableText, Spinner} from "tamagui";
+import {H2, H4, Input, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 
 export default function JoinStore() {
@@ -54,7 +54,7 @@ export default function JoinStore() {
                         automaticallyAdjustKeyboardInsets={true}
             >
                 <EditContainer>
-                    <H2>Enter the unique ID of the Store you want to join</H2>
+                    <H4>Enter the unique ID of the Store you want to join</H4>
                     <Input
                         flex={1}
                         // size="$3"
@@ -65,6 +65,7 @@ export default function JoinStore() {
                         autoCapitalize='characters'
                         autoFocus
                     />
+                    <Separator />
                     <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Join store"}</BigButton>
                     {error && <SizableText>{error}</SizableText>}
                 </EditContainer>

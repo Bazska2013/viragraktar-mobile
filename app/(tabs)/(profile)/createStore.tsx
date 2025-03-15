@@ -16,18 +16,17 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
-import {Input, Label, ScrollView, Checkbox, Spinner, SizableText} from "tamagui";
+import {Input, Label, ScrollView, Checkbox, Spinner, SizableText, H4, Separator, Switch} from "tamagui";
 import {Check} from "@tamagui/lucide-icons";
 
 export default function CreateStore() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const {getUserData, setStore} = useUserContext();
+    const {getUserData, setStore, fetchUserData} = useUserContext();
 
     const [error, setError] = useState(null);
     const [name, setName] = useState(null);
-    const [nameInputStyle, setNameInputStyle] = useState(styles.textInput);
     const [opening_hours, setOpeningHours] = useState(null);
     const [calculation_enabled, setCalculationEnabled] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +38,7 @@ export default function CreateStore() {
         try {
             response = await axios.post('/api/store', {
                 name: name,
-                opening_hours: opening_hours,
+                opening_hours: JSON.stringify(opening_hours),
                 calculation_enabled: calculation_enabled,
             });
         } catch (error: any) {
@@ -48,6 +47,7 @@ export default function CreateStore() {
         } finally {
             setIsLoading(false);
             if (response?.status === 201) {
+                fetchUserData();
                 getUserData();
                 setStore(response.data);
                 router.back();
@@ -56,7 +56,7 @@ export default function CreateStore() {
     }
 
     useEffect(() => {
-        if (name && name.length > 0 && opening_hours && opening_hours.length > 0) {
+        if (name && name.length > 0) {
             setValidInput(true);
         } else {
             setValidInput(false);
@@ -71,7 +71,9 @@ export default function CreateStore() {
             >
                 <EditContainer>
                     <VerticalContainer>
-                        <Label htmlFor="name">Name of your store</Label>
+                        <Label htmlFor="name">
+                            <H4>Name of your store</H4>
+                        </Label>
                         <Input
                             flex={1}
                             // size="$3"
@@ -85,17 +87,18 @@ export default function CreateStore() {
                             autoCorrect={false}
                         />
                     </VerticalContainer>
+                    <Separator />
                     <OpeningHours setFieldValue={setOpeningHours} />
+                    <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="calculation_enabled">Enable price calculation</Label>
-                        <Checkbox
-                            id="calculation_enabled"
-                            value={calculation_enabled} onValueChange={setCalculationEnabled}>
-                            <Checkbox.Indicator>
-                                <Check />
-                            </Checkbox.Indicator>
-                        </Checkbox>
+                        <Label htmlFor="calculation_enabled">
+                            <H4>Enable price calculation</H4>
+                        </Label>
+                        <Switch id="calculation_enabled" checked={calculation_enabled} onCheckedChange={setCalculationEnabled}>
+                            <Switch.Thumb animation="bouncy" />
+                        </Switch>
                     </VerticalContainer>
+                    <Separator />
                     <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Create store"}</BigButton>
                 </EditContainer>
                 {error && <SizableText>{error}</SizableText>}

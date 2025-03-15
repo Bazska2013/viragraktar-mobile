@@ -18,8 +18,14 @@ import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
-import {BigButton, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
-import {AnimatePresence, H2, Input, Paragraph, ScrollView, Spinner} from "tamagui";
+import {
+    BigButton,
+    EditContainer,
+    HorizontalContainer,
+    SmallButtonWithAccent,
+    VerticalContainer
+} from "@/tamagui.config";
+import {AnimatePresence, H2, H4, Input, Paragraph, ScrollView, Spinner} from "tamagui";
 import {Plus, Search, X} from "@tamagui/lucide-icons";
 
 export default  function Buy() {
@@ -67,11 +73,14 @@ export default  function Buy() {
                               maxToRenderPerBatch={10}
                               windowSize={10}
                               marginBottom="5%"
-                        // onEndReached={handleLoadMore}
-                        // onEndReachedThreshold={0.5}
                               onScroll={handleScroll}
                               scrollEventThrottle={16}
-                              ListEmptyComponent={<Spinner />}
+                              ListEmptyComponent={
+                                  <EditContainer marginBottom="$5">
+                                      <H4>Oops!</H4>
+                                      <Paragraph>It looks like you have not yet added any item to your store. Press the button below to begin!</Paragraph>
+                                  </EditContainer>
+                              }
                               ListHeaderComponent={
                                   <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
                                       <AnimatePresence mode="wait" initial="false">

@@ -7,6 +7,7 @@ import * as SecureStore from "expo-secure-store";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Drawer} from "expo-router/drawer";
 import {ShoppingCart, Store, User} from "@tamagui/lucide-icons";
+import axios from "@/scripts/axiosConfig";
 
 const UserContext = createContext<{
     user: any,
@@ -14,6 +15,7 @@ const UserContext = createContext<{
     store: any,
     setStore: (store: any) => void,
     getUserData: () => void
+    fetchUserData: () => void
 } | undefined>(undefined);
 
 export function useUserContext() {
@@ -45,6 +47,19 @@ export default function TabLayout() {
     const [store, setStore] = useState(null);
     const isWideScreen = useResponsiveLayout();
 
+    const fetchUserData = async () => {
+        let response;
+        try {
+            response = await axios.get('/api/user');
+        } catch (error: any) {
+            console.error(error.response.data.message);
+        } finally {
+            if (response?.status === 200) {
+                setUser(response.data);
+            }
+        }
+    }
+
     const getUserData = async () => {
         const user = JSON.parse(await SecureStore.getItemAsync('user') as string);
         const store = JSON.parse(await SecureStore.getItemAsync('store') as string);
@@ -63,7 +78,8 @@ export default function TabLayout() {
         setUser: setUser,
         store: store,
         setStore: setStore,
-        getUserData: getUserData
+        getUserData: getUserData,
+        fetchUserData: fetchUserData
     }
 
     return (
