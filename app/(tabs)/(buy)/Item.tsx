@@ -109,10 +109,12 @@ const Item = ({props}: {props: any}) => {
                 <StyledGroup orientation='vertical'>
                     <SmallButtonWithAccent icon={Plus} onPress={() => handleChange('', 'add')} />
                     <Input flex={1}
-                           borderWidth={2}
                            keyboardType='numeric'
                            value={item.stock.toString()}
                            onChangeText={(value) => handleChange(value, 'field')}
+                           alignSelf="center"
+                           backgroundColor="transparent"
+                           borderWidth={0}
                     />
                     <SmallButtonWithAccent icon={Minus} onPress={() => handleChange('', 'remove')} />
                 </StyledGroup>

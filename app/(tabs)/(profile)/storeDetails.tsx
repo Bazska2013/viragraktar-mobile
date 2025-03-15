@@ -1,6 +1,6 @@
 import {RefreshControl, SafeAreaView} from "react-native";
-import {H4, ScrollView, SizableText} from "tamagui";
-import {SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import {H4, ScrollView, Separator, SizableText} from "tamagui";
+import {EditContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 import {useEffect, useState} from "react";
@@ -8,7 +8,8 @@ import * as Clipboard from 'expo-clipboard';
 import {ClipboardCopy} from "@tamagui/lucide-icons";
 
 export default function StoreDetails() {
-    const {store, } = useUserContext();
+    const {store } = useUserContext();
+    const openingHours = JSON.parse(store?.opening_hours);
     const [storeId, setStoreId] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -61,16 +62,24 @@ export default function StoreDetails() {
                         automaticallyAdjustKeyboardInsets={true}
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <VerticalContainer>
+                <EditContainer>
                     <H4>Store name</H4>
                     <SizableText>{store?.name}</SizableText>
+                    <Separator />
                     <H4>Opening hours</H4>
-                    <SizableText>{store?.opening_hours}</SizableText>
+                    {Object.keys(openingHours).map((day, index) => (
+                        <VerticalContainer key={day}>
+                            <H4>{day}</H4>
+                            <SizableText>{openingHours[day].closed ? 'Closed' : 'From ' + openingHours[day].from + ' - To ' + openingHours[day].to}</SizableText>
+                        </VerticalContainer>
+                    ))}
+                    <Separator />
                     <H4>Is calculation enabled?</H4>
                     <SizableText>{store?.calculation_enabled ? 'Yes' : 'No'}</SizableText>
+                    <Separator />
                     <H4>Press the button to copy the Store ID</H4>
                     <SmallButtonWithAccent icon={ClipboardCopy} onPress={copyToClipboard}>{copied? 'Copied!' : storeId}</SmallButtonWithAccent>
-                </VerticalContainer>
+                </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )
