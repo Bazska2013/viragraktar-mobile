@@ -90,11 +90,11 @@ export const StyledListItem = styled(ListItem, {
     pressStyle: {
         backgroundColor: '#ffffff',
     }
-})
+});
 
 export const StyledGroup = styled(Group, {
     boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
-})
+});
 
 export const tamaguiConfig = createTamagui(defaultConfig)
 

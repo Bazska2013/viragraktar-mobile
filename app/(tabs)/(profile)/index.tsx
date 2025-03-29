@@ -20,7 +20,7 @@ import {
     Calendar,
     ChevronRight,
     DollarSign,
-    FilePen, LogOut,
+    FilePen, LineChart, LogOut,
     TextSearch,
     UserPen,
     UserSearch
@@ -168,7 +168,7 @@ export default function Profile() {
                             </Group.Item>
                         </Group>
                     </VerticalContainer>
-                    {store ?
+                    {store && user.is_admin ?
                         <VerticalContainer width="90%" alignSelf="center">
                             <SizableText>Store settings</SizableText>
                             <Group orientation="vertical"
@@ -183,42 +183,63 @@ export default function Profile() {
                                         onPress={() => {router.push('/storeDetails')}}
                                     />
                                 </Group.Item>
-                                {user.is_admin && <>
+                                <Group.Item>
+                                    <StyledListItem
+                                        title="Change store name"
+                                        icon={FilePen}
+                                        iconAfter={ChevronRight}
+                                        onPress={() => {router.push('/changeStoreName')}}
+                                    />
+                                </Group.Item>
+                                <Group.Item>
+                                    <StyledListItem
+                                        title="Change opening hours"
+                                        icon={Calendar}
+                                        iconAfter={ChevronRight}
+                                        onPress={() => {router.push('/changeOpeningHours')}}
+                                    />
+                                </Group.Item>
+                                <Group.Item>
+                                    <StyledListItem
+                                        title="Enable/Disable price calculation"
+                                        icon={DollarSign}
+                                        iconAfter={ChevronRight}
+                                        onPress={() => {router.push('/changePriceCalculation')}}
+                                    />
+                                </Group.Item>
+                                <Group.Item>
+                                    <StyledListItem
+                                        title="View report"
+                                        icon={LineChart}
+                                        iconAfter={ChevronRight}
+                                        onPress={() => {router.push('/generateReport')}}
+                                    />
+                                </Group.Item>
+                                <Group.Item>
+                                    <StyledListItem
+                                        title="Manage users"
+                                        icon={BookUser}
+                                        iconAfter={ChevronRight}
+                                        onPress={() => {router.push('/manageUsers')}}
+                                    />
+                                </Group.Item>
+                            </Group>
+                        </VerticalContainer> :
+                        store ?
+                            <VerticalContainer width="90%" alignSelf="center">
+                                <SizableText>Store settings</SizableText>
+                                <Group orientation="vertical"
+                                       boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                       separator={<Separator />}
+                                >
                                     <Group.Item>
                                         <StyledListItem
-                                            title="Change store name"
-                                            icon={FilePen}
+                                            title="Store details"
+                                            icon={TextSearch}
                                             iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/changeStoreName')}}
+                                            onPress={() => {router.push('/storeDetails')}}
                                         />
                                     </Group.Item>
-                                    <Group.Item>
-                                        <StyledListItem
-                                            title="Change opening hours"
-                                            icon={Calendar}
-                                            iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/changeOpeningHours')}}
-                                        />
-                                    </Group.Item>
-                                    <Group.Item>
-                                        <StyledListItem
-                                            title="Enable/Disable price calculation"
-                                            icon={DollarSign}
-                                            iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/changePriceCalculation')}}
-                                        />
-                                    </Group.Item>
-                                    <Group.Item>
-                                        <StyledListItem
-                                            title="Manage users"
-                                            icon={BookUser}
-                                            iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/manageUsers')}}
-                                        />
-                                    </Group.Item>
-                                </>
-                                }
-                                {!user.is_admin &&
                                     <Group.Item>
                                         <StyledListItem
                                             title="Leave store"
@@ -227,33 +248,33 @@ export default function Profile() {
                                             onPress={() => confirmAlert(true)}
                                         />
                                     </Group.Item>
-                                }
-                            </Group>
-                        </VerticalContainer> :
-                        <VerticalContainer width="90%" alignSelf="center">
-                            <SizableText>Join or create Store</SizableText>
-                            <Group orientation="vertical"
-                                   boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
-                                   separator={<Separator />}
-                            >
-                                <Group.Item>
-                                    <StyledListItem
-                                        title="Join store"
-                                        icon={TextSearch}
-                                        iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/joinStore')}}
-                                    />
-                                </Group.Item>
-                                <Group.Item>
-                                    <StyledListItem
-                                        title="Create store"
-                                        icon={TextSearch}
-                                        iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/createStore')}}
-                                    />
-                                </Group.Item>
-                            </Group>
-                        </VerticalContainer>
+                                </Group>
+                            </VerticalContainer>
+                            :
+                            <VerticalContainer width="90%" alignSelf="center">
+                                <SizableText>Join or create Store</SizableText>
+                                <Group orientation="vertical"
+                                       boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                       separator={<Separator />}
+                                >
+                                    <Group.Item>
+                                        <StyledListItem
+                                            title="Join store"
+                                            icon={TextSearch}
+                                            iconAfter={ChevronRight}
+                                            onPress={() => {router.push('/joinStore')}}
+                                        />
+                                    </Group.Item>
+                                    <Group.Item>
+                                        <StyledListItem
+                                            title="Create store"
+                                            icon={TextSearch}
+                                            iconAfter={ChevronRight}
+                                            onPress={() => {router.push('/createStore')}}
+                                        />
+                                    </Group.Item>
+                                </Group>
+                            </VerticalContainer>
                     }
                     <BigButton width="90%" alignSelf="center" onPress={() => confirmAlert(false)}>Log out</BigButton>
                 </VerticalContainer>

@@ -46,7 +46,7 @@ export default function StoreDetails() {
     }
 
     const copyToClipboard = async () => {
-        await Clipboard.setStringAsync('hello world');
+        await Clipboard.setStringAsync(storeId);
         setCopied(true);
         const intervalId = setInterval(() => {
             setCopied(false);
