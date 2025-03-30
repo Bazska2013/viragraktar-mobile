@@ -1,13 +1,14 @@
-import {RefreshControl, SafeAreaView} from "react-native";
+import {FlatList, RefreshControl, SafeAreaView} from "react-native";
 import {H4, ScrollView} from "tamagui";
 import {EditContainer, VerticalContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
 import {VictoryBar, VictoryChart, VictoryPie, VictoryTheme, VictoryLine, VictoryScatter} from "victory-native";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
+import TransactionsTable from "@/app/(tabs)/(profile)/components/TransactionsTable";
 
 export default function ViewReport() {
-    const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue} = useReportContext();
+    const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal} = useReportContext();
     const [isLoading, setIsLoading] = useState(true);
 
     const getReadableDate = (date: Date) => {
@@ -154,7 +155,7 @@ export default function ViewReport() {
                 <EditContainer>
                     <H4>{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
                 </EditContainer>
-                {data.length > 0 && <>
+                {data.length > 0 ? <>
                     {showDistribution &&
                         <EditContainer alignItems="center">
                             <H4>Distribution of items sold</H4>
@@ -195,7 +196,13 @@ export default function ViewReport() {
                             </VictoryChart>
                         </EditContainer>
                     }
-                </>}
+                    {showTable &&
+                        <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
+                    }
+                </> :
+                <EditContainer>
+                    <H4>No data available for this day</H4>
+                </EditContainer>}
             </ScrollView>
         </SafeAreaView>
     )
