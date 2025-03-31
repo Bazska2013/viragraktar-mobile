@@ -4,7 +4,7 @@ import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {SafeAreaView} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
-import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
+import {BigButton, EditContainer} from "@/tamagui.config";
 import {FilePen} from "@tamagui/lucide-icons";
 
 export default function ChangeStoreName() {
@@ -52,7 +52,7 @@ export default function ChangeStoreName() {
                     />
                     <Separator />
                     <BigButton icon={FilePen} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change store name'}</BigButton>
-                    <SizableText>{error}</SizableText>
+                    <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>

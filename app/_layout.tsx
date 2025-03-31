@@ -1,9 +1,7 @@
-import {SplashScreen, Stack} from "expo-router";
+import {Stack} from "expo-router";
 import {useColorScheme, Button, Dimensions} from "react-native";
-import {useEffect} from "react";
 import {DarkTheme, DefaultTheme, ThemeProvider} from "@react-navigation/native";
 import {StatusBar} from "expo-status-bar";
-import {StyleSheet} from "react-native";
 import {router} from "expo-router";
 import { TamaguiProvider} from "tamagui";
 
@@ -27,16 +25,3 @@ export default function RootLayout() {
       </TamaguiProvider>
   )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-    },
-    link: {
-        marginTop: 15,
-        paddingVertical: 15,
-    },
-});

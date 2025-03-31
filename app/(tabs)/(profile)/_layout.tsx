@@ -1,6 +1,5 @@
 import {router, Stack} from "expo-router";
 import {Button, Dimensions} from "react-native";
-import axios from "@/scripts/axiosConfig";
 import {createContext, useContext, useState} from "react";
 
 const ReportContext = createContext<{

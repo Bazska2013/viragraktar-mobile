@@ -1,13 +1,4 @@
-import {
-    ActivityIndicator,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    useColorScheme
-} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
@@ -16,8 +7,7 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
-import {Input, Label, ScrollView, Checkbox, Spinner, SizableText, H4, Separator, Switch} from "tamagui";
-import {Check} from "@tamagui/lucide-icons";
+import {Input, Label, ScrollView, Spinner, SizableText, H4, Separator, Switch} from "tamagui";
 
 export default function CreateStore() {
 
@@ -76,9 +66,7 @@ export default function CreateStore() {
                         </Label>
                         <Input
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
-                            // isInvalid={!!errors.name}
                             value={name}
                             id="name"
                             onChangeText={setName}
@@ -101,44 +89,8 @@ export default function CreateStore() {
                     <Separator />
                     <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Create store"}</BigButton>
                 </EditContainer>
-                {error && <SizableText>{error}</SizableText>}
+                {error && <SizableText color="$red1">{error}</SizableText>}
             </ScrollView>
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        margin: 10,
-        fontSize: 20,
-    },
-    textInput: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    defaultButton: {
-        backgroundColor: 'lightgrey',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    header: {
-        fontSize: 25,
-        padding: 10,
-        fontWeight: 'bold',
-    },
-    checkbox: {
-        margin: 10,
-    }
-});

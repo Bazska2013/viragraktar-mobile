@@ -1,5 +1,5 @@
 import {HorizontalContainer, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
-import {H4, H6, Label, Separator, SizableText, Switch} from "tamagui";
+import {H4, Label, Separator, SizableText, Spinner, Switch} from "tamagui";
 import {Save, Trash} from "@tamagui/lucide-icons";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -129,9 +129,10 @@ const ManageUser = (props) => {
             </HorizontalContainer>
             <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
-                <SmallButtonWithAccent icon={Save} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleSave()} >Save changes</SmallButtonWithAccent>
-                <SmallButtonWithAccent icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? "1" : "0.5"} onPress={() => handleDelete()} >Remove user</SmallButtonWithAccent>
+                <SmallButtonWithAccent icon={Save} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? "1" : "0.5"} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
             </StyledGroup>
+            {error && <SizableText color="$red1">{error}</SizableText>}
         </VerticalContainer>
     )
 }

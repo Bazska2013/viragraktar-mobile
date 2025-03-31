@@ -1,25 +1,17 @@
-import {
-    HorizontalContainer,
-    SmallButton,
-    SmallButtonWithAccent,
-    StyledGroup,
-    VerticalContainer
-} from "@/tamagui.config";
-import {Button, Group, H4, Image, Input, SizableText} from "tamagui";
+import {HorizontalContainer, SmallButton, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
+import {Button, H4, Image, Input, SizableText} from "tamagui";
 import flowerImage from "@/assets/images/defaultFlower.png";
 import {memo, useCallback, useEffect, useState} from "react";
-import {Check, FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
-import {router} from "expo-router";
+import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
-    const [error, setError] = useState(null);
     const [amount, setAmount] = useState(0);
 
     const {addToCart, isItemInCart, removeFromCart} = useItemsContext();
 
-    const handleChange = useCallback((value, type) => {
+    const handleChange = useCallback((value, type: string) => {
         switch (type) {
             case 'minus':
                 if (amount > 0) {
@@ -91,7 +83,6 @@ const Item = ({item}) => {
                         height: 120,
                     }} />
                     <H4>{item.name}</H4>
-                    {/*<SizableText>{item.description}</SizableText>*/}
                     <SizableText>Price: HUF {item.price}</SizableText>
                     <SizableText>Stock: {item.stock}</SizableText>
                 </VerticalContainer>

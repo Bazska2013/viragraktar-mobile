@@ -1,35 +1,20 @@
-import {
-    Dimensions,
-    FlatList,
-    Pressable,
-    RefreshControl,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    useColorScheme,
-    View
-} from "react-native";
-import {Text} from "react-native";
-import {SymbolView} from "expo-symbols";
+import {Dimensions, FlatList, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
 import {useEffect, useState} from "react";
-import api from "@/scripts/axiosConfig";
-import * as SecureStore from "expo-secure-store";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
-import {AnimatePresence, H2, H4, Input, Paragraph, Spinner} from "tamagui";
+import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 
 export default function Sell() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const {user, setUser, store, setStore, getUserData} = useUserContext();
-    const {items, fetchItems, cartItems, addToCart, removeFromCart, emptyCart, editCart, isItemInCart, setCartItems} = useItemsContext();
+    const {user, store, getUserData} = useUserContext();
+    const {items, fetchItems, cartItems} = useItemsContext();
 
     const [showCartButton, setShowCartButton] = useState(false);
 
@@ -82,10 +67,8 @@ export default function Sell() {
                                               <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
                                                   <Input
                                                       flex={1}
-                                                      // size="$3"
                                                       borderWidth={2}
                                                       id="search"
-                                                      // isInvalid={!!errors.name}
                                                       value={search}
                                                       onChangeText={setSearch}
                                                       autoFocus
@@ -99,14 +82,6 @@ export default function Sell() {
                                       <SmallButtonWithAccent height="100%" icon={openSearch ? X : Search} onPress={() => setOpenSearch(!openSearch)}>{!openSearch && 'Search'}</SmallButtonWithAccent>
                                   </HorizontalContainer>
                               }
-                        // onEndReached={handleLoadMore}
-                        // onEndReachedThreshold={0.5}
-                        //       ListHeaderComponent={
-                        //           <Pressable style={styles.button} onPress={() => {router.push('/newItem')}}>
-                        //               <Text style={[styles.text, {color: theme.colors.text}]}>New item</Text>
-                        //           </Pressable>
-                        //       }
-                        //       ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: 'gray' }} />}
                     />
                     <AnimatePresence>
                         {showCartButton &&
@@ -142,22 +117,3 @@ export default function Sell() {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        fontSize: 20,
-        padding: 10,
-    },
-    header: {
-        fontSize: 25,
-        padding: 10,
-        fontWeight: 'bold',
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    }
-})

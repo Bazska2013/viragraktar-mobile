@@ -1,31 +1,12 @@
-import {SymbolView} from "expo-symbols";
-import {
-    Dimensions,
-    FlatList,
-    Pressable,
-    RefreshControl,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View
-} from "react-native";
+import {Dimensions, FlatList, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
-import axios from '../../../scripts/axiosConfig';
-import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButtonWithAccent,
-    VerticalContainer
-} from "@/tamagui.config";
-import {AnimatePresence, H2, H4, Input, Paragraph, ScrollView, Spinner} from "tamagui";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent,} from "@/tamagui.config";
+import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {Plus, Search, X} from "@tamagui/lucide-icons";
 
 export default  function Buy() {
@@ -34,7 +15,7 @@ export default  function Buy() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const {user, setUser, store, setStore, getUserData} = useUserContext();
+    const {user, store, getUserData} = useUserContext();
 
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
@@ -88,10 +69,8 @@ export default  function Buy() {
                                               <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
                                                   <Input
                                                       flex={1}
-                                                      // size="$3"
                                                       borderWidth={2}
                                                       id="search"
-                                                      // isInvalid={!!errors.name}
                                                       value={search}
                                                       onChangeText={setSearch}
                                                       autoFocus
@@ -134,31 +113,3 @@ export default  function Buy() {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    scrollView: {
-        flex: 1,
-        backgroundColor: 'pink',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    text: {
-        fontSize: 20,
-        padding: 10,
-    },
-    header: {
-        fontSize: 25,
-        padding: 10,
-        fontWeight: 'bold',
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    }
-})

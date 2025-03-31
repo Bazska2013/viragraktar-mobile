@@ -1,22 +1,12 @@
 import {useEffect, useState} from "react";
-import {
-    ActivityIndicator,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    useColorScheme,
-    View
-} from "react-native";
+import {Platform, SafeAreaView, useColorScheme,} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useSearchParams} from "expo-router/build/hooks";
 import axios from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
-import {H2, H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator} from "tamagui";
+import {H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator} from "tamagui";
 import {
     BigButton,
     EditContainer,
@@ -138,7 +128,6 @@ export default function EditItem() {
                 <Sheet.Frame>
                     <HorizontalContainer width="100%" justifyContent="space-around">
                         <SmallButtonWithAccent onPress={pickImage}>Pick an image</SmallButtonWithAccent>
-                        {/*<SmallButtonWithAccent onPress={handleOpenCamera}>Take a picture</SmallButtonWithAccent>*/}
                     </HorizontalContainer>
                 </Sheet.Frame>
             </Sheet>
@@ -151,10 +140,8 @@ export default function EditItem() {
                             </Label>
                             <Input
                                 flex={1}
-                                // size="$3"
                                 borderWidth={2}
                                 id="name"
-                                // isInvalid={!!errors.name}
                                 value={item.name.toString()}
                                 onChangeText={(value) => setItem({...item, name: value})}
                                 autoFocus
@@ -168,10 +155,8 @@ export default function EditItem() {
                             </Label>
                             <Input
                                 flex={1}
-                                // size="$3"
                                 borderWidth={2}
                                 id="description"
-                                // isInvalid={!!errors.description}
                                 value={item.description.toString()}
                                 onChangeText={(value) => setItem({...item, description: value})}
                                 autoCapitalize="sentences"
@@ -184,10 +169,8 @@ export default function EditItem() {
                             </Label>
                             <Input
                                 flex={1}
-                                // size="$3"
                                 borderWidth={2}
                                 id="price"
-                                // isInvalid={!!errors.price}
                                 value={item.price.toString()}
                                 onChangeText={(value) => setItem({...item, price: value})}
                                 keyboardType="numeric"
@@ -200,10 +183,8 @@ export default function EditItem() {
                             </Label>
                             <Input
                                 flex={1}
-                                // size="$3"
                                 borderWidth={2}
                                 id="stock"
-                                // isInvalid={!!errors.stock}
                                 value={item.stock.toString()}
                                 onChangeText={(value) => setItem({...item, stock: value})}
                                 keyboardType="numeric"
@@ -227,31 +208,3 @@ export default function EditItem() {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        margin: 10,
-        fontSize: 20,
-    },
-    textInput: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    defaultButton: {
-        backgroundColor: 'lightgrey',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    }
-});

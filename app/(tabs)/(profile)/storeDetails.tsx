@@ -30,9 +30,8 @@ export default function StoreDetails() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             getStoreId();
-        }, 30000); // 30000 milliseconds = 30 seconds
+        }, 30000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
     }, []);
 
@@ -52,7 +51,6 @@ export default function StoreDetails() {
             setCopied(false);
         }, 2000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
     };
 

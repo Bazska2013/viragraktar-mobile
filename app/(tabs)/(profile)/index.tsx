@@ -1,35 +1,16 @@
-import {Alert, Pressable, RefreshControl, SafeAreaView, Text, useColorScheme} from "react-native";
-import {Link, router} from "expo-router";
+import {Alert, RefreshControl, SafeAreaView, useColorScheme} from "react-native";
+import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
-import {StyleSheet} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {Button, Group, H1, H2, H4, H6, ListItem, ScrollView, Separator, SizableText} from 'tamagui';
-import {
-    BigButton,
-    EditContainer,
-    SmallButton,
-    SmallButtonWithAccent,
-    StyledListItem,
-    VerticalContainer
-} from "@/tamagui.config";
-import {
-    BookKey, BookUser,
-    Calendar,
-    ChevronRight,
-    DollarSign,
-    FilePen, LineChart, LogOut,
-    TextSearch,
-    UserPen,
-    UserSearch
-} from "@tamagui/lucide-icons";
+import {Group, H2, H4, H6, ScrollView, Separator, SizableText} from 'tamagui';
+import {BigButton, StyledListItem, VerticalContainer} from "@/tamagui.config";
+import {BookKey, BookUser, Calendar, ChevronRight, DollarSign, FilePen, LineChart, LogOut, TextSearch, UserPen, UserSearch} from "@tamagui/lucide-icons";
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
-    const [storeId, setStoreId] = useState(null);
-    const [storeIdShown, setStoreIdShown] = useState(false);
 
     const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -282,22 +263,3 @@ export default function Profile() {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        fontSize: 20,
-        padding: 10,
-    },
-    header: {
-        fontSize: 25,
-        padding: 10,
-        fontWeight: 'bold',
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    }
-});

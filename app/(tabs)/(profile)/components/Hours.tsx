@@ -7,11 +7,11 @@ import {Check} from "@tamagui/lucide-icons";
 const Hours = (props) => {
     const [fromDate, setFromDate] = useState(() => {
         const [hours, minutes] = (props.from || "00:00").split(':').map(Number);
-        return new Date(1970, 0, 1, hours, minutes); // Year: 1970, Month: 0 (Jan), Day: 1
+        return new Date(1970, 0, 1, hours, minutes);
     });
     const [toDate, setToDate] = useState(() => {
         const [hours, minutes] = (props.to || "00:00").split(':').map(Number);
-        return new Date(1970, 0, 1, hours, minutes); // Year: 1970, Month: 0 (Jan), Day: 1
+        return new Date(1970, 0, 1, hours, minutes);
     });
 
     const handleFrom = (event: DateTimePickerEvent, date: Date) => {
@@ -55,7 +55,7 @@ const Hours = (props) => {
                                  alignItems="center"
             >
                 <Label htmlFor={'closed' + props.day}>Closed</Label>
-                <Checkbox id={'closed' + props.day} name="closed" /*size="$3"*/ checked={!!props.closed} onCheckedChange={props.onClick}>
+                <Checkbox id={'closed' + props.day} name="closed" checked={!!props.closed} onCheckedChange={props.onClick}>
                     <Checkbox.Indicator>
                         <Check />
                     </Checkbox.Indicator>

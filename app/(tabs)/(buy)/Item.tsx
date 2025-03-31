@@ -1,20 +1,13 @@
-import {View, Text, StyleSheet, useColorScheme, Pressable, TextInput} from "react-native";
+import {Text, useColorScheme} from "react-native";
 import {memo, useCallback, useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {router} from "expo-router";
-import {
-    HorizontalContainer,
-    SmallButton,
-    VerticalContainer,
-    SmallButtonWithAccent,
-    StyledGroup
-} from "@/tamagui.config";
+import {HorizontalContainer, SmallButton, VerticalContainer, SmallButtonWithAccent, StyledGroup} from "@/tamagui.config";
 import {Minus, Plus, X, Check} from "@tamagui/lucide-icons";
 import flowerImage from "../../../assets/images/defaultFlower.png";
 import {Group, H4, SizableText, Input, Image} from "tamagui";
-import {Svg} from "react-native-svg"
 
 const Item = ({props}: {props: any}) => {
 
@@ -33,7 +26,6 @@ const Item = ({props}: {props: any}) => {
                 description: item.description,
                 price: item.price,
                 stock: item.stock,
-                /*image: image*/
             });
         } catch (error: any) {
             setError(error.response.data.message);
@@ -100,7 +92,6 @@ const Item = ({props}: {props: any}) => {
                     height: 120,
                 }} />
                 <H4>{item.name}</H4>
-                {/*<SizableText>{item.description}</SizableText>*/}
                 <SizableText>Price: HUF {item.price}</SizableText>
             </VerticalContainer>
             <VerticalContainer
@@ -137,29 +128,3 @@ const Item = ({props}: {props: any}) => {
 }
 
 export default memo(Item);
-
-const styles = StyleSheet.create({
-    text: {
-        fontSize: 20,
-        padding: 10,
-    },
-    header: {
-        fontSize: 25,
-        padding: 10,
-        fontWeight: 'bold',
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    textInput: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-})

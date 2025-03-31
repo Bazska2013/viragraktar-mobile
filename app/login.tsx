@@ -1,27 +1,17 @@
-import {
-    SafeAreaView,
-    Text,
-    TextInput,
-    StyleSheet,
-    Pressable,
-    useColorScheme,
-    Platform, ActivityIndicator
-} from "react-native";
+import {SafeAreaView, useColorScheme, Platform} from "react-native";
 import {useEffect, useState} from "react";
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from '../scripts/axiosConfig';
 import CookieManager from '@react-native-cookies/cookies';
-import {Button, H4, Input, Label, Separator, SizableText, Spinner} from 'tamagui';
+import {H4, Input, Label, Separator, SizableText, Spinner} from 'tamagui';
 import {BigButton, EditContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import {ScrollView} from "tamagui";
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emailInputStyle, setEmailInputStyle] = useState(styles.textInput);
-    const [passwordInputStyle, setPasswordInputStyle] = useState(styles.textInput);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(false);
@@ -105,9 +95,7 @@ export default function Login() {
                         <Input
                             id="email"
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
-                            // isInvalid={!!errors.name}
                             placeholder="abc@xyz.com"
                             onChangeText={setEmail}
                             value={email}
@@ -124,9 +112,7 @@ export default function Login() {
                         <Input
                             id="password"
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
-                            // isInvalid={!!errors.name}
                             placeholder="********"
                             onChangeText={setPassword}
                             value={password}
@@ -135,7 +121,7 @@ export default function Login() {
                         />
                     </VerticalContainer>
                     <Separator />
-                    {/*<SizableText>{error}</SizableText>*/}
+                    <SizableText color="$red1">{error}</SizableText>
                     <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign in"}</BigButton>
                     <Separator />
                     <SizableText>Don't have an account yet?</SizableText>
@@ -145,31 +131,3 @@ export default function Login() {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        margin: 10,
-        fontSize: 20,
-    },
-    textInput: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    defaultButton: {
-        backgroundColor: 'lightgrey',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    }
-});

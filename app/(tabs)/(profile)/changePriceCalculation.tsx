@@ -1,6 +1,6 @@
-import {Checkbox, H4, Input, Label, ScrollView, Separator, SizableText, Spinner, Switch} from "tamagui";
-import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
-import {Check, DollarSign, FilePen} from "@tamagui/lucide-icons";
+import {H4, Label, ScrollView, Separator, SizableText, Spinner, Switch} from "tamagui";
+import {BigButton, EditContainer} from "@/tamagui.config";
+import {DollarSign} from "@tamagui/lucide-icons";
 import {SafeAreaView} from "react-native";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -47,7 +47,7 @@ export default function ChangePriceCalculation() {
                     </Switch>
                     <Separator />
                     <BigButton icon={DollarSign} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change price calculation'}</BigButton>
-                    <SizableText>{error}</SizableText>
+                    <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>

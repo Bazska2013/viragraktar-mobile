@@ -1,6 +1,6 @@
 import {SafeAreaView} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
-import {VerticalContainer, BigButton, EditContainer} from "@/tamagui.config";
+import {BigButton, EditContainer} from "@/tamagui.config";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
@@ -8,7 +8,7 @@ import {router} from "expo-router";
 import {UserPen} from "@tamagui/lucide-icons";
 
 export default function ChangeName() {
-    const {user, getUserData, setUser} = useUserContext();
+    const {user, setUser} = useUserContext();
 
     const [name, setName] = useState(user?.name);
     const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +52,7 @@ export default function ChangeName() {
                     />
                     <Separator />
                     <BigButton icon={UserPen} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> : 'Change name'}</BigButton>
-                    <SizableText>{error}</SizableText>
+                    <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>

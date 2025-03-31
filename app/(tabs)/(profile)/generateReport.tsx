@@ -1,16 +1,14 @@
-import {Platform, SafeAreaView} from "react-native";
-import {StatusBar} from "expo-status-bar";
-import {Checkbox, H4, H6, Label, ScrollView, Separator, SizableText} from "tamagui";
+import {SafeAreaView} from "react-native";
+import {Checkbox, H4, H6, Label, ScrollView, Separator} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config";
-import {Picker, PickerIOS} from '@react-native-picker/picker';
-import {useEffect, useState} from "react";
+import {Picker} from '@react-native-picker/picker';
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {Check} from "@tamagui/lucide-icons";
+import {Check, LineChart} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
 
 export default function GenerateReport() {
-    const {data, setData, date, setDate, start, setStart, end, setEnd, items, setItems, oneDay, setOneDay, showDistribution, setShowDistribution, showRevenue, setShowRevenue, showTable, setShowTable, showPie, setShowPie, showLine, setShowLine, showDistTable, setShowDistTable, showTransactionTable, setShowTransactionTable, showTotal, setShowTotal} = useReportContext();
+    const {date, setDate, start, setStart, end, setEnd, oneDay, setOneDay, showDistribution, setShowDistribution, showRevenue, setShowRevenue, showTable, setShowTable, showPie, setShowPie, showLine, setShowLine, showDistTable, setShowDistTable, setShowTransactionTable, showTotal, setShowTotal} = useReportContext();
 
     const handleSetDate = (event: DateTimePickerEvent, date: Date) => {
         const {
@@ -162,7 +160,7 @@ export default function GenerateReport() {
                             </Checkbox>
                         </HorizontalContainer>}
                         <Separator />
-                        <BigButton onPress={() => router.push('/viewReport')}>Generate report</BigButton>
+                        <BigButton icon={LineChart} onPress={() => router.push('/viewReport')}>Generate report</BigButton>
                     </VerticalContainer>
                 </EditContainer>
             </ScrollView>

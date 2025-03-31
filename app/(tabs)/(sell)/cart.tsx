@@ -1,14 +1,7 @@
 import {Dimensions, Platform, SafeAreaView} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {Group, H3, H4, Input, ScrollView, Separator, SizableText, Spinner} from "tamagui";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButton,
-    SmallButtonWithAccent,
-    VerticalContainer
-} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {Banknote, CreditCard, DollarSign, Minus, Plus, Trash} from "@tamagui/lucide-icons";
 import {useEffect, useState} from "react";
@@ -88,7 +81,6 @@ export default function Cart() {
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-
             <ScrollView style={{height: '100%'}}>
                     {Dimensions.get('window').width >= 768 ? <>
                         <EditContainer>
@@ -168,7 +160,7 @@ export default function Cart() {
                                 </H4>
                                 <Separator />
                                 <BigButton icon={DollarSign} onPress={() => handleCheckout()}>{isLoading ? <Spinner /> : 'Sell'}</BigButton>
-                                {error && <SizableText color='red' >{error}</SizableText>}
+                                {error && <SizableText color='$red1'>{error}</SizableText>}
                             </VerticalContainer>
                         </EditContainer>
                     </>}

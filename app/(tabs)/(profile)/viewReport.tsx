@@ -1,6 +1,6 @@
-import {FlatList, RefreshControl, SafeAreaView} from "react-native";
+import {RefreshControl, SafeAreaView} from "react-native";
 import {H4, ScrollView} from "tamagui";
-import {EditContainer, VerticalContainer} from "@/tamagui.config"
+import {EditContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
 import {VictoryBar, VictoryChart, VictoryPie, VictoryTheme, VictoryLine, VictoryScatter} from "victory-native";
 import {useEffect, useState} from "react";
@@ -34,7 +34,7 @@ export default function ViewReport() {
             console.error(error);
         } finally {
             setIsLoading(false);
-            setData(response.data);
+            setData(response?.data);
         }
     }
 
@@ -48,7 +48,7 @@ export default function ViewReport() {
             console.error(error);
         } finally {
             setIsLoading(false);
-            setData(response.data);
+            setData(response?.data);
         }
     }
 

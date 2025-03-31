@@ -1,11 +1,11 @@
-import {Platform, SafeAreaView, useColorScheme, Text, Pressable, StyleSheet, TextInput} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {H2, H4, Input, ScrollView, Separator, SizableText, Spinner} from "tamagui";
+import {H4, Input, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 
 export default function JoinStore() {
@@ -15,7 +15,6 @@ export default function JoinStore() {
 
     const [error, setError] = useState(null);
     const [code, setCode] = useState(null);
-    const [codeInputStyle, setCodeInputStyle] = useState(styles.textInput);
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(false);
 
@@ -57,9 +56,7 @@ export default function JoinStore() {
                     <H4>Enter the unique ID of the Store you want to join</H4>
                     <Input
                         flex={1}
-                        // size="$3"
                         borderWidth={2}
-                        // isInvalid={!!errors.name}
                         value={code ? code.toString() : ''}
                         onChangeText={setCode}
                         autoCapitalize='characters'
@@ -67,35 +64,9 @@ export default function JoinStore() {
                     />
                     <Separator />
                     <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Join store"}</BigButton>
-                    {error && <SizableText>{error}</SizableText>}
+                    {error && <SizableText color="$red1">{error}</SizableText>}
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        margin: 10,
-        fontSize: 20,
-    },
-    textInput: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    header: {
-        fontSize: 25,
-        padding: 10,
-        fontWeight: 'bold',
-    },
-});

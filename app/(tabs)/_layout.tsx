@@ -1,6 +1,5 @@
 import {router, Tabs} from "expo-router";
-import {SymbolView} from "expo-symbols";
-import {Dimensions, StyleSheet, TouchableOpacity, useColorScheme} from "react-native";
+import {Dimensions, TouchableOpacity, useColorScheme} from "react-native";
 import * as Haptics from "expo-haptics";
 import {createContext, useContext, useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
@@ -26,7 +25,7 @@ export function useUserContext() {
     return context;
 }
 
-const WideScreenThreshold = 768; // Example iPad breakpoint width
+const WideScreenThreshold = 768;
 
 const useResponsiveLayout = () => {
     const [isWideScreen, setIsWideScreen] = useState(Dimensions.get('window').width >= WideScreenThreshold);
@@ -35,7 +34,7 @@ const useResponsiveLayout = () => {
         const subscription = Dimensions.addEventListener('change', ({ window }) => {
             setIsWideScreen(window.width >= WideScreenThreshold);
         });
-        return () => subscription?.remove(); // Cleanup listener on unmount
+        return () => subscription?.remove();
     }, []);
 
     return isWideScreen;
@@ -92,7 +91,6 @@ export default function TabLayout() {
                             options={{
                                 drawerLabel: 'Sell',
                                 title: 'Sell',
-                                // drawerIcon: ({ color }) => <SymbolView name="storefront.fill" tintColor={color} />,
                                 drawerIcon: ({ color }) => <Store />,
                                 drawerType: 'front'
                             }}
@@ -102,7 +100,6 @@ export default function TabLayout() {
                             options={{
                                 drawerLabel: 'Buy',
                                 title: 'Buy',
-                                // drawerIcon: ({ color }) => <SymbolView name="cart.fill" tintColor={color} />,
                                 drawerIcon: ({ color }) => <ShoppingCart />,
                                 drawerType: 'front'
                             }}
@@ -112,7 +109,6 @@ export default function TabLayout() {
                             options={{
                                 drawerLabel: 'Profile',
                                 title: 'Profile',
-                                // drawerIcon: ({ color }) => <SymbolView name="person.crop.square.fill" tintColor={color} />,
                                 drawerIcon: ({ color }) => <User />,
                                 drawerType: 'front'
                             }}
@@ -137,10 +133,3 @@ export default function TabLayout() {
         </UserContext.Provider>
     )
 }
-
-const styles = StyleSheet.create({
-    symbol: {
-        width: 24,
-        height: 24,
-    },
-});

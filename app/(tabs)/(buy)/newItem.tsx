@@ -1,29 +1,13 @@
-import {
-    ActivityIndicator, Alert,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput, TouchableOpacity,
-    useColorScheme, View
-} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import axios from "@/scripts/axiosConfig";
-import {Input, Label, ScrollView, SizableText, Spinner, Image, Sheet, H4, Separator} from "tamagui";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButtonWithAccent,
-    VerticalContainer
-} from "@/tamagui.config";
+import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText} from "tamagui";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import * as ImagePicker from 'expo-image-picker';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 
 export default function NewItem() {
 
@@ -38,12 +22,9 @@ export default function NewItem() {
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(false);
     const [imageModal, setImageModal] = useState(false);
-    const [openCamera, setOpenCamera] = useState(false);
+    const [error, setError] = useState(null);
 
     const [image, setImage] = useState<string | null>(null);
-
-    // const [facing, setFacing] = useState<CameraType>('back');
-    // const [permission, requestPermission] = useCameraPermissions();
 
     const pickImage = async () => {
         setImageModal(false);
@@ -59,24 +40,6 @@ export default function NewItem() {
             setImage(result.assets[0].uri);
         }
     };
-
-    // function toggleCameraFacing() {
-    //     setFacing(current => (current === 'back' ? 'front' : 'back'));
-    // }
-    //
-    // const handleOpenCamera = () => {
-    //     setImageModal(false);
-    //     if (!permission.granted) {
-    //         Alert.alert('Grant permissions', 'You need to grant permissions to use the camera', [
-    //             {
-    //                 text: 'OK',
-    //                 onPress: () => requestPermission()
-    //             }
-    //         ])
-    //     } else {
-    //         setOpenCamera(true);
-    //     }
-    // }
 
     const handleSubmit = async () => {
         let response;
@@ -101,7 +64,7 @@ export default function NewItem() {
             });
         } catch (error: any) {
             setIsLoading(false);
-            console.log(error.response.data.message);
+            setError(error.response.data.message);
         } finally {
             setIsLoading(false);
             if (response?.status === 201) {
@@ -118,20 +81,6 @@ export default function NewItem() {
             setValidInput(false);
         }
     }, [name, description, price, stock]);
-
-    // if (openCamera) {
-    //     return (<>
-    //             <SmallButtonWithAccent onPress={() => setOpenCamera(false)}>Close camera</SmallButtonWithAccent>
-    //             <CameraView facing={facing}>
-    //                 <View>
-    //                     <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-    //                         <Text style={styles.text}>Flip Camera</Text>
-    //                     </TouchableOpacity>
-    //                 </View>
-    //             </CameraView>
-    //     </>
-    //     )
-    // }
 
     return (
         <SafeAreaView>
@@ -156,7 +105,6 @@ export default function NewItem() {
                 <Sheet.Frame>
                     <HorizontalContainer width="100%" justifyContent="space-around">
                         <SmallButtonWithAccent onPress={pickImage}>Pick an image</SmallButtonWithAccent>
-                        {/*<SmallButtonWithAccent onPress={handleOpenCamera}>Take a picture</SmallButtonWithAccent>*/}
                     </HorizontalContainer>
                 </Sheet.Frame>
             </Sheet>
@@ -169,9 +117,7 @@ export default function NewItem() {
                         <Input
                             id="name"
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
-                            // isInvalid={!!errors.name}
                             value={name}
                             onChangeText={setName}
                             autoFocus
@@ -185,10 +131,8 @@ export default function NewItem() {
                         </Label>
                         <Input
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
                             id="description"
-                            // isInvalid={!!errors.description}
                             value={description}
                             onChangeText={setDescription}
                             autoCapitalize="sentences"
@@ -201,10 +145,8 @@ export default function NewItem() {
                         </Label>
                         <Input
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
                             id="price"
-                            // isInvalid={!!errors.price}
                             value={price}
                             onChangeText={setPrice}
                             keyboardType="numeric"
@@ -217,10 +159,8 @@ export default function NewItem() {
                         </Label>
                         <Input
                             flex={1}
-                            // size="$3"
                             borderWidth={2}
                             id="stock"
-                            // isInvalid={!!errors.stock}
                             value={stock}
                             onChangeText={setStock}
                             keyboardType="numeric"
@@ -237,37 +177,9 @@ export default function NewItem() {
                     </VerticalContainer>
                     <Separator />
                     <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "New item"}</BigButton>
-                    {/*<SizableText>{error}</SizableText>*/}
+                    <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>
         </SafeAreaView>
     )
 };
-
-const styles = StyleSheet.create({
-    text: {
-        margin: 10,
-        fontSize: 20,
-    },
-    textInput: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 5,
-    },
-    button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    defaultButton: {
-        backgroundColor: 'lightgrey',
-        padding: 10,
-        margin: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    }
-});
