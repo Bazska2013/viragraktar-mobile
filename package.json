@@ -57,7 +57,8 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "tamagui": "^1.125.22",
-    "victory-native": "^37.3.6"
+    "victory-native": "^37.3.6",
+    "expo-dev-client": "~5.0.16"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

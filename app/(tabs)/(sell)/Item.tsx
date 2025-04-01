@@ -4,6 +4,7 @@ import flowerImage from "@/assets/images/defaultFlower.png";
 import {memo, useCallback, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
+import {BASE_URL} from "@/scripts/axiosConfig";
 
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
@@ -57,7 +58,7 @@ const Item = ({item}) => {
             marginTop='5%'
             alignSelf="center"
             backgroundColor={isItemInCart(item) ? '#f2f6d5' : ''}
-            opacity={item.stock === 0 ? '0.5' : '1'}
+            opacity={item.stock === 0 ? 0.5 : 1}
             flex={1}
             gap={0}
         >
@@ -78,7 +79,7 @@ const Item = ({item}) => {
                     alignItems="center"
                 >
                     <Image borderRadius="$5" source={{
-                        uri: item.image ? "http://localhost:8000/images/" + item.image : flowerImage,
+                        uri: item.image ? BASE_URL + "/images/" + item.image : flowerImage,
                         width: 120,
                         height: 120,
                     }} />
@@ -109,7 +110,7 @@ const Item = ({item}) => {
                         boxShadow={isChanged ? "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)" : "none"}
                         icon={ShoppingCart}
                         disabled={!isChanged}
-                        opacity={isChanged ? "1" : "0.5"}
+                        opacity={isChanged ? 1 : 0.5}
                         onPress={() => handleAddToCart()}
                     >Add to cart</SmallButtonWithAccent>
                 </VerticalContainer>

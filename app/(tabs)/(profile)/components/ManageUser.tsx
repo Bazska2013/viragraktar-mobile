@@ -123,14 +123,14 @@ const ManageUser = (props) => {
                 <Label htmlFor={props.name + 'admin'}>
                     <H4>Admin</H4>
                 </Label>
-                <Switch checked={isAdmin} disabled={user.id === props.id} opacity={user.id !== props.id ? "1" : "0.5"} id={props.name + 'admin'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'admin')}>
+                <Switch checked={isAdmin} disabled={user.id === props.id} opacity={user.id !== props.id ? 1 : 0.5} id={props.name + 'admin'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'admin')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
             <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
-                <SmallButtonWithAccent icon={Save} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
-                <SmallButtonWithAccent icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? "1" : "0.5"} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? 1 : 0.5} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
             </StyledGroup>
             {error && <SizableText color="$red1">{error}</SizableText>}
         </VerticalContainer>

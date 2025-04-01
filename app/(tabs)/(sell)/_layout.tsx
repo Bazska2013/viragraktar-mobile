@@ -1,7 +1,7 @@
 import {router, Stack} from "expo-router";
 import React, {createContext, useContext, useState} from "react";
 import axios from "@/scripts/axiosConfig";
-import {Button, Dimensions} from "react-native";
+import {Button, Dimensions, Platform} from "react-native";
 
 const ItemsContext = createContext<{
     items: any,
@@ -78,7 +78,7 @@ export default function SellLayout() {
                 <Stack.Screen name="index"
                               options={{title: 'Sell', headerShown: false}} />
                 <Stack.Screen name="cart"
-                              options={{title: 'Cart', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: () => <Button title="Cancel" onPress={() => router.back()} />}} />
+                              options={{title: 'Cart', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button title="Cancel" onPress={() => router.back()} /> : undefined}} />
             </Stack>
         </ItemsContext.Provider>
     )

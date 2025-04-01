@@ -1,4 +1,13 @@
-import {Dimensions, FlatList, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
+import {
+    Dimensions,
+    FlatList,
+    Platform,
+    RefreshControl,
+    SafeAreaView, StatusBar,
+    StyleSheet,
+    useColorScheme,
+    View
+} from "react-native";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -41,7 +50,7 @@ export default function Sell() {
     }, [cartItems]);
 
     return (
-        <SafeAreaView style={{height: '100%'}}>
+        <SafeAreaView style={[styles.AndroidSafeArea]}>
             {store ? <>
                 {user?.is_seller ? <>
                     <FlatList data={items}
@@ -117,3 +126,10 @@ export default function Sell() {
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    AndroidSafeArea: {
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        flex: 1,
+    }
+})

@@ -1,4 +1,4 @@
-import {Dimensions, FlatList, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
+import {Dimensions, FlatList, RefreshControl, SafeAreaView, useColorScheme, View, StyleSheet, Platform, StatusBar} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
@@ -40,7 +40,7 @@ export default  function Buy() {
     }, []);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={[styles.AndroidSafeArea]}>
             {store ? <>
                 {user?.is_buyer ? <>
                     <FlatList data={items}
@@ -113,3 +113,10 @@ export default  function Buy() {
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    AndroidSafeArea: {
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        flex: 1,
+    }
+})

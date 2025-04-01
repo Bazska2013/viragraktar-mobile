@@ -1,4 +1,4 @@
-import {Alert, RefreshControl, SafeAreaView, useColorScheme} from "react-native";
+import {Alert, Platform, RefreshControl, SafeAreaView, StatusBar, StyleSheet, useColorScheme} from "react-native";
 import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
@@ -98,7 +98,7 @@ export default function Profile() {
         ]);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={[styles.AndroidSafeArea]}>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
@@ -263,3 +263,10 @@ export default function Profile() {
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    AndroidSafeArea: {
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        flex: 1,
+    }
+})

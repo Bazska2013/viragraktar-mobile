@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Platform, SafeAreaView, useColorScheme,} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useSearchParams} from "expo-router/build/hooks";
-import axios from '@/scripts/axiosConfig';
+import axios, {BASE_URL} from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
@@ -194,7 +194,7 @@ export default function EditItem() {
                         <VerticalContainer>
                             <SmallButtonWithAccent onPress={setImageModal}>{item.image ? 'Change image' : 'Pick an image'}</SmallButtonWithAccent>
                             {(item.image || image) && <Image alignSelf="center" borderRadius={5} source={{
-                                uri: image ? image : item.image ? "http://localhost:8000/images/" + item.image : '',
+                                uri: image ? image : item.image ? BASE_URL + "/images/" + item.image : '',
                                 width: 200,
                                 height: 200,
                             }} />}

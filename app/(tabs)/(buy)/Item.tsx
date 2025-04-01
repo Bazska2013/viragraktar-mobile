@@ -1,6 +1,7 @@
 import {Text, useColorScheme} from "react-native";
 import {memo, useCallback, useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
+import {BASE_URL} from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {router} from "expo-router";
@@ -87,7 +88,7 @@ const Item = ({props}: {props: any}) => {
                 alignItems="center"
             >
                 <Image borderRadius="$5" source={{
-                    uri: item.image ? "http://localhost:8000/images/" + item.image : flowerImage,
+                    uri: item.image ? BASE_URL + "/images/" + item.image : flowerImage,
                     width: 120,
                     height: 120,
                 }} />
@@ -113,8 +114,8 @@ const Item = ({props}: {props: any}) => {
                     orientation='horizontal'
                     boxShadow={isChanged ? "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)" : "none"}
                 >
-                    <SmallButton icon={X} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleCancel()} width="50%" />
-                    <SmallButton icon={Check} disabled={!isChanged} opacity={isChanged ? "1" : "0.5"} onPress={() => handleSubmit()} width="50%" />
+                    <SmallButton icon={X} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleCancel()} width="50%" />
+                    <SmallButton icon={Check} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSubmit()} width="50%" />
                 </Group>
                 <SmallButtonWithAccent
                     boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
