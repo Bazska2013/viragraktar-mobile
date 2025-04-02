@@ -1,4 +1,4 @@
-import {Text, useColorScheme} from "react-native";
+import {Dimensions, Text, useColorScheme} from "react-native";
 import {memo, useCallback, useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {BASE_URL} from "@/scripts/axiosConfig";
@@ -76,12 +76,11 @@ const Item = ({props}: {props: any}) => {
         <HorizontalContainer
             borderRadius="$5"
             boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
-            width='90%'
-            marginBottom='5%'
-            marginTop='5%'
+            width={Dimensions.get('window').width > 768 ? '100%' : '90%'}
             alignSelf="center"
             flex={1}
             padding="$3"
+            marginTop={Dimensions.get('window').height >= 768 ? 20 : 0}
         >
             <VerticalContainer
                 flex={2}

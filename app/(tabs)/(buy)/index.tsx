@@ -45,15 +45,15 @@ export default  function Buy() {
                 {user?.is_buyer ? <>
                     <FlatList data={items}
                               style={{height: '100%'}}
-                              numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
+                              numColumns={Dimensions.get('window').width >= 768 ? 2 : 1}
                               renderItem={({item}) => <Item key={item.id} props={item} />}
                               keyExtractor={(item) => item.id.toString()}
                               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
                               initialNumToRender={10}
                               maxToRenderPerBatch={10}
+                              columnWrapperStyle={{gap: 20, width: '90%', alignSelf: 'center'}}
                               windowSize={10}
-                              marginBottom="5%"
                               onScroll={handleScroll}
                               scrollEventThrottle={16}
                               ListEmptyComponent={
@@ -63,7 +63,7 @@ export default  function Buy() {
                                   </EditContainer>
                               }
                               ListHeaderComponent={
-                                  <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
+                                  <HorizontalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0} width="90%" alignSelf="center" justifyContent="space-between">
                                       <AnimatePresence mode="wait" initial="false">
                                           {openSearch ? <>
                                               <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
@@ -85,16 +85,16 @@ export default  function Buy() {
                                   </HorizontalContainer>
                               }
                               ListFooterComponent={
-                                  <BigButton marginBottom="5%" width="90%" alignSelf="center" icon={Plus} onPress={() => {router.push('/newItem')}} />
+                                  <BigButton marginTop={20} marginBottom="5%" width="90%" alignSelf="center" icon={Plus} onPress={() => {router.push('/newItem')}}>{Dimensions.get('window').width >= 768 ? ' New item' : ''}</BigButton>
                               }
                     />
                     <AnimatePresence>
                         {!isAtBottom &&
                             <BigButton animation="quick" enterStyle={
-                                {x: 100}
+                                {x: Dimensions.get('window').width >= 768 ? 200 : 100}
                             } exitStyle={
-                                {x: 100}
-                            } icon={Plus} position="absolute" bottom={30} right={10} onPress={() => {router.push('/newItem')}} />
+                                {x: Dimensions.get('window').width >= 768 ? 200 : 100}
+                            } icon={Plus} position="absolute" bottom={10} right={10} onPress={() => {router.push('/newItem')}}>{Dimensions.get('window').width >= 768 ? 'New item' : ''}</BigButton>
                         }
                     </AnimatePresence>
                 </> : <>

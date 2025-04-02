@@ -1,4 +1,13 @@
-import {Alert, Platform, RefreshControl, SafeAreaView, StatusBar, StyleSheet, useColorScheme} from "react-native";
+import {
+    Alert,
+    Dimensions,
+    Platform,
+    RefreshControl,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    useColorScheme
+} from "react-native";
 import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
@@ -103,7 +112,7 @@ export default function Profile() {
                         automaticallyAdjustKeyboardInsets={true}
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <VerticalContainer>
+                <VerticalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0}>
                     <H2 width="90%" alignSelf="center">Profile</H2>
                     <VerticalContainer
                         borderRadius="$5"

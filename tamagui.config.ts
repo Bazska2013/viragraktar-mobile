@@ -23,7 +23,7 @@ export const EditContainer = styled(YStack, {
     borderRadius: "$5",
     marginTop: "$5",
     marginBottom: "$5",
-    width: Dimensions.get('window').width > 1280 ? '50%' : Dimensions.get('window').width > 768 ? '75%' : '90%',
+    width: '90%',
     alignSelf: 'center',
     boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
 });

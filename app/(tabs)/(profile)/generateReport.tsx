@@ -83,7 +83,7 @@ export default function GenerateReport() {
                     <Separator />
                     <H4>Options</H4>
                     <VerticalContainer>
-                        <HorizontalContainer alignItems="center" justifyContent="space-between">
+                        <HorizontalContainer alignItems="center">
                             <Label htmlFor="dist">
                                 <H6>Distribution</H6>
                             </Label>
@@ -105,7 +105,7 @@ export default function GenerateReport() {
                     </VerticalContainer>
                     <Separator />
                     <VerticalContainer>
-                        <HorizontalContainer alignItems="center" justifyContent="space-between">
+                        <HorizontalContainer alignItems="center">
                             <Label htmlFor="rev">
                                 <H6>Revenue</H6>
                             </Label>
@@ -128,7 +128,7 @@ export default function GenerateReport() {
                     <Separator />
                     <VerticalContainer>
                         <VerticalContainer>
-                            <HorizontalContainer>
+                            <HorizontalContainer alignItems="center">
                                 <Label htmlFor="table">
                                     <H6>Transactions table</H6>
                                 </Label>
@@ -149,7 +149,7 @@ export default function GenerateReport() {
                                 </>
                             }
                         </VerticalContainer>
-                        {showTable && <HorizontalContainer>
+                        {showTable && <HorizontalContainer alignItems="center">
                             <Label htmlFor="tableTotal">
                                 <H6>Show total</H6>
                             </Label>

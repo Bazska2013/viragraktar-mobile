@@ -54,7 +54,8 @@ export default function Sell() {
             {store ? <>
                 {user?.is_seller ? <>
                     <FlatList data={items}
-                              numColumns={Dimensions.get('window').width >= 768 ? 3: 1}
+                              style={{height: '100%'}}
+                              numColumns={Dimensions.get('window').width >= 768 ? 2 : 1}
                               renderItem={({item}) =>
                                   <Item key={item.id} item={item} />}
                               keyExtractor={(item) => item.id.toString()}
@@ -62,6 +63,7 @@ export default function Sell() {
                               keyboardDismissMode='interactive'
                               initialNumToRender={10}
                               maxToRenderPerBatch={10}
+                              columnWrapperStyle={{gap: 20, width: '90%', alignSelf: 'center'}}
                               windowSize={10}
                               ListEmptyComponent={
                                   <EditContainer marginBottom="$5">
@@ -70,7 +72,7 @@ export default function Sell() {
                                   </EditContainer>
                               }
                               ListHeaderComponent={
-                                  <HorizontalContainer width="90%" alignSelf="center" justifyContent="space-between">
+                                  <HorizontalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0} width="90%" alignSelf="center" justifyContent="space-between">
                                       <AnimatePresence mode="wait" initial="false">
                                           {openSearch ? <>
                                               <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
@@ -97,17 +99,17 @@ export default function Sell() {
                             <BigButton
                                 animation="quick"
                                 enterStyle={{
-                                    x: 100,
+                                    x: Dimensions.get('window').width >= 768 ? 200 : 100,
                                 }}
                                 exitStyle={{
-                                    x: 100,
+                                    x: Dimensions.get('window').width >= 768 ? 200 : 100,
                                 }}
                                 position="absolute"
                                 bottom={10}
                                 right={10}
                                 icon={ShoppingBasket}
                                 onPress={() => router.push('/cart')}
-                            />
+                            >{Dimensions.get('window').width >= 768 ? 'Checkout' : ''}</BigButton>
                         }
                     </AnimatePresence>
                 </> : <>

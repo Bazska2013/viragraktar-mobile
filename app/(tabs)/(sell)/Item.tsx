@@ -5,6 +5,7 @@ import {memo, useCallback, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {BASE_URL} from "@/scripts/axiosConfig";
+import {Dimensions} from "react-native";
 
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
@@ -53,13 +54,13 @@ const Item = ({item}) => {
         <VerticalContainer
             borderRadius="$5"
             boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
-            width='90%'
-            marginBottom='5%'
-            marginTop='5%'
+            width={Dimensions.get('window').width > 768 ? '100%' : '90%'}
             alignSelf="center"
+            flex={1}
+            padding="$3"
+            marginTop={Dimensions.get('window').height >= 768 ? 20 : 0}
             backgroundColor={isItemInCart(item) ? '#f2f6d5' : ''}
             opacity={item.stock === 0 ? 0.5 : 1}
-            flex={1}
             gap={0}
         >
             <Button
