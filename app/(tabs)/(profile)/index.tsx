@@ -266,7 +266,7 @@ export default function Profile() {
                                 </Group>
                             </VerticalContainer>
                     }
-                    <BigButton width="90%" alignSelf="center" onPress={() => confirmAlert(false)}>Log out</BigButton>
+                    <BigButton marginBottom={20} width="90%" alignSelf="center" onPress={() => confirmAlert(false)}>Log out</BigButton>
                 </VerticalContainer>
             </ScrollView>
         </SafeAreaView>

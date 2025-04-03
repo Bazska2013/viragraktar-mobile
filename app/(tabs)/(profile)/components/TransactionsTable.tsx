@@ -146,21 +146,21 @@ const TransactionsTable = (props) => {
                     {props.distShown && <EditContainer>
                         <H4 alignSelf="center">Item distribution</H4>
                         <VerticalContainer>
-                            <HorizontalContainer alignItems="center" justifyContent="space-between">
-                                <SizableText fontSize="$7">Name</SizableText>
-                                <SizableText fontSize="$7">Price</SizableText>
-                                <SizableText fontSize="$7">Amount</SizableText>
-                                <SizableText fontSize="$7">Revenue</SizableText>
+                            <HorizontalContainer alignItems="center">
+                                <SizableText width="18%" textAlign="center" fontSize="$5">Name</SizableText>
+                                <SizableText width="15%" textAlign="center" fontSize="$5">Price</SizableText>
+                                <SizableText width="20%" textAlign="center" fontSize="$5">Amount</SizableText>
+                                <SizableText width="22%" textAlign="center" fontSize="$5">Revenue</SizableText>
                             </HorizontalContainer>
                             <Separator />
                             {props.items.map((item, index) => {
                                 return (
                                     <View key={index}>
-                                        <HorizontalContainer alignItems="center" width="100%" justifyContent="space-between">
-                                            <SizableText width="20%" alignSelf="center">{item.name}</SizableText>
-                                            <SizableText width="20%" alignSelf="center">{item.price}</SizableText>
-                                            <SizableText width="20%" alignSelf="center">{item.amount}</SizableText>
-                                            <SizableText width="20%" alignSelf="center">{item.amount * item.price}</SizableText>
+                                        <HorizontalContainer alignItems="center" width="100%">
+                                            <SizableText width="18%" textAlign="center" alignSelf="center">{item.name}</SizableText>
+                                            <SizableText width="15%" textAlign="center" alignSelf="center">{item.price}</SizableText>
+                                            <SizableText width="20%" textAlign="center" alignSelf="center">{item.amount}</SizableText>
+                                            <SizableText width="22%" textAlign="center" alignSelf="center">{item.amount * item.price}</SizableText>
                                         </HorizontalContainer>
                                         <Separator />
                                     </View>
@@ -171,23 +171,23 @@ const TransactionsTable = (props) => {
                     {props.transShown && <EditContainer>
                         <H4 alignSelf="center">Transactions history</H4>
                         <VerticalContainer>
-                            <HorizontalContainer alignItems="center" justifyContent="space-between">
-                                <SizableText fontSize="$3" width="15%">Date</SizableText>
-                                <SizableText fontSize="$3" width="13%">Time</SizableText>
-                                <SizableText fontSize="$3" width="13%">User</SizableText>
-                                <SizableText fontSize="$3" width="20%">Payment method</SizableText>
-                                <SizableText fontSize="$3" width="15%">Total income</SizableText>
+                            <HorizontalContainer alignItems="center">
+                                <SizableText textAlign="center" fontSize="$3" width="14%">Date</SizableText>
+                                <SizableText textAlign="center" fontSize="$3" width="11%">Time</SizableText>
+                                <SizableText textAlign="center" fontSize="$3" width="12%">User</SizableText>
+                                <SizableText textAlign="center" fontSize="$3" width="18%">Payment method</SizableText>
+                                <SizableText textAlign="center" fontSize="$3" width="18%">Total income</SizableText>
                             </HorizontalContainer>
                             <Separator />
                             {props.transactions.map((item, index) => {
                                 return (
                                     <View key={index}>
                                         <HorizontalContainer alignItems="center" width="100%" justifyContent="space-between">
-                                            <SizableText fontSize="$2" width="15%" alignSelf="center">{generateDate(item.created_at)}</SizableText>
-                                            <SizableText fontSize="$2" width="13%" alignSelf="center">{generateTime(item.created_at)}</SizableText>
-                                            <SizableText fontSize="$2" width="13%" alignSelf="center">{findUserName(item.user_id)}</SizableText>
-                                            <SizableText fontSize="$2" width="20%" alignSelf="center">{item.credit ? 'Credit card' : 'Cash'}</SizableText>
-                                            <SizableText fontSize="$2" width="15%" alignSelf="center">{item.total}</SizableText>
+                                            <SizableText textAlign="center" fontSize="$2" width="14%" alignSelf="center">{generateDate(item.created_at)}</SizableText>
+                                            <SizableText textAlign="center" fontSize="$2" width="11%" alignSelf="center">{generateTime(item.created_at)}</SizableText>
+                                            <SizableText textAlign="center" fontSize="$2" width="12%" alignSelf="center">{findUserName(item.user_id)}</SizableText>
+                                            <SizableText textAlign="center" fontSize="$2" width="18%" alignSelf="center">{item.credit ? 'Credit card' : 'Cash'}</SizableText>
+                                            <SizableText textAlign="center" fontSize="$2" width="18%" alignSelf="center">{item.total}</SizableText>
                                         </HorizontalContainer>
                                         <Separator />
                                     </View>

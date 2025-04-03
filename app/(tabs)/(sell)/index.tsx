@@ -63,7 +63,7 @@ export default function Sell() {
                               keyboardDismissMode='interactive'
                               initialNumToRender={10}
                               maxToRenderPerBatch={10}
-                              columnWrapperStyle={{gap: 20, width: '90%', alignSelf: 'center'}}
+                              columnWrapperStyle={Dimensions.get('window').width >= 768 ? {gap: 20, width: '90%', alignSelf: 'center'} : undefined}
                               windowSize={10}
                               ListEmptyComponent={
                                   <EditContainer marginBottom="$5">

@@ -58,7 +58,8 @@ const Item = ({item}) => {
             alignSelf="center"
             flex={1}
             padding="$3"
-            marginTop={Dimensions.get('window').height >= 768 ? 20 : 0}
+            marginTop={Dimensions.get('window').width >= 768 ? 20 : 10}
+            marginBottom={Dimensions.get('window').width >= 768 ? 0 : 10}
             backgroundColor={isItemInCart(item) ? '#f2f6d5' : ''}
             opacity={item.stock === 0 ? 0.5 : 1}
             gap={0}

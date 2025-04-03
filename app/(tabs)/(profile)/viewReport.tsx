@@ -1,11 +1,24 @@
-import {Dimensions, RefreshControl, SafeAreaView} from "react-native";
+import {Dimensions, RefreshControl, SafeAreaView, View} from "react-native";
 import {H4, ScrollView} from "tamagui";
-import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
+import {BigButton, EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
-import {VictoryBar, VictoryChart, VictoryPie, VictoryTheme, VictoryLine, VictoryScatter} from "victory-native";
+import {
+    VictoryAxis,
+    VictoryBar,
+    VictoryChart,
+    VictoryLine,
+    VictoryPie,
+    VictoryScatter,
+    VictoryTheme
+} from "victory-native";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import TransactionsTable from "@/app/(tabs)/(profile)/components/TransactionsTable";
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import {captureRef} from 'react-native-view-shot';
+import {Download} from "@tamagui/lucide-icons";
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 export default function ViewReport() {
     const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal} = useReportContext();
@@ -147,9 +160,54 @@ export default function ViewReport() {
         setIsLoading(false);
     }
 
+    // const handleDownloadReport = async () => {
+    //     try {
+    //         // const pdfDoc = <MyDocument />;
+    //         // const pdfBlob = await pdf(pdfDoc).toBlob(); // Generate PDF as a blob
+    //         let options = {
+    //             html: '<h1>Halo</h1>',
+    //             fileName: 'test',
+    //             directory: 'Documents',
+    //         }
+    //         let file = await RNHTMLtoPDF.convert(options);
+    //
+    //         const pdfUri = FileSystem.cacheDirectory + 'report.pdf';
+    //         await FileSystem.writeAsStringAsync(pdfUri, await pdfBlob.arrayBuffer(), {
+    //             encoding: FileSystem.EncodingType.Base64,
+    //         });
+    //
+    //         if (await Sharing.isAvailableAsync()) {
+    //             await Sharing.shareAsync(pdfUri);
+    //         } else {
+    //             console.log('Sharing is not available');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error generating PDF:', error);
+    //     }
+    // };
+    //
+    // const captureComponent = async (ref: string) => {
+    //     return await captureRef(ref, {format: 'png', quality: 1});
+    // };
+
+    // const MyDocument = () => {
+    //     const distChartImage = captureComponent('distChartRef');
+    //     const revenueChartImage = captureComponent('revenueChartRef');
+    //     const tableImage = captureComponent('tableRef');
+    //     return (
+    //         <Document>
+    //             <Page size="A4">
+    //                 <Text>Report</Text>
+    //                 <Text>This is a report about the transactions made.</Text>
+    //                 {/* Add more content here */}
+    //             </Page>
+    //         </Document>
+    //     );
+    // }
+
     return (
         <SafeAreaView>
-            <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />} >
+            <ScrollView height="100%" refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />} >
                 {Dimensions.get('window').width >= 768 ? <>
                     <VerticalContainer>
                         <H4
@@ -164,75 +222,104 @@ export default function ViewReport() {
                         {data.length > 0 ? <>
                             <HorizontalContainer width="90%" alignSelf="center">
                                 {showDistribution &&
-                                    <VerticalContainer alignItems="center"
-                                                       padding="$5"
-                                                       borderRadius="$5"
-                                                       marginTop="$5"
-                                                       marginBottom="$5"
-                                                       boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
-                                                       width="90%"
-                                                       alignSelf="center"
-                                    >
+                                    <EditContainer alignItems="center">
                                         <H4>Distribution of items sold</H4>
-                                        {showPie ?
-                                            <VictoryPie
-                                                data={aggregateItems()}
-                                                x="name"
-                                                y="amount"
-                                                theme={VictoryTheme.grayscale}
-                                                categories={{x: items.map(item => item.name)}}
-                                                width={400}
-                                                height={400}
-                                            />
-                                            :
-                                            <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}
-                                                          width={400}
-                                                          height={400}
-                                            >
-                                                <VictoryBar
+                                        <View id="distChartRef">
+                                            {showPie ?
+                                                <VictoryPie
+                                                    data={aggregateItems()}
                                                     x="name"
                                                     y="amount"
-                                                    data={aggregateItems()}
-                                                    animate={{duration: 500}}
+                                                    theme={VictoryTheme.grayscale}
+                                                    categories={{x: items.map(item => item.name)}}
+                                                    width={400}
+                                                    height={400}
+                                                    padding={60}
                                                 />
-                                            </VictoryChart>
-                                        }
-                                    </VerticalContainer>
+                                                :
+                                                <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}
+                                                              width={550}
+                                                              height={400}
+                                                >
+                                                    <VictoryAxis
+                                                        fixLabelOverlap
+                                                        style={{
+                                                            tickLabels: {
+                                                                angle: 0,
+                                                                fontSize: 15,
+                                                                padding: 5
+                                                            }
+                                                        }}
+                                                    />
+                                                    <VictoryAxis
+                                                        dependentAxis
+                                                        style={{
+                                                            tickLabels: {
+                                                                angle: 0,
+                                                                fontSize: 15,
+                                                                padding: 5
+                                                            }
+                                                        }}
+                                                    />
+                                                    <VictoryBar
+                                                        x="name"
+                                                        y="amount"
+                                                        data={aggregateItems()}
+                                                        animate={{duration: 500}}
+                                                    />
+                                                </VictoryChart>
+                                            }
+                                        </View>
+                                    </EditContainer>
                                 }
                                 {showRevenue &&
-                                    <VerticalContainer alignItems="center"
-                                                       padding="$5"
-                                                       borderRadius="$5"
-                                                       marginTop="$5"
-                                                       marginBottom="$5"
-                                                       boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
-                                                       width="90%"
-                                                       alignSelf="center"
+                                    <EditContainer
+                                        alignItems="center"
                                     >
                                         <H4>Revenue from transactions</H4>
                                         <VictoryChart
-                                            width={400}
+                                            width={550}
                                             height={400}
                                             theme={VictoryTheme.grayscale}
                                             domainPadding={50}
                                             animate={{duration: 500}}
                                         >
+                                            <VictoryAxis
+                                                fixLabelOverlap
+                                                style={{
+                                                    tickLabels: {
+                                                        angle: 0,
+                                                        fontSize: 15,
+                                                        padding: 5
+                                                    }
+                                                }}
+                                            />
+                                            <VictoryAxis
+                                                dependentAxis
+                                                style={{
+                                                    tickLabels: {
+                                                        angle: 0,
+                                                        fontSize: 15,
+                                                        padding: 5
+                                                    }
+                                                }}
+                                            />
                                             {showLine ?
                                                 <VictoryLine data={readableData()} x='created_at' y='total' />
                                                 :
                                                 <VictoryScatter data={readableData()} x='created_at' y='total' />
                                             }
                                         </VictoryChart>
-                                    </VerticalContainer>
+                                    </EditContainer>
                                 }
                             </HorizontalContainer>
                                 {showTable &&
                                     <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
                                 }
                             </> :
-                            <HorizontalContainer>
+                            <EditContainer>
                                 <H4>No data available for this day</H4>
-                            </HorizontalContainer>}
+                            </EditContainer>}
                     </VerticalContainer>
                 </> : <>
                     <EditContainer>
@@ -249,11 +336,32 @@ export default function ViewReport() {
                                             y="amount"
                                             theme={VictoryTheme.grayscale}
                                             categories={{x: items.map(item => item.name)}}
-                                            width={400}
-                                            height={400}
+                                            width={300}
+                                            height={300}
+                                            padding={60}
                                         />
                                         :
                                         <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}>
+                                            <VictoryAxis
+                                                fixLabelOverlap
+                                                style={{
+                                                    tickLabels: {
+                                                        angle: 0,
+                                                        fontSize: 15,
+                                                        padding: 5
+                                                    }
+                                                }}
+                                            />
+                                            <VictoryAxis
+                                                dependentAxis
+                                                style={{
+                                                    tickLabels: {
+                                                        angle: 0,
+                                                        fontSize: 15,
+                                                        padding: 5
+                                                    }
+                                                }}
+                                            />
                                             <VictoryBar
                                                 x="name"
                                                 y="amount"
@@ -273,6 +381,26 @@ export default function ViewReport() {
                                         domainPadding={50}
                                         animate={{duration: 500}}
                                     >
+                                        <VictoryAxis
+                                            fixLabelOverlap
+                                            style={{
+                                                tickLabels: {
+                                                    angle: 0,
+                                                    fontSize: 15,
+                                                    padding: 5
+                                                }
+                                            }}
+                                        />
+                                        <VictoryAxis
+                                            dependentAxis
+                                            style={{
+                                                tickLabels: {
+                                                    angle: 0,
+                                                    fontSize: 15,
+                                                    padding: 5
+                                                }
+                                            }}
+                                        />
                                         {showLine ?
                                             <VictoryLine data={readableData()} x='created_at' y='total' />
                                             :
@@ -289,6 +417,9 @@ export default function ViewReport() {
                             <H4>No data available for this day</H4>
                         </EditContainer>}
                 </>}
+                {/*<EditContainer>*/}
+                {/*    <BigButton icon={Download} onPress={handleDownloadReport}>Download PDF</BigButton>*/}
+                {/*</EditContainer>*/}
             </ScrollView>
         </SafeAreaView>
     )

@@ -10,10 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.viragraktar-mobile",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to take picture of the items you want to upload."
-      }
+      },
+      "bundleIdentifier": "com.anonymous.viragraktarmobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,8 +21,6 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO",
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],

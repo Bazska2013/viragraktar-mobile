@@ -80,7 +80,8 @@ const Item = ({props}: {props: any}) => {
             alignSelf="center"
             flex={1}
             padding="$3"
-            marginTop={Dimensions.get('window').height >= 768 ? 20 : 0}
+            marginTop={Dimensions.get('window').width >= 768 ? 20 : 10}
+            marginBottom={Dimensions.get('window').width >= 768 ? 0 : 10}
         >
             <VerticalContainer
                 flex={2}
