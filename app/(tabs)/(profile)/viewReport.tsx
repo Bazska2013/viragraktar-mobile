@@ -21,21 +21,8 @@ import {Download} from "@tamagui/lucide-icons";
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 export default function ViewReport() {
-    const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal} = useReportContext();
+    const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal, getReadableDate} = useReportContext();
     const [isLoading, setIsLoading] = useState(true);
-
-    const getReadableDate = (date: Date) => {
-        let year = date.getFullYear();
-        let month = (date.getMonth() + 1).toString();
-        let day = (date.getDate()).toString();
-        if (parseInt(month) < 10) {
-            month = '0' + month;
-        }
-        if (parseInt(day) < 10) {
-            day = '0' + day;
-        }
-        return year + '-' + month + '-' + day;
-    }
 
     const fetchDayData = async () => {
         setIsLoading(true);
@@ -152,6 +139,8 @@ export default function ViewReport() {
 
     const handleRefresh = () => {
         setIsLoading(true);
+        setItems([]);
+        setData([]);
         if (oneDay) {
             fetchDayData();
         } else {
@@ -402,9 +391,9 @@ export default function ViewReport() {
                                             }}
                                         />
                                         {showLine ?
-                                            <VictoryLine data={readableData()} x='created_at' y='total' />
+                                            <VictoryLine key="lineChart" data={readableData()} x='created_at' y='total' />
                                             :
-                                            <VictoryScatter data={readableData()} x='created_at' y='total' />
+                                            <VictoryScatter key="scatterChart" data={readableData()} x='created_at' y='total' />
                                         }
                                     </VictoryChart>
                                 </EditContainer>

@@ -47,7 +47,7 @@ export default function Login() {
             if (token) {
                 await save('token', token);
                 await getUserData();
-                router.replace('/');
+                router.replace('/(tabs)/(sell)');
             }
         }
     }

@@ -1,8 +1,9 @@
-import {HorizontalContainer, StyledGroup, VerticalContainer} from "@/tamagui.config";
+import {HorizontalContainer, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
 import {Checkbox, Group, H4, H6, Label} from "tamagui";
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {useState} from "react";
 import {Check} from "@tamagui/lucide-icons";
+import {Platform} from "react-native";
 
 const Hours = (props) => {
     const [fromDate, setFromDate] = useState(() => {
@@ -14,13 +15,21 @@ const Hours = (props) => {
         return new Date(1970, 0, 1, hours, minutes);
     });
 
+    const [showFromPicker, setShowFromPicker] = useState(false);
+    const [showToPicker, setShowToPicker] = useState(false);
+
     const handleFrom = (event: DateTimePickerEvent, date: Date) => {
         const {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        if (type === 'dismissed') {
+            setShowFromPicker(false);
+            return;
+        }
         setFromDate(new Date(date));
         props.onSelectFrom(date.getHours() + ':' + date.getMinutes());
+        setShowFromPicker(false);
     }
 
     const handleTo = (event: DateTimePickerEvent, date: Date) => {
@@ -28,8 +37,13 @@ const Hours = (props) => {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        if (type === 'dismissed') {
+            setShowToPicker(false);
+            return;
+        }
         setToDate(new Date(date));
         props.onSelectTo(date.getHours() + ':' + date.getMinutes());
+        setShowToPicker(false);
     }
 
     return (
@@ -39,14 +53,31 @@ const Hours = (props) => {
             </H4>
 
             <StyledGroup orientation="horizontal" width="100%" padding="$3" justifyContent="space-between">
-                <Group.Item>
-                    <H6>From</H6>
-                    <RNDateTimePicker style={{width: '100%'}} alignSelf="center" value={fromDate} onChange={handleFrom} mode="time" />
-                </Group.Item>
-                <Group.Item>
-                    <H6>To</H6>
-                    <RNDateTimePicker alignSelf="center" value={toDate} onChange={handleTo} mode="time" />
-                </Group.Item>
+                {Platform.OS === 'android' ? <>
+                    <Group.Item>
+                        <H6>From</H6>
+                        <SmallButtonWithAccent onPress={setShowFromPicker}>{props.from}</SmallButtonWithAccent>
+                        {showFromPicker &&
+                            <RNDateTimePicker is24Hour display="clock" style={{width: '100%'}} alignSelf="center" value={fromDate} onChange={handleFrom} mode="time" />
+                        }
+                    </Group.Item>
+                    <Group.Item>
+                        <H6>To</H6>
+                        <SmallButtonWithAccent onPress={setShowToPicker}>{props.to}</SmallButtonWithAccent>
+                        {showToPicker &&
+                            <RNDateTimePicker is24Hour display="clock" alignSelf="center" value={toDate} onChange={handleTo} mode="time" />
+                        }
+                    </Group.Item>
+                </> : <>
+                    <Group.Item>
+                        <H6>From</H6>
+                        <RNDateTimePicker style={{width: '100%'}} alignSelf="center" value={fromDate} onChange={handleFrom} mode="time" />
+                    </Group.Item>
+                    <Group.Item>
+                        <H6>To</H6>
+                        <RNDateTimePicker alignSelf="center" value={toDate} onChange={handleTo} mode="time" />
+                    </Group.Item>
+                </>}
             </StyledGroup>
             <HorizontalContainer width="50%"
                                  boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"

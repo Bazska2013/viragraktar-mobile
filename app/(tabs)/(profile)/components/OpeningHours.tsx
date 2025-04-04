@@ -41,7 +41,7 @@ const OpeningHours = (props) => {
     };
 
     return (
-        <HorizontalContainer flexWrap="wrap" flexDirection={Dimensions.get('window').width >= 768 ? 'row' : 'column'} width="90%" alignSelf="center">
+        <HorizontalContainer flexWrap="wrap" flexDirection="column" width="90%" alignSelf="center">
             {Object.keys(openingHours).map((day, index) => (
                 <Hours
                     key={index}

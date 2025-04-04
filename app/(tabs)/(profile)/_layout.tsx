@@ -31,6 +31,7 @@ const ReportContext = createContext<{
         setShowTransactionTable: (showTransactionTable: boolean) => void,
         showTotal: boolean,
         setShowTotal: (showTotal: boolean) => void,
+        getReadableDate: (date: Date) => string,
 } | undefined>(undefined);
 
 export function useReportContext() {
@@ -56,6 +57,19 @@ export default function ProfileLayout() {
         const [showDistTable, setShowDistTable] = useState(true);
         const [showTransactionTable, setShowTransactionTable] = useState(true);
         const [showTotal, setShowTotal] = useState(true);
+
+        const getReadableDate = (date: Date) => {
+                let year = date.getFullYear();
+                let month = (date.getMonth() + 1).toString();
+                let day = (date.getDate()).toString();
+                if (parseInt(month) < 10) {
+                        month = '0' + month;
+                }
+                if (parseInt(day) < 10) {
+                        day = '0' + day;
+                }
+                return year + '-' + month + '-' + day;
+        }
 
         const contextValue = {
                 data: data,
@@ -85,7 +99,8 @@ export default function ProfileLayout() {
                 showTransactionTable: showTransactionTable,
                 setShowTransactionTable: setShowTransactionTable,
                 showTotal: showTotal,
-                setShowTotal: setShowTotal
+                setShowTotal: setShowTotal,
+                getReadableDate: getReadableDate,
         }
 
     return (

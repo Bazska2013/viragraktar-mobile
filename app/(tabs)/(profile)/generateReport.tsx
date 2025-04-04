@@ -1,21 +1,36 @@
-import {SafeAreaView} from "react-native";
+import {Platform, SafeAreaView} from "react-native";
 import {Checkbox, H4, H6, Label, ScrollView, Separator} from "tamagui";
-import {BigButton, EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config";
+import {
+    BigButton,
+    EditContainer,
+    HorizontalContainer,
+    SmallButtonWithAccent,
+    VerticalContainer
+} from "@/tamagui.config";
 import {Picker} from '@react-native-picker/picker';
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Check, LineChart} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
+import {useState} from "react";
 
 export default function GenerateReport() {
-    const {date, setDate, start, setStart, end, setEnd, oneDay, setOneDay, showDistribution, setShowDistribution, showRevenue, setShowRevenue, showTable, setShowTable, showPie, setShowPie, showLine, setShowLine, showDistTable, setShowDistTable, setShowTransactionTable, showTotal, setShowTotal} = useReportContext();
+    const {date, setDate, start, setStart, end, setEnd, oneDay, setOneDay, showDistribution, setShowDistribution, showRevenue, setShowRevenue, showTable, setShowTable, showPie, setShowPie, showLine, setShowLine, showDistTable, setShowDistTable, setShowTransactionTable, showTotal, setShowTotal, getReadableDate} = useReportContext();
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showStartPicker, setShowStartPicker] = useState(false);
+    const [showEndPicker, setShowEndPicker] = useState(false);
 
     const handleSetDate = (event: DateTimePickerEvent, date: Date) => {
         const {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        if (type === 'dismissed') {
+            setShowDatePicker(false);
+            return;
+        }
         setDate(date);
+        setShowDatePicker(false);
     }
 
     const handleSetStart = (event: DateTimePickerEvent, date: Date) => {
@@ -23,7 +38,12 @@ export default function GenerateReport() {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        if (type === 'dismissed') {
+            setShowStartPicker(false);
+            return;
+        }
         setStart(date);
+        setShowStartPicker(false);
     }
 
     const handleSetEnd = (event: DateTimePickerEvent, date: Date) => {
@@ -31,7 +51,12 @@ export default function GenerateReport() {
             type,
             nativeEvent: {timestamp, utcOffset},
         } = event;
+        if (type === 'dismissed') {
+            setShowEndPicker(false);
+            return;
+        }
         setEnd(date);
+        setShowEndPicker(false);
     }
 
     const handleTableStyle = (value) => {
@@ -68,16 +93,38 @@ export default function GenerateReport() {
                     <Separator />
                     {oneDay ? <HorizontalContainer alignItems="center" justifyContent="space-between">
                         <H6>Select date:</H6>
-                        <RNDateTimePicker style={{width: '100%'}} value={date} onChange={handleSetDate} alignSelf="center" mode="date" />
+                        {Platform.OS === 'android' ? <>
+                            <SmallButtonWithAccent onPress={setShowDatePicker}>{getReadableDate(date)}</SmallButtonWithAccent>
+                            {showDatePicker &&
+                                <RNDateTimePicker display="calendar" style={{width: '100%'}} value={date} onChange={handleSetDate} alignSelf="center" mode="date" />
+                            }
+                        </> : <>
+                            <RNDateTimePicker style={{width: '100%'}} value={date} onChange={handleSetDate} alignSelf="center" mode="date" />
+                        </>}
                     </HorizontalContainer> : <VerticalContainer>
                         <HorizontalContainer alignItems="center" justifyContent="space-between">
                             <H6>From</H6>
-                            <RNDateTimePicker style={{width: '100%'}} value={start} onChange={handleSetStart} alignSelf="center" mode="date" />
+                            {Platform.OS === 'android' ? <>
+                                <SmallButtonWithAccent onPress={setShowStartPicker}>{getReadableDate(start)}</SmallButtonWithAccent>
+                                {showStartPicker &&
+                                    <RNDateTimePicker display="calendar" style={{width: '100%'}} value={start} onChange={handleSetStart} alignSelf="center" mode="date" />
+                                }
+                            </> : <>
+                                <RNDateTimePicker style={{width: '100%'}} value={start} onChange={handleSetStart} alignSelf="center" mode="date" />
+                            </>}
+
                         </HorizontalContainer>
                         <Separator />
                         <HorizontalContainer alignItems="center" justifyContent="space-between">
                             <H6>To</H6>
-                            <RNDateTimePicker style={{width: '100%'}} value={end} onChange={handleSetEnd} alignSelf="center" mode="date" />
+                            {Platform.OS === 'android' ? <>
+                                <SmallButtonWithAccent onPress={setShowEndPicker}>{getReadableDate(end)}</SmallButtonWithAccent>
+                                {showEndPicker &&
+                                    <RNDateTimePicker display="calendar" style={{width: '100%'}} value={end} onChange={handleSetEnd} alignSelf="center" mode="date" />
+                                }
+                            </> : <>
+                                <RNDateTimePicker style={{width: '100%'}} value={end} onChange={handleSetEnd} alignSelf="center" mode="date" />
+                            </>}
                         </HorizontalContainer>
                     </VerticalContainer>}
                     <Separator />
@@ -118,8 +165,12 @@ export default function GenerateReport() {
                         {showRevenue &&
                             <>
                                 <H6>Style:</H6>
-                                <Picker selectedValue={showLine ? 'Line' : 'Scatter'} onValueChange={(itemValue) => setShowLine(itemValue === 'Line')}>
-                                    <Picker.Item label="Line" value="Line"/>
+                                <Picker selectedValue={Platform.OS === 'ios' ? showLine ? 'Line' : 'Scatter' : 'Scatter'} onValueChange={(itemValue) => setShowLine(itemValue === 'Line')}>
+                                    {Platform.OS === 'android' ?
+                                        <Picker.Item enabled={false} label="Line (This option is unavailable on android)" value="Line"/>
+                                        :
+                                        <Picker.Item label="Line" value="Line"/>
+                                    }
                                     <Picker.Item label="Scatter" value="Scatter"/>
                                 </Picker>
                             </>
