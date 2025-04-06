@@ -15,7 +15,7 @@ import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {Group, H2, H4, H6, ScrollView, Separator, SizableText} from 'tamagui';
-import {BigButton, StyledListItem, VerticalContainer} from "@/tamagui.config";
+import {BigButton, StyledGroup, StyledListItem, VerticalContainer} from "@/tamagui.config";
 import {BookKey, BookUser, Calendar, ChevronRight, DollarSign, FilePen, LineChart, LogOut, TextSearch, UserPen, UserSearch} from "@tamagui/lucide-icons";
 
 export default function Profile() {
@@ -118,7 +118,8 @@ export default function Profile() {
                         borderRadius="$5"
                         width="90%"
                         alignSelf="center"
-                        boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                        boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
+                        backgroundColor={theme.colors.card}
                         padding="$3"
                     >
                         <H4>Hello {user?.name}!</H4>
@@ -128,8 +129,7 @@ export default function Profile() {
                     </VerticalContainer>
                     <VerticalContainer width="90%" alignSelf="center">
                         <SizableText>User settings</SizableText>
-                        <Group orientation="vertical"
-                               boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                        <StyledGroup orientation="vertical"
                                separator={<Separator />}
                         >
                             <Group.Item>
@@ -156,13 +156,12 @@ export default function Profile() {
                                     onPress={() => {router.push('/changePassword')}}
                                 />
                             </Group.Item>
-                        </Group>
+                        </StyledGroup>
                     </VerticalContainer>
                     {store && user.is_admin ?
                         <VerticalContainer width="90%" alignSelf="center">
                             <SizableText>Store settings</SizableText>
-                            <Group orientation="vertical"
-                                   boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                            <StyledGroup orientation="vertical"
                                    separator={<Separator />}
                             >
                                 <Group.Item>
@@ -213,13 +212,12 @@ export default function Profile() {
                                         onPress={() => {router.push('/manageUsers')}}
                                     />
                                 </Group.Item>
-                            </Group>
+                            </StyledGroup>
                         </VerticalContainer> :
                         store ?
                             <VerticalContainer width="90%" alignSelf="center">
                                 <SizableText>Store settings</SizableText>
-                                <Group orientation="vertical"
-                                       boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                <StyledGroup orientation="vertical"
                                        separator={<Separator />}
                                 >
                                     <Group.Item>
@@ -238,13 +236,12 @@ export default function Profile() {
                                             onPress={() => confirmAlert(true)}
                                         />
                                     </Group.Item>
-                                </Group>
+                                </StyledGroup>
                             </VerticalContainer>
                             :
                             <VerticalContainer width="90%" alignSelf="center">
                                 <SizableText>Join or create Store</SizableText>
-                                <Group orientation="vertical"
-                                       boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                <StyledGroup orientation="vertical"
                                        separator={<Separator />}
                                 >
                                     <Group.Item>
@@ -263,7 +260,7 @@ export default function Profile() {
                                             onPress={() => {router.push('/createStore')}}
                                         />
                                     </Group.Item>
-                                </Group>
+                                </StyledGroup>
                             </VerticalContainer>
                     }
                     <BigButton marginBottom={20} width="90%" alignSelf="center" onPress={() => confirmAlert(false)}>Log out</BigButton>

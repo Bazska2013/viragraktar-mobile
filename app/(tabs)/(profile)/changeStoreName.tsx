@@ -2,15 +2,17 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import {useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
-import {SafeAreaView} from "react-native";
+import {SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 import {FilePen} from "@tamagui/lucide-icons";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ChangeStoreName() {
     const {store, setStore} = useUserContext()
 
     const [name, setName] = useState(store?.name)
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -37,7 +39,9 @@ export default function ChangeStoreName() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <Label htmlFor="name">
                         <H4>Store name</H4>
                     </Label>

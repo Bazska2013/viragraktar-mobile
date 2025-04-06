@@ -5,13 +5,16 @@ import {memo, useCallback, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {BASE_URL} from "@/scripts/axiosConfig";
-import {Dimensions} from "react-native";
+import {Dimensions, useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
     const [amount, setAmount] = useState(0);
 
     const {addToCart, isItemInCart, removeFromCart} = useItemsContext();
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const handleChange = useCallback((value, type: string) => {
         switch (type) {
@@ -53,26 +56,28 @@ const Item = ({item}) => {
     return (
         <VerticalContainer
             borderRadius="$5"
-            boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+            boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
             width={Dimensions.get('window').width > 768 ? '100%' : '90%'}
             alignSelf="center"
             flex={1}
             padding="$3"
             marginTop={Dimensions.get('window').width >= 768 ? 20 : 10}
             marginBottom={Dimensions.get('window').width >= 768 ? 20 : 10}
-            backgroundColor={isItemInCart(item) ? '#f2f6d5' : ''}
+            backgroundColor={isItemInCart(item) ? 'rgba(251,249,239,0.9)' : theme.colors.card}
             opacity={item.stock === 0 ? 0.5 : 1}
             gap={0}
         >
-            <Button
-                boxShadow={isChanged ? "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)" : "none"}
-                icon={X}
-                disabled={!isChanged}
-                backgroundColor={isChanged ? '#f2f6d5' : 'transparent'}
-                alignSelf="flex-end"
-                marginBottom={0}
-                size="$3"
-                onPress={() => setAmount(0)} />
+            {/*<Button*/}
+            {/*    boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}*/}
+            {/*    icon={X}*/}
+            {/*    disabled={!isChanged}*/}
+            {/*    color="#292023"*/}
+            {/*    backgroundColor="transparent"*/}
+            {/*    alignSelf="flex-end"*/}
+            {/*    marginBottom={0}*/}
+            {/*    size="$3"*/}
+            {/*    onPress={() => setAmount(0)} />*/}
+            <X color="#292023" opacity={isChanged ? 1 : 0.5} size="$1" alignSelf="flex-end" marginBottom={0} disabled={!isChanged} onPress={() => setAmount(0)} />
             <HorizontalContainer
                 padding="$3"
             >
@@ -93,23 +98,21 @@ const Item = ({item}) => {
                     flex={2}
                 >
                     <StyledGroup orientation='vertical'>
-                        <SmallButtonWithAccent icon={Plus} onPress={() => handleChange('', 'plus')} />
+                        <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={() => handleChange('', 'plus')} />
                         <Input flex={1}
                                keyboardType='numeric'
                                value={amount.toString()}
                                onChangeText={(value) => handleChange(value, 'field')}
                                alignSelf="center"
-                               backgroundColor="transparent"
+                               textAlign="center"
+                               width="100%"
                                borderWidth={0}
                         />
-                        <SmallButtonWithAccent icon={Minus} onPress={() => handleChange('', 'minus')} />
+                        <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'minus')} />
                     </StyledGroup>
-                    <SmallButton
-                        boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
-                        icon={FileSearch}
-                    >View details</SmallButton>
+                    <SmallButton icon={FileSearch}>View details</SmallButton>
                     <SmallButtonWithAccent
-                        boxShadow={isChanged ? "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)" : "none"}
+                        boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}
                         icon={ShoppingCart}
                         disabled={!isChanged}
                         opacity={isChanged ? 1 : 0.5}

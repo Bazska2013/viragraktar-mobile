@@ -12,6 +12,7 @@ import {Plus, Search, X} from "@tamagui/lucide-icons";
 export default  function Buy() {
 
     const {items, fetchItems} = useItemsContext();
+    const [filteredItems, setFilteredItems] = useState(items);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -34,16 +35,50 @@ export default  function Buy() {
         fetchItems().then(() => setIsRefreshing(false));
     }
 
+    const handleSearch = () => {
+        if (search.length > 0) {
+            const filtered = items.filter((item) => {
+                return item.name.toLowerCase().includes(search.toLowerCase());
+            });
+            setFilteredItems(filtered);
+        } else {
+            setFilteredItems(items);
+        }
+    }
+
+    useEffect(() => {
+        handleSearch();
+    }, [search]);
+
+    useEffect(() => {
+        if (!openSearch) {
+            setSearch("");
+            setFilteredItems(items);
+        }
+    }, [openSearch]);
+
     useEffect(() => {
         getUserData()
         fetchItems();
+        if (!openSearch) {
+            setSearch("");
+            setFilteredItems(items);
+        }
     }, []);
+
+    useEffect(() => {
+        if (items.length > 0) {
+            setFilteredItems(items);
+        } else {
+            setFilteredItems([]);
+        }
+    }, [items]);
 
     return (
         <SafeAreaView style={[styles.AndroidSafeArea]}>
             {store ? <>
                 {user?.is_buyer ? <>
-                    <FlatList data={items}
+                    <FlatList data={filteredItems}
                               style={{height: '100%'}}
                               numColumns={Dimensions.get('window').width >= 768 ? 2 : 1}
                               renderItem={({item}) => <Item key={item.id} props={item} />}
@@ -57,9 +92,9 @@ export default  function Buy() {
                               onScroll={handleScroll}
                               scrollEventThrottle={16}
                               ListEmptyComponent={
-                                  <EditContainer marginBottom="$5">
+                                  <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
                                       <H4>Oops!</H4>
-                                      <Paragraph>It looks like you have not yet added any item to your store. Press the button below to begin!</Paragraph>
+                                      <Paragraph>{openSearch ? "It looks like there's no item named " + search + " available in your store. Press the button below to add it!" : 'It looks like you have not yet added any item to your store. Press the button below to begin!'}</Paragraph>
                                   </EditContainer>
                               }
                               ListHeaderComponent={

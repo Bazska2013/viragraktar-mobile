@@ -2,10 +2,13 @@ import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.c
 import {H4, H6, Separator, SizableText} from "tamagui";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
-import {Dimensions, View} from "react-native";
+import {Dimensions, useColorScheme, View} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const TransactionsTable = (props) => {
     const [storeUsers, setStoreUsers] = useState([]);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     useEffect(() => {
         fetchStoreUsers();
@@ -66,9 +69,10 @@ const TransactionsTable = (props) => {
                         borderRadius="$5"
                         marginTop="$5"
                         marginBottom="$5"
-                        boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                        boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
                         width="90%"
                         alignSelf="center"
+                        backgroundColor={theme.colors.card}
                     >
                         <H4 alignSelf="center">Item distribution</H4>
                             <HorizontalContainer alignItems="center">
@@ -93,11 +97,12 @@ const TransactionsTable = (props) => {
                             })}
                     </VerticalContainer>}
                     {props.transShown && <VerticalContainer
+                        backgroundColor={theme.colors.card}
                         padding="$5"
                         borderRadius="$5"
                         marginTop="$5"
                         marginBottom="$5"
-                        boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                        boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
                         width="90%"
                         alignSelf="center"
                     >
@@ -133,9 +138,10 @@ const TransactionsTable = (props) => {
                                              borderRadius="$5"
                                              marginTop="$5"
                                              marginBottom="$5"
-                                             boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                             boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
                                              width="90%"
                                              alignSelf="center"
+                                             backgroundColor={theme.colors.card}
                         >
                             <H6>Total</H6>
                             <H6>HUF {props.items.reduce((acc, item) => acc + item.amount * item.price, 0)}</H6>
@@ -143,7 +149,7 @@ const TransactionsTable = (props) => {
                     }
                 </VerticalContainer> :
                 <>
-                    {props.distShown && <EditContainer>
+                    {props.distShown && <EditContainer backgroundColor={theme.colors.card}>
                         <H4 alignSelf="center">Item distribution</H4>
                         <VerticalContainer>
                             <HorizontalContainer alignItems="center">
@@ -168,7 +174,7 @@ const TransactionsTable = (props) => {
                             })}
                         </VerticalContainer>
                     </EditContainer>}
-                    {props.transShown && <EditContainer>
+                    {props.transShown && <EditContainer backgroundColor={theme.colors.card}>
                         <H4 alignSelf="center">Transactions history</H4>
                         <VerticalContainer>
                             <HorizontalContainer alignItems="center">
@@ -196,7 +202,7 @@ const TransactionsTable = (props) => {
                         </VerticalContainer>
                     </EditContainer>}
                     {props.totalShown &&
-                        <EditContainer>
+                        <EditContainer backgroundColor={theme.colors.card}>
                             <HorizontalContainer alignItems="center" justifyContent="space-between">
                                 <H6>Total</H6>
                                 <H6>HUF {props.items.reduce((acc, item) => acc + item.amount * item.price, 0)}</H6>

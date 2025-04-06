@@ -24,6 +24,7 @@ export default function Sell() {
 
     const {user, store, getUserData} = useUserContext();
     const {items, fetchItems, cartItems} = useItemsContext();
+    const [filteredItems, setFilteredItems] = useState(items);
 
     const [showCartButton, setShowCartButton] = useState(false);
 
@@ -39,6 +40,10 @@ export default function Sell() {
     useEffect(() => {
         getUserData()
         fetchItems();
+        if (!openSearch) {
+            setSearch("");
+            setFilteredItems(items);
+        }
     }, []);
 
     useEffect(() => {
@@ -49,11 +54,41 @@ export default function Sell() {
         }
     }, [cartItems]);
 
+    const handleSearch = () => {
+        if (search.length > 0) {
+            const filtered = items.filter((item) => {
+                return item.name.toLowerCase().includes(search.toLowerCase());
+            });
+            setFilteredItems(filtered);
+        } else {
+            setFilteredItems(items);
+        }
+    }
+
+    useEffect(() => {
+        handleSearch();
+    }, [search]);
+
+    useEffect(() => {
+        if (!openSearch) {
+            setSearch("");
+            setFilteredItems(items);
+        }
+    }, [openSearch]);
+
+    useEffect(() => {
+        if (items.length > 0) {
+            setFilteredItems(items);
+        } else {
+            setFilteredItems([]);
+        }
+    }, [items]);
+
     return (
         <SafeAreaView style={[styles.AndroidSafeArea]}>
             {store ? <>
                 {user?.is_seller ? <>
-                    <FlatList data={items}
+                    <FlatList data={filteredItems}
                               style={{height: '100%'}}
                               numColumns={Dimensions.get('window').width >= 768 ? 2 : 1}
                               renderItem={({item}) =>
@@ -66,9 +101,9 @@ export default function Sell() {
                               columnWrapperStyle={Dimensions.get('window').width >= 768 ? {gap: 20, width: '90%', alignSelf: 'center'} : undefined}
                               windowSize={10}
                               ListEmptyComponent={
-                                  <EditContainer marginBottom="$5">
+                                  <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
                                       <H4>Oops!</H4>
-                                      <Paragraph>It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!</Paragraph>
+                                      <Paragraph>{openSearch ? "It looks like there's no item named " + search + " available in your store. Pull down to refresh this page or if you have permission add it on the Buy page!" : "It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!"}</Paragraph>
                                   </EditContainer>
                               }
                               ListHeaderComponent={

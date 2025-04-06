@@ -1,16 +1,21 @@
-import {SafeAreaView} from "react-native";
+import {SafeAreaView, useColorScheme} from "react-native";
 import {H4, ScrollView, Separator, SizableText} from "tamagui";
 import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ProfileDetails() {
     const {user, store} = useUserContext();
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <HorizontalContainer
                         alignItems="center"
                         justifyContent="space-between"

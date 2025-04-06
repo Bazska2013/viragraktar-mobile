@@ -1,4 +1,4 @@
-import {Platform, SafeAreaView} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {Checkbox, H4, H6, Label, ScrollView, Separator} from "tamagui";
 import {
     BigButton,
@@ -13,12 +13,15 @@ import {Check, LineChart} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
 import {useState} from "react";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function GenerateReport() {
     const {date, setDate, start, setStart, end, setEnd, oneDay, setOneDay, showDistribution, setShowDistribution, showRevenue, setShowRevenue, showTable, setShowTable, showPie, setShowPie, showLine, setShowLine, showDistTable, setShowDistTable, setShowTransactionTable, showTotal, setShowTotal, getReadableDate} = useReportContext();
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartPicker, setShowStartPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const handleSetDate = (event: DateTimePickerEvent, date: Date) => {
         const {
@@ -82,7 +85,9 @@ export default function GenerateReport() {
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <VerticalContainer>
                         <H4>Get data from</H4>
                         <Picker id="day" selectedValue={oneDay ? 'one day' : 'range'} onValueChange={(itemValue) => setOneDay(itemValue === 'one day')}>

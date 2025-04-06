@@ -1,4 +1,4 @@
-import {SafeAreaView} from "react-native";
+import {SafeAreaView, useColorScheme} from "react-native";
 import {ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
@@ -7,10 +7,13 @@ import {useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {Calendar} from "@tamagui/lucide-icons";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ChangeOpeningHours () {
     const {store, setStore} = useUserContext()
     const [openingHours, setOpeningHours] = useState(JSON.parse(store.opening_hours));
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -37,7 +40,9 @@ export default function ChangeOpeningHours () {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <OpeningHours openingHours={openingHours} setFieldValue={(value)=> setOpeningHours(value)} />
                     <Separator />
                     <BigButton icon={Calendar} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> :'Change opening hours'}</BigButton>

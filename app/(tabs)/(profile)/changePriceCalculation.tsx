@@ -1,15 +1,18 @@
 import {H4, Label, ScrollView, Separator, SizableText, Spinner, Switch} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 import {DollarSign} from "@tamagui/lucide-icons";
-import {SafeAreaView} from "react-native";
+import {SafeAreaView, useColorScheme} from "react-native";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ChangePriceCalculation() {
 
     const {store, setStore} = useUserContext()
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [calculation, setCalculation] = useState(!!store?.calculation_enabled);
 
@@ -38,7 +41,9 @@ export default function ChangePriceCalculation() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <Label htmlFor="calculation">
                         <H4>Calculation enabled</H4>
                     </Label>

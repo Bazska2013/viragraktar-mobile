@@ -52,7 +52,9 @@ export default function JoinStore() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
             >
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <H4>Enter the unique ID of the Store you want to join</H4>
                     <Input
                         flex={1}

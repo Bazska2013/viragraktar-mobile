@@ -59,7 +59,9 @@ export default function CreateStore() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
             >
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <VerticalContainer>
                         <Label htmlFor="name">
                             <H4>Name of your store</H4>

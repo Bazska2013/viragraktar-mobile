@@ -1,15 +1,18 @@
-import {SafeAreaView} from "react-native";
+import {SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import {useEffect, useState} from "react";
 import {BookKey} from "@tamagui/lucide-icons";
 import axios from '@/scripts/axiosConfig';
 import {router} from "expo-router";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const [validData, setValidData] = useState<boolean>(false);
 
@@ -49,7 +52,9 @@ export default function ChangePassword() {
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <VerticalContainer>
                         <Label htmlFor="current">
                             <H4>Current password</H4>

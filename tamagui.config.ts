@@ -1,6 +1,7 @@
 import { defaultConfig } from '@tamagui/config/v4'
 import {Button, createTamagui, Group, ListItem, styled, XStack, YStack} from 'tamagui'
-import {Dimensions} from "react-native";
+import {Dimensions, useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export const VerticalContainer = styled(YStack, {
     flex: 1,
@@ -25,13 +26,13 @@ export const EditContainer = styled(YStack, {
     marginBottom: "$5",
     width: '90%',
     alignSelf: 'center',
-    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
 });
 
 export const BigButton = styled(Button, {
     backgroundColor: '#292023',
     color: 'white',
-    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
     hoverStyle: {
         backgroundColor: '#392D31',
     },
@@ -49,51 +50,52 @@ export const BigButton = styled(Button, {
 });
 
 export const SmallButtonWithAccent = styled(Button, {
-    backgroundColor: '#8e8b7c',
-    color: 'white',
+    backgroundColor: '#FBF9EF',
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
     hoverStyle: {
-        backgroundColor: '#979487',
+        backgroundColor: '#faf0e6',
     },
     focusStyle: {
-        backgroundColor: '#979487',
+        backgroundColor: '#faf5eb',
     },
     pressStyle: {
-        backgroundColor: '#838072'
+        backgroundColor: '#f5ebe1'
     },
     disabledStyle: {
-        backgroundColor: '#A09E92',
+        backgroundColor: '#fffaf5',
         border: 'none',
     },
     size: "$3",
 });
 
 export const SmallButton = styled(Button, {
-    backgroundColor: '#f2f6d5',
-    color: 'black',
+    backgroundColor: '#f5f5f5',
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
     hoverStyle: {
-        backgroundColor: '#fafbee',
+        backgroundColor: '#f0f0f0',
     },
     focusStyle: {
-        backgroundColor: '#fafbee',
+        backgroundColor: '#f3f3f3',
     },
     pressStyle: {
-        backgroundColor: '#F0F3CD'
+        backgroundColor: '#f1f1f1'
     },
     disabledStyle: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#fafafa',
         border: 'none',
     },
     size: "$3",
 });
 
 export const StyledListItem = styled(ListItem, {
+    backgroundColor: '#ffffff',
     pressStyle: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fafafa',
     }
 });
 
 export const StyledGroup = styled(Group, {
-    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)",
+    boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
 });
 
 export const tamaguiConfig = createTamagui(defaultConfig)

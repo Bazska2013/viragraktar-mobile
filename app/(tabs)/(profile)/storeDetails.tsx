@@ -1,4 +1,4 @@
-import {RefreshControl, SafeAreaView} from "react-native";
+import {RefreshControl, SafeAreaView, useColorScheme} from "react-native";
 import {H4, ScrollView, Separator, SizableText} from "tamagui";
 import {EditContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -6,6 +6,7 @@ import axios from "@/scripts/axiosConfig";
 import {useEffect, useState} from "react";
 import * as Clipboard from 'expo-clipboard';
 import {ClipboardCopy} from "@tamagui/lucide-icons";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function StoreDetails() {
     const {store } = useUserContext();
@@ -13,6 +14,8 @@ export default function StoreDetails() {
     const [storeId, setStoreId] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [copied, setCopied] = useState(false);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const getStoreId = async () => {
         let response;
@@ -60,7 +63,9 @@ export default function StoreDetails() {
                         automaticallyAdjustKeyboardInsets={true}
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <H4>Store name</H4>
                     <SizableText>{store?.name}</SizableText>
                     <Separator />

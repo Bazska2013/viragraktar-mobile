@@ -47,7 +47,7 @@ export default function ManageUsers() {
                 <VerticalContainer width="90%" alignSelf="center">
                     {isLoading ? <Spinner /> : error ? <H4>An error occurred while fetching the users. Error: {error}</H4> :
                         <Accordion overflow="hidden" type="multiple"
-                                   boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                                   boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
                                    borderRadius="$5"
                                    marginTop="10%"
                         >

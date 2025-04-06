@@ -133,7 +133,9 @@ export default function EditItem() {
             </Sheet>
             {item &&
                 <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
-                    <EditContainer>
+                    <EditContainer
+                        backgroundColor={theme.colors.card}
+                    >
                         <VerticalContainer>
                             <Label htmlFor="name">
                                 <H4>Name of the item</H4>

@@ -1,4 +1,4 @@
-import {Dimensions, RefreshControl, SafeAreaView, View} from "react-native";
+import {Dimensions, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
 import {H4, ScrollView} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
@@ -19,10 +19,13 @@ import * as Sharing from 'expo-sharing';
 import {captureRef} from 'react-native-view-shot';
 import {Download} from "@tamagui/lucide-icons";
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ViewReport() {
     const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal, getReadableDate} = useReportContext();
     const [isLoading, setIsLoading] = useState(true);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const fetchDayData = async () => {
         setIsLoading(true);
@@ -204,14 +207,15 @@ export default function ViewReport() {
                             borderRadius="$5"
                             marginTop="$5"
                             marginBottom="$5"
-                            boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+                            boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
                             width="90%"
                             alignSelf="center"
+                            backgroundColor={theme.colors.card}
                         >{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
                         {data.length > 0 ? <>
                             <HorizontalContainer width="90%" alignSelf="center">
                                 {showDistribution &&
-                                    <EditContainer alignItems="center">
+                                    <EditContainer alignItems="center" backgroundColor={theme.colors.card}>
                                         <H4>Distribution of items sold</H4>
                                         <View id="distChartRef">
                                             {showPie ?
@@ -227,7 +231,7 @@ export default function ViewReport() {
                                                 />
                                                 :
                                                 <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}
-                                                              width={550}
+                                                              width={500}
                                                               height={400}
                                                 >
                                                     <VictoryAxis
@@ -264,10 +268,11 @@ export default function ViewReport() {
                                 {showRevenue &&
                                     <EditContainer
                                         alignItems="center"
+                                        backgroundColor={theme.colors.card}
                                     >
                                         <H4>Revenue from transactions</H4>
                                         <VictoryChart
-                                            width={550}
+                                            width={500}
                                             height={400}
                                             theme={VictoryTheme.grayscale}
                                             domainPadding={50}
@@ -306,17 +311,23 @@ export default function ViewReport() {
                                     <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
                                 }
                             </> :
-                            <EditContainer>
+                            <EditContainer
+                                backgroundColor={theme.colors.card}
+                            >
                                 <H4>No data available for this day</H4>
                             </EditContainer>}
                     </VerticalContainer>
                 </> : <>
-                    <EditContainer>
+                    <EditContainer
+                        backgroundColor={theme.colors.card}
+                    >
                         <H4>{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
                     </EditContainer>
                     {data.length > 0 ? <>
                             {showDistribution &&
-                                <EditContainer alignItems="center">
+                                <EditContainer alignItems="center"
+                                               backgroundColor={theme.colors.card}
+                                >
                                     <H4>Distribution of items sold</H4>
                                     {showPie ?
                                         <VictoryPie
@@ -362,7 +373,7 @@ export default function ViewReport() {
                                 </EditContainer>
                             }
                             {showRevenue &&
-                                <EditContainer alignItems="center">
+                                <EditContainer alignItems="center" backgroundColor={theme.colors.card}>
                                     <H4>Revenue from transactions</H4>
                                     <VictoryChart
                                         width={350}
@@ -402,7 +413,9 @@ export default function ViewReport() {
                                 <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
                             }
                         </> :
-                        <EditContainer>
+                        <EditContainer
+                            backgroundColor={theme.colors.card}
+                        >
                             <H4>No data available for this day</H4>
                         </EditContainer>}
                 </>}

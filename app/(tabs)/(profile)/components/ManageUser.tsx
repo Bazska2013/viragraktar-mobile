@@ -38,7 +38,7 @@ const ManageUser = (props) => {
         let response;
         setIsLoading(true);
         try {
-            response = await axios.post('/api/update-privileges/' + user.id, {
+            response = await axios.post('/api/update-privileges/' + props.id, {
                 is_seller: isSeller,
                 is_buyer: isBuyer,
                 is_admin: isAdmin
@@ -129,8 +129,8 @@ const ManageUser = (props) => {
             </HorizontalContainer>
             <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
-                <SmallButtonWithAccent icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
-                <SmallButtonWithAccent icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? 1 : 0.5} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent boxShadow="unset" icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? 1 : 0.5} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
             </StyledGroup>
             {error && <SizableText color="$red1">{error}</SizableText>}
         </VerticalContainer>

@@ -34,7 +34,7 @@ export default  function Register() {
             setError(error.response?.data?.message);
         } finally {
             setIsLoading(false);
-            if (response?.status === 201) {
+            if (response?.status === 200) {
                 router.back();
             }
         }
@@ -54,7 +54,9 @@ export default  function Register() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
             >
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <VerticalContainer>
                         <Label htmlFor="email">
                             <H4>Email</H4>

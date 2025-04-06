@@ -75,13 +75,14 @@ const Item = ({props}: {props: any}) => {
     return (
         <HorizontalContainer
             borderRadius="$5"
-            boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
+            boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
             width={Dimensions.get('window').width > 768 ? '100%' : '90%'}
             alignSelf="center"
             flex={1}
             padding="$3"
             marginTop={Dimensions.get('window').width >= 768 ? 20 : 10}
             marginBottom={Dimensions.get('window').width >= 768 ? 0 : 10}
+            backgroundColor={theme.colors.card}
         >
             <VerticalContainer
                 flex={2}
@@ -99,26 +100,26 @@ const Item = ({props}: {props: any}) => {
                 flex={1}
             >
                 <StyledGroup orientation='vertical'>
-                    <SmallButtonWithAccent icon={Plus} onPress={() => handleChange('', 'add')} />
+                    <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={() => handleChange('', 'add')} />
                     <Input flex={1}
                            keyboardType='numeric'
                            value={item.stock.toString()}
                            onChangeText={(value) => handleChange(value, 'field')}
                            alignSelf="center"
-                           backgroundColor="transparent"
+                           textAlign="center"
+                           width="100%"
                            borderWidth={0}
                     />
-                    <SmallButtonWithAccent icon={Minus} onPress={() => handleChange('', 'remove')} />
+                    <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'remove')} />
                 </StyledGroup>
                 <Group
                     orientation='horizontal'
-                    boxShadow={isChanged ? "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)" : "none"}
+                    boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}
                 >
-                    <SmallButton icon={X} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleCancel()} width="50%" />
-                    <SmallButton icon={Check} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSubmit()} width="50%" />
+                    <SmallButton boxShadow='unset' icon={X} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleCancel()} width="50%" />
+                    <SmallButton boxShadow='unset' icon={Check} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSubmit()} width="50%" />
                 </Group>
                 <SmallButtonWithAccent
-                    boxShadow="0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 8px 0 rgba(0, 0, 0, 0.2)"
                     onPress={() => {router.push(`/editItem?id=${item.id}`);}}
                 >
                     Edit Item

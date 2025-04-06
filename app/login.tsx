@@ -87,7 +87,9 @@ export default function Login() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
             >
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
                     <VerticalContainer>
                         <Label htmlFor="email">
                             <H4>Email</H4>

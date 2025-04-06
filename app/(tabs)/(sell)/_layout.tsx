@@ -78,7 +78,7 @@ export default function SellLayout() {
                 <Stack.Screen name="index"
                               options={{title: 'Sell', headerShown: false}} />
                 <Stack.Screen name="cart"
-                              options={{title: 'Cart', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                              options={{title: 'Cart', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
             </Stack>
         </ItemsContext.Provider>
     )

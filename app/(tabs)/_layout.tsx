@@ -116,17 +116,17 @@ export default function TabLayout() {
                     </Drawer>
                 </GestureHandlerRootView>
             </> : <>
-                <Tabs screenOptions={{tabBarActiveTintColor: colorScheme === "light" ? "black" : "white", tabBarInactiveTintColor: 'gray', tabBarButton: (props) => (
+                <Tabs screenOptions={{tabBarActiveTintColor: colorScheme === "light" ? "#292023" : "white", tabBarInactiveTintColor: 'gray', tabBarButton: (props) => (
                         <TouchableOpacity {...props} onPress={() => {Haptics.selectionAsync(); props.onPress();}} />
                     )}}>
                     <Tabs.Screen name="(sell)"
-                                 options={{title: 'Sell', headerShown: false,tabBarIcon: ({ color }) => <Store />,}}
+                                 options={{title: 'Sell', headerShown: false,tabBarIcon: ({ color }) => <Store color={color} />,}}
                     />
                     <Tabs.Screen name="(buy)"
-                                 options={{title: 'Buy', headerShown: false, tabBarIcon: ({ color }) => <ShoppingCart />,}}
+                                 options={{title: 'Buy', headerShown: false, tabBarIcon: ({ color }) => <ShoppingCart color={color} />,}}
                     />
                     <Tabs.Screen name="(profile)"
-                                 options={{title: 'Profile', headerShown: false, tabBarIcon: ({color}) => <User />}}
+                                 options={{title: 'Profile', headerShown: false, tabBarIcon: ({color}) => <User color={color} />}}
                     />
                 </Tabs>
             </>}
