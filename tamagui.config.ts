@@ -1,20 +1,16 @@
 import { defaultConfig } from '@tamagui/config/v4'
 import {Button, createTamagui, Group, ListItem, styled, XStack, YStack} from 'tamagui'
-import {Dimensions, useColorScheme} from "react-native";
-import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export const VerticalContainer = styled(YStack, {
     flex: 1,
     gap: "$5",
     padding: "$1",
-    elevation: "$10"
 });
 
 export const HorizontalContainer = styled(XStack, {
     flex: 1,
     gap: "$5",
     padding: "$1",
-    elevation: "$10"
 });
 
 export const EditContainer = styled(YStack, {
