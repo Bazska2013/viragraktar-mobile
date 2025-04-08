@@ -7,11 +7,11 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent,} from "@/tamagui.config";
 import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
-import {Plus, Search, X} from "@tamagui/lucide-icons";
+import {Combine, Plus, Search, X} from "@tamagui/lucide-icons";
 
 export default  function Buy() {
 
-    const {items, fetchItems} = useItemsContext();
+    const {items, fetchItems, selectedItems, setSelectedItems} = useItemsContext();
     const [filteredItems, setFilteredItems] = useState(items);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
@@ -23,6 +23,7 @@ export default  function Buy() {
 
     const [openSearch, setOpenSearch] = useState(false);
     const [search, setSearch] = useState("");
+    const [showCombine, setShowCombine] = useState(false);
 
     const handleScroll = (event) => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -64,6 +65,7 @@ export default  function Buy() {
             setSearch("");
             setFilteredItems(items);
         }
+        setSelectedItems([]);
     }, []);
 
     useEffect(() => {
@@ -73,6 +75,14 @@ export default  function Buy() {
             setFilteredItems([]);
         }
     }, [items]);
+
+    useEffect(() => {
+        if (selectedItems.length > 1) {
+            setShowCombine(true);
+        } else {
+            setShowCombine(false);
+        }
+    }, [selectedItems]);
 
     return (
         <SafeAreaView style={[styles.AndroidSafeArea]}>
@@ -130,6 +140,17 @@ export default  function Buy() {
                             } exitStyle={
                                 {x: Dimensions.get('window').width >= 768 ? 200 : 100}
                             } icon={Plus} position="absolute" bottom={10} right={10} onPress={() => {router.push('/newItem')}}>{Dimensions.get('window').width >= 768 ? 'New item' : ''}</BigButton>
+                        }
+                    </AnimatePresence>
+                    <AnimatePresence>
+                        {showCombine &&
+                            <SmallButtonWithAccent size="$5" animation="quick" enterStyle={
+                                {x: Dimensions.get('window').width >= 768 ? 200 : 100}
+                            } exitStyle={
+                                {x: Dimensions.get('window').width >= 768 ? 200 : 100}
+                            } icon={Combine} position="absolute" bottom={100} right={20}
+                            onPress={() => router.push('/combineItems')}
+                            >{Dimensions.get('window').width >= 768 ? 'New item' : ''}</SmallButtonWithAccent>
                         }
                     </AnimatePresence>
                 </> : <>

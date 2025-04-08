@@ -6,7 +6,11 @@ import {Button, Dimensions, Platform} from "react-native";
 const ItemsContext = createContext<{
     items: any,
     setItems: (items: any) => void,
-    fetchItems: () => void
+    fetchItems: () => void,
+    selectedItems: any,
+    setSelectedItems: (items: any) => void,
+    handleAddToSelected: (item: any) => void,
+    removeFromSelected: (item: any) => void,
 } | undefined>(undefined);
 
 export function useItemsContext() {
@@ -19,6 +23,7 @@ export function useItemsContext() {
 
 export default function BuyLayout() {
     const [items, setItems] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
 
     const fetchItems = async () => {
         try {
@@ -31,10 +36,26 @@ export default function BuyLayout() {
         }
     }
 
+    const handleAddToSelected = (item) => {
+        if (!selectedItems.includes(item)) {
+            setSelectedItems([...selectedItems, item]);
+        }
+    }
+
+    const removeFromSelected = (item) => {
+        if (selectedItems.includes(item)) {
+            setSelectedItems(selectedItems.filter((selectedItem) => selectedItem !== item));
+        }
+    }
+
     const contextValue = {
         items: items,
         setItems: setItems,
-        fetchItems: fetchItems
+        fetchItems: fetchItems,
+        selectedItems: selectedItems,
+        setSelectedItems: setSelectedItems,
+        handleAddToSelected: handleAddToSelected,
+        removeFromSelected: removeFromSelected,
     };
 
     return (
@@ -46,6 +67,8 @@ export default function BuyLayout() {
                               options={{title: 'New item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
                 <Stack.Screen name='editItem'
                               options={{title: 'Edit item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                <Stack.Screen name='combineItems'
+                              options={{title: 'Combine items', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
             </Stack>
         </ItemsContext.Provider>
     )

@@ -1,5 +1,5 @@
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
-import {Button, H4, Image, Input, SizableText} from "tamagui";
+import {Button, H4, Image, Input, SizableText, Square} from "tamagui";
 import flowerImage from "@/assets/images/defaultFlower.png";
 import {memo, useCallback, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
@@ -67,17 +67,9 @@ const Item = ({item}) => {
             opacity={item.stock === 0 ? 0.5 : 1}
             gap={0}
         >
-            {/*<Button*/}
-            {/*    boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}*/}
-            {/*    icon={X}*/}
-            {/*    disabled={!isChanged}*/}
-            {/*    color="#292023"*/}
-            {/*    backgroundColor="transparent"*/}
-            {/*    alignSelf="flex-end"*/}
-            {/*    marginBottom={0}*/}
-            {/*    size="$3"*/}
-            {/*    onPress={() => setAmount(0)} />*/}
-            <X color="#292023" opacity={isChanged ? 1 : 0.5} size="$1" alignSelf="flex-end" marginBottom={0} disabled={!isChanged} onPress={() => setAmount(0)} />
+            <Square animation="quick" pressStyle={{scale: 0.9}} scale={isChanged ? 1 : 0} opacity={isChanged ? 1 : 0} alignSelf="flex-end" marginBottom={0} onPress={() => setAmount(0)}>
+                <X color="#292023" size="$1" />
+            </Square>
             <HorizontalContainer
                 padding="$3"
             >

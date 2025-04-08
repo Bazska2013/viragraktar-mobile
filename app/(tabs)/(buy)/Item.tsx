@@ -6,17 +6,18 @@ import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {router} from "expo-router";
 import {HorizontalContainer, SmallButton, VerticalContainer, SmallButtonWithAccent, StyledGroup} from "@/tamagui.config";
-import {Minus, Plus, X, Check} from "@tamagui/lucide-icons";
+import {Minus, Plus, X, Check, CheckSquare, Square} from "@tamagui/lucide-icons";
 import flowerImage from "../../../assets/images/defaultFlower.png";
 import {Group, H4, SizableText, Input, Image} from "tamagui";
 
-const Item = ({props}: {props: any}) => {
+const Item = ({props} : {props: any}) => {
 
     const [item, setItem] = useState(props);
     const [isChanged, setIsChanged] = useState(false);
     const [error, setError] = useState(null);
+    const [selected, setSelected] = useState(false);
 
-    const {fetchItems} = useItemsContext();
+    const {fetchItems, handleAddToSelected, removeFromSelected, selectedItems} = useItemsContext();
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const handleSubmit = useCallback(async () => {
@@ -68,6 +69,22 @@ const Item = ({props}: {props: any}) => {
         setItem(props);
     }, [props])
 
+    useEffect(() => {
+        if (selected) {
+            handleAddToSelected(item);
+        } else {
+            removeFromSelected(item);
+        }
+    }, [selected]);
+
+    useEffect(() => {
+        if (selectedItems.includes(item)) {
+            setSelected(true);
+        } else {
+            setSelected(false);
+        }
+    }, [selectedItems]);
+
     if (error) {
         return <Text style={{color: 'red'}}>{error}</Text>
     }
@@ -82,7 +99,7 @@ const Item = ({props}: {props: any}) => {
             padding="$3"
             marginTop={Dimensions.get('window').width >= 768 ? 20 : 10}
             marginBottom={Dimensions.get('window').width >= 768 ? 0 : 10}
-            backgroundColor={theme.colors.card}
+            backgroundColor={selected ? 'rgba(251,249,239,0.9)' : theme.colors.card}
         >
             <VerticalContainer
                 flex={2}
@@ -124,6 +141,7 @@ const Item = ({props}: {props: any}) => {
                 >
                     Edit Item
                 </SmallButtonWithAccent>
+                <SmallButton width="100%" icon={selected ? CheckSquare : Square} onPress={() => setSelected(!selected)}>Select</SmallButton>
             </VerticalContainer>
         </HorizontalContainer>
     )
