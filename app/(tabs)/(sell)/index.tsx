@@ -17,6 +17,8 @@ import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} fr
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
 import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
+import BuyFilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
+import SellFilterBar from "@/app/(tabs)/(sell)/SellFilterBar";
 
 export default function Sell() {
 
@@ -24,13 +26,14 @@ export default function Sell() {
 
     const {user, store, getUserData} = useUserContext();
     const {items, fetchItems, cartItems} = useItemsContext();
-    const [filteredItems, setFilteredItems] = useState(items);
+
+    const [filteredItems, setFilteredItems] = useState([]);
+    const [filterString, setFilterString] = useState('');
+    const [filterLabels, setFilterLabels] = useState([]);
 
     const [showCartButton, setShowCartButton] = useState(false);
 
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [openSearch, setOpenSearch] = useState(false);
-    const [search, setSearch] = useState("");
 
     const handleRefresh = () => {
         setIsRefreshing(true);
@@ -39,11 +42,11 @@ export default function Sell() {
 
     useEffect(() => {
         getUserData()
-        fetchItems();
-        if (!openSearch) {
-            setSearch("");
+        fetchItems().then(() => {
             setFilteredItems(items);
-        }
+            setFilterString('');
+            setFilterLabels([]);
+        });
     }, []);
 
     useEffect(() => {
@@ -54,35 +57,21 @@ export default function Sell() {
         }
     }, [cartItems]);
 
-    const handleSearch = () => {
-        if (search.length > 0) {
-            const filtered = items.filter((item) => {
-                return item.name.toLowerCase().includes(search.toLowerCase());
-            });
-            setFilteredItems(filtered);
+    useEffect(() => {
+        if (filterString.length > 0) {
+            setFilteredItems(items.filter((item) => item.name.toLowerCase().includes(filterString.toLowerCase())));
         } else {
             setFilteredItems(items);
         }
-    }
+    }, [filterString]);
 
     useEffect(() => {
-        handleSearch();
-    }, [search]);
-
-    useEffect(() => {
-        if (!openSearch) {
-            setSearch("");
-            setFilteredItems(items);
-        }
-    }, [openSearch]);
-
-    useEffect(() => {
-        if (items.length > 0) {
-            setFilteredItems(items);
+        if (filterLabels.length > 0) {
+            setFilteredItems(items.filter((item) => JSON.parse(item.description).labels.some(label => filterLabels.includes(label))));
         } else {
-            setFilteredItems([]);
+            setFilteredItems(items);
         }
-    }, [items]);
+    }, [filterLabels]);
 
     return (
         <SafeAreaView style={[styles.AndroidSafeArea]}>
@@ -103,50 +92,24 @@ export default function Sell() {
                               ListEmptyComponent={
                                   <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
                                       <H4>Oops!</H4>
-                                      <Paragraph>{openSearch ? "It looks like there's no item named " + search + " available in your store. Pull down to refresh this page or if you have permission add it on the Buy page!" : "It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!"}</Paragraph>
+                                      <Paragraph>{filterString ? "It looks like there's no item named " + filterString + " available in your store. Pull down to refresh this page or if you have permission add it on the Buy page!" : "It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!"}</Paragraph>
                                   </EditContainer>
                               }
                               ListHeaderComponent={
-                                  <HorizontalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0} width="90%" alignSelf="center" justifyContent="space-between">
-                                      <AnimatePresence mode="wait" initial="false">
-                                          {openSearch ? <>
-                                              <HorizontalContainer animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>
-                                                  <Input
-                                                      flex={1}
-                                                      borderWidth={2}
-                                                      id="search"
-                                                      value={search}
-                                                      onChangeText={setSearch}
-                                                      autoFocus
-                                                      autoCapitalize="words"
-                                                  />
-                                              </HorizontalContainer>
-                                          </> : <>
-                                              <H2 animation="medium" enterStyle={{x: -100}} exitStyle={{x: 100}}>Sell</H2>
-                                          </>}
-                                      </AnimatePresence>
-                                      <SmallButtonWithAccent height="100%" icon={openSearch ? X : Search} onPress={() => setOpenSearch(!openSearch)}>{!openSearch && 'Search'}</SmallButtonWithAccent>
-                                  </HorizontalContainer>
+                                  <SellFilterBar onTextChange={setFilterString} onLabelChange={setFilterLabels} />
                               }
                     />
-                    <AnimatePresence>
-                        {showCartButton &&
-                            <BigButton
-                                animation="quick"
-                                enterStyle={{
-                                    x: Dimensions.get('window').width >= 768 ? 200 : 100,
-                                }}
-                                exitStyle={{
-                                    x: Dimensions.get('window').width >= 768 ? 200 : 100,
-                                }}
-                                position="absolute"
-                                bottom={10}
-                                right={10}
-                                icon={ShoppingBasket}
-                                onPress={() => router.push('/cart')}
-                            >{Dimensions.get('window').width >= 768 ? 'Checkout' : ''}</BigButton>
-                        }
-                    </AnimatePresence>
+                    <BigButton
+                        animation="quick"
+                        x={showCartButton ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
+                        position="absolute"
+                        bottom={10}
+                        right={10}
+                        icon={ShoppingBasket}
+                        onPress={() => router.push('/cart')}
+                    >
+                        {Dimensions.get('window').width >= 768 ? 'Checkout' : ''}
+                    </BigButton>
                 </> : <>
                     <View justifyContent="center" alignItems="center" alignSelf="center" height="100%">
                         <H2>Permission denied</H2>
