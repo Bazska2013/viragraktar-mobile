@@ -16,7 +16,20 @@ import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {Group, H2, H4, H6, ScrollView, Separator, SizableText} from 'tamagui';
 import {BigButton, StyledGroup, StyledListItem, VerticalContainer} from "@/tamagui.config";
-import {BookKey, BookUser, Calendar, ChevronRight, DollarSign, FilePen, LineChart, LogOut, TextSearch, UserPen, UserSearch} from "@tamagui/lucide-icons";
+import {
+    BookKey,
+    BookUser,
+    Calendar,
+    ChevronRight,
+    DollarSign,
+    FilePen,
+    LineChart,
+    LogOut,
+    Tags,
+    TextSearch,
+    UserPen,
+    UserSearch
+} from "@tamagui/lucide-icons";
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
@@ -210,6 +223,14 @@ export default function Profile() {
                                         icon={BookUser}
                                         iconAfter={ChevronRight}
                                         onPress={() => {router.push('/manageUsers')}}
+                                    />
+                                </Group.Item>
+                                <Group.Item>
+                                    <StyledListItem
+                                        title="Modify labels"
+                                        icon={Tags}
+                                        iconAfter={ChevronRight}
+                                        onPress={() => {router.push('/modifyLabels')}}
                                     />
                                 </Group.Item>
                             </StyledGroup>

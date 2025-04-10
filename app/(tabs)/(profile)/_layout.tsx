@@ -132,6 +132,8 @@ export default function ProfileLayout() {
                                       options={{title: 'Generate report', headerShown: true}} />
                         <Stack.Screen name="viewReport"
                                       options={{title: 'View report', headerShown: true, headerBackTitle: 'Generate report'}} />
+                        <Stack.Screen name="modifyLabels"
+                                        options={{title: 'Modify labels', headerShown: true}} />
                 </Stack>
         </ReportContext.Provider>
     )
