@@ -14,6 +14,7 @@ import {
     SmallButtonWithAccent,
     VerticalContainer
 } from "@/tamagui.config";
+import Labels from "@/app/(tabs)/(buy)/Labels";
 
 export default function CombineItems() {
 
@@ -29,12 +30,22 @@ export default function CombineItems() {
     const [validInput, setValidInput] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [error, setError] = useState(null);
+    const [labels, setLabels] = useState([]);
 
     useEffect(() => {
         if (selectedItems) {
             setName(selectedItems.map((item: any) => item.name).join('-'));
             setDescription(selectedItems.map((item: any) => item.description).join('-'));
             setPrice(selectedItems.map((item: any) => item.price).reduce((a: string, b: string) => Number(a) + Number(b), 0).toString());
+            const newLabels = [];
+            for (let item of selectedItems) {
+                for (let label of JSON.parse(item.description).labels) {
+                    if (!newLabels.includes(label)) {
+                        newLabels.push(label);
+                    }
+                }
+            }
+            setLabels(newLabels);
         }
     }, [selectedItems]);
 
@@ -58,10 +69,14 @@ export default function CombineItems() {
     const handleSubmit = async () => {
         let response;
         setIsLoading(true);
+        let description = {
+            labels: labels,
+            connections: selectedItems,
+        }
         try {
             const formDataForNew = new FormData();
             formDataForNew.set('name', name);
-            formDataForNew.set('description', description);
+            formDataForNew.set('description', JSON.stringify(description));
             formDataForNew.set('price', price);
             formDataForNew.set('stock', stock);
             if (image) {
@@ -143,16 +158,14 @@ export default function CombineItems() {
                     </VerticalContainer>
                     <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="description" >
-                            <H4>Description of the combined item</H4>
+                        <Label htmlFor="labels">
+                            <H4>Labels of the item</H4>
                         </Label>
-                        <Input
-                            flex={1}
-                            borderWidth={2}
-                            id="description"
-                            value={description}
-                            onChangeText={setDescription}
-                            autoCapitalize="sentences"
+                        <Labels
+                            id="labels"
+                            value={labels}
+                            onChange={setLabels}
+                            combined={true}
                         />
                     </VerticalContainer>
                     <Separator />

@@ -15,6 +15,7 @@ import {
     VerticalContainer
 } from "@/tamagui.config";
 import * as ImagePicker from "expo-image-picker";
+import Labels from "@/app/(tabs)/(buy)/Labels";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
@@ -27,6 +28,7 @@ export default function EditItem() {
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(true);
     const [imageModal, setImageModal] = useState(false);
+    const [labels, setLabels] = useState([]);
 
     const [image, setImage] = useState<string | null>(null);
 
@@ -54,6 +56,7 @@ export default function EditItem() {
         } finally {
             if (response?.status === 200) {
                 setItem(response.data);
+                setLabels(JSON.parse(response.data.description).labels);
             }
         }
     }
@@ -61,10 +64,14 @@ export default function EditItem() {
     const handleSubmit = async () => {
         let response;
         setIsLoading(true);
+        let description = {
+            labels: labels,
+            connections: item.description.connections || [],
+        }
         try {
             const formDataForEdit = new FormData();
             formDataForEdit.set('name', item.name);
-            formDataForEdit.set('description', item.description);
+            formDataForEdit.set('description', JSON.stringify(description));
             formDataForEdit.set('price', item.price);
             formDataForEdit.set('stock', item.stock);
             if (image) {
@@ -97,7 +104,7 @@ export default function EditItem() {
 
     useEffect(() => {
         if (item) {
-            if (item.name.toString().length > 0 && item.description.toString().length > 0 && item.price.toString().length > 0 && item.stock.toString().length > 0) {
+            if (item.name.toString().length > 0 && item.price.toString().length > 0 && item.stock.toString().length > 0) {
                 setValidInput(true);
             } else {
                 setValidInput(false);
@@ -152,16 +159,14 @@ export default function EditItem() {
                         </VerticalContainer>
                         <Separator />
                         <VerticalContainer>
-                            <Label htmlFor="description">
-                                <H4>Description of the item</H4>
+                            <Label htmlFor="labels">
+                                <H4>Labels of the item</H4>
                             </Label>
-                            <Input
-                                flex={1}
-                                borderWidth={2}
-                                id="description"
-                                value={item.description.toString()}
-                                onChangeText={(value) => setItem({...item, description: value})}
-                                autoCapitalize="sentences"
+                            <Labels
+                                id="labels"
+                                value={labels}
+                                onChange={setLabels}
+                                combined={false}
                             />
                         </VerticalContainer>
                         <Separator />

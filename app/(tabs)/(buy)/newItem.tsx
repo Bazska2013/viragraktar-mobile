@@ -8,6 +8,7 @@ import axios from "@/scripts/axiosConfig";
 import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import * as ImagePicker from 'expo-image-picker';
+import Labels from "@/app/(tabs)/(buy)/Labels";
 
 export default function NewItem() {
 
@@ -23,6 +24,7 @@ export default function NewItem() {
     const [validInput, setValidInput] = useState(false);
     const [imageModal, setImageModal] = useState(false);
     const [error, setError] = useState(null);
+    const [labels, setLabels] = useState([]);
 
     const [image, setImage] = useState<string | null>(null);
 
@@ -44,10 +46,14 @@ export default function NewItem() {
     const handleSubmit = async () => {
         let response;
         setIsLoading(true);
+        let description = {
+            labels: labels,
+            connections: [],
+        }
         try {
             const formDataForNew = new FormData();
             formDataForNew.set('name', name);
-            formDataForNew.set('description', description);
+            formDataForNew.set('description', JSON.stringify(description));
             formDataForNew.set('price', price);
             formDataForNew.set('stock', stock);
             if (image) {
@@ -75,7 +81,7 @@ export default function NewItem() {
     }
 
     useEffect(() => {
-        if (name.length > 0 && description.length > 0 && price.length > 0 && stock.length > 0) {
+        if (name.length > 0 && price.length > 0 && stock.length > 0) {
             setValidInput(true);
         } else {
             setValidInput(false);
@@ -128,16 +134,14 @@ export default function NewItem() {
                     </VerticalContainer>
                     <Separator />
                     <VerticalContainer>
-                        <Label htmlFor="description" >
-                            <H4>Description of the item</H4>
+                        <Label htmlFor="labels">
+                            <H4>Labels of the item</H4>
                         </Label>
-                        <Input
-                            flex={1}
-                            borderWidth={2}
-                            id="description"
-                            value={description}
-                            onChangeText={setDescription}
-                            autoCapitalize="sentences"
+                        <Labels
+                            id="labels"
+                            value={labels}
+                            onChange={setLabels}
+                            combined={false}
                         />
                     </VerticalContainer>
                     <Separator />
