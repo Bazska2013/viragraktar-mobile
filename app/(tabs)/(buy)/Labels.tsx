@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {H6, Input, Separator} from "tamagui";
@@ -66,18 +66,18 @@ const Labels = ({value, id, onChange, combined}) => {
             <H6>Available labels</H6>
             <HorizontalContainer flexWrap="wrap">
                 {filteredLabels.map((label, index) => (
-                    <SmallButton iconAfter={Plus} onPress={() => handleAddToSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={index}>{label}</SmallButton>
+                    <SmallButton iconAfter={Plus} onPress={() => handleAddToSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label}>{label}</SmallButton>
                 ))}
             </HorizontalContainer>
             <Separator />
             <H6>Selected labels</H6>
             <HorizontalContainer flexWrap="wrap">
                 {selectedLabels && selectedLabels.map((label, index) => (
-                    <SmallButtonWithAccent iconAfter={X} onPress={() => handleRemoveFromSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={index}>{label}</SmallButtonWithAccent>
+                    <SmallButtonWithAccent iconAfter={X} onPress={() => handleRemoveFromSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label}>{label}</SmallButtonWithAccent>
                 ))}
             </HorizontalContainer>
         </VerticalContainer>
     )
 }
 
-export default Labels;
+export default React.memo(Labels);

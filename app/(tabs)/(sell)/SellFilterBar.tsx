@@ -61,9 +61,9 @@ const SellFilterBar = ({onTextChange, onLabelChange}) => {
     }
 
     return (
-        <VerticalContainer animation="medium" width={Dimensions.get('window').width > 768 ? '100%' : '90%'} alignSelf="center">
+        <VerticalContainer animation="medium" width="90%" alignSelf="center">
             <HorizontalContainer alignItems="center" height={50}>
-                <H2 left={0} position="absolute" animation="quicker" x={searchOpen ? -100 : 0}>Sell</H2>
+                <H2 left={0} position="absolute" animation="quicker" x={searchOpen ? -200 : 0}>Sell</H2>
                 <YStack left={0} position="absolute" animation="quick" scale={searchOpen ? 1 : 0} opacity={searchOpen ? 1 : 0} width="80%">
                     <Input
                         backgroundColor="none"

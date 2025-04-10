@@ -1,7 +1,7 @@
 import {HorizontalContainer, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
 import {Checkbox, Group, H4, H6, Label, Separator} from "tamagui";
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Check} from "@tamagui/lucide-icons";
 import {Platform} from "react-native";
 
@@ -97,4 +97,4 @@ const Hours = (props) => {
     )
 }
 
-export default Hours;
+export default React.memo(Hours);

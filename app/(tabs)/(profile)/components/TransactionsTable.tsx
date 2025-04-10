@@ -1,6 +1,6 @@
 import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {H4, H6, Separator, SizableText} from "tamagui";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {Dimensions, useColorScheme, View} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -84,7 +84,7 @@ const TransactionsTable = (props) => {
                             <Separator />
                             {props.items.map((item, index) => {
                                 return (
-                                    <View key={index}>
+                                    <View key={item.id}>
                                         <HorizontalContainer alignItems="center">
                                             <SizableText width="25%" textAlign="center" alignSelf="center">{item.name}</SizableText>
                                             <SizableText width="25%" textAlign="center" alignSelf="center">{item.price}</SizableText>
@@ -118,7 +118,7 @@ const TransactionsTable = (props) => {
                             <Separator />
                             {props.transactions.map((item, index) => {
                                 return (
-                                    <View key={index}>
+                                    <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%">
                                             <SizableText width="19%" textAlign="center" alignSelf="center">{generateDate(item.created_at)}</SizableText>
                                             <SizableText width="6%" textAlign="center" alignSelf="center">{generateTime(item.created_at)}</SizableText>
@@ -161,7 +161,7 @@ const TransactionsTable = (props) => {
                             <Separator />
                             {props.items.map((item, index) => {
                                 return (
-                                    <View key={index}>
+                                    <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%">
                                             <SizableText width="18%" textAlign="center" alignSelf="center">{item.name}</SizableText>
                                             <SizableText width="15%" textAlign="center" alignSelf="center">{item.price}</SizableText>
@@ -187,7 +187,7 @@ const TransactionsTable = (props) => {
                             <Separator />
                             {props.transactions.map((item, index) => {
                                 return (
-                                    <View key={index}>
+                                    <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%" justifyContent="space-between">
                                             <SizableText textAlign="center" fontSize="$2" width="14%" alignSelf="center">{generateDate(item.created_at)}</SizableText>
                                             <SizableText textAlign="center" fontSize="$2" width="11%" alignSelf="center">{generateTime(item.created_at)}</SizableText>
@@ -215,4 +215,4 @@ const TransactionsTable = (props) => {
     )
 }
 
-export default TransactionsTable;
+export default React.memo(TransactionsTable);

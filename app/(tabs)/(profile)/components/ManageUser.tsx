@@ -1,7 +1,7 @@
 import {HorizontalContainer, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
 import {H4, Label, Separator, SizableText, Spinner, Switch} from "tamagui";
 import {Save, Trash} from "@tamagui/lucide-icons";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 
@@ -137,4 +137,4 @@ const ManageUser = (props) => {
     )
 }
 
-export default ManageUser;
+export default React.memo(ManageUser);

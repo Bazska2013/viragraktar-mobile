@@ -69,7 +69,7 @@ export default function ModifyLabels() {
                     <Paragraph>Press the available labels listed below to remove them from your store. Items that already have the selected label will continue to have it. You have to manually remove them from the individual items.</Paragraph>
                     <HorizontalContainer flexWrap="wrap">
                         {labels && labels.map((label, index) => (
-                            <SmallButton iconAfter={X} padding="$2" borderRadius="$5" key={index} onPress={() => handleRemoveLabel(label)}>{label}</SmallButton>
+                            <SmallButton iconAfter={X} padding="$2" borderRadius="$5" key={label} onPress={() => handleRemoveLabel(label)}>{label}</SmallButton>
                         ))}
                     </HorizontalContainer>
                     <Separator />

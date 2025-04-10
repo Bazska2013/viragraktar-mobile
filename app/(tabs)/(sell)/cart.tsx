@@ -105,7 +105,7 @@ export default function Cart() {
                                 <H3>Total</H3>
                             </HorizontalContainer>
                             {cartItems.map((item, index) => (
-                                <HorizontalContainer key={index}>
+                                <HorizontalContainer key={item.id}>
                                     <SizableText>{index + 1}</SizableText>
                                     <SizableText>{item.name}</SizableText>
                                     <Group orientation="horizontal">
@@ -139,7 +139,7 @@ export default function Cart() {
                             backgroundColor={theme.colors.card}
                         >
                             {cartItems.map((item, index) => (
-                                <VerticalContainer key={index}>
+                                <VerticalContainer key={item.id}>
                                     <HorizontalContainer>
                                         <H4>{item.name}</H4>
                                     </HorizontalContainer>

@@ -1,7 +1,7 @@
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
 import {Button, H4, Image, Input, SizableText, Square} from "tamagui";
 import flowerImage from "@/assets/images/defaultFlower.png";
-import {memo, useCallback, useEffect, useState} from "react";
+import React, {memo, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {BASE_URL} from "@/scripts/axiosConfig";
@@ -16,7 +16,7 @@ const Item = ({item}) => {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const handleChange = useCallback((value, type: string) => {
+    const handleChange = (value, type: string) => {
         switch (type) {
             case 'minus':
                 if (amount > 0) {
@@ -37,7 +37,7 @@ const Item = ({item}) => {
                 }}
                 break;
         }
-    }, [amount]);
+    };
 
     useEffect(() => {
         if (amount === 0) {
@@ -46,12 +46,12 @@ const Item = ({item}) => {
         }
     }, [amount]);
 
-    const handleAddToCart = useCallback(() => {
+    const handleAddToCart = () => {
         if (amount > 0) {
             let newItem = {...item, amount: amount};
             addToCart(newItem);
         }
-    }, [amount]);
+    };
 
     return (
         <VerticalContainer
@@ -116,4 +116,4 @@ const Item = ({item}) => {
     )
 }
 
-export default memo(Item);
+export default React.memo(Item);

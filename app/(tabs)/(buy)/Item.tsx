@@ -1,5 +1,5 @@
 import {Dimensions, Text, useColorScheme} from "react-native";
-import {memo, useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {BASE_URL} from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
@@ -20,7 +20,7 @@ const Item = ({props} : {props: any}) => {
     const {fetchItems, handleAddToSelected, removeFromSelected, selectedItems} = useItemsContext();
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
-    const handleSubmit = useCallback(async () => {
+    const handleSubmit = async () => {
         let response;
         try {
             response = await axios.post('/api/item/edit/' + item.id, {
@@ -38,9 +38,9 @@ const Item = ({props} : {props: any}) => {
                 fetchItems();
             }
         }
-    }, [item])
+    }
 
-    const handleChange = useCallback((value: string, type: string) => {
+    const handleChange = (value: string, type: string) => {
         switch (type) {
             case 'add':
                 setItem({...item, stock: item.stock + 1});
@@ -58,12 +58,12 @@ const Item = ({props} : {props: any}) => {
                 break;
         }
         setIsChanged(true);
-    }, [item])
+    }
 
-    const handleCancel = useCallback(() => {
+    const handleCancel = () => {
         setItem(props);
         setIsChanged(false);
-    }, [props])
+    }
 
     useEffect(() => {
         setItem(props);
@@ -147,4 +147,4 @@ const Item = ({props} : {props: any}) => {
     )
 }
 
-export default memo(Item);
+export default React.memo(Item);

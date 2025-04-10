@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Dimensions} from "react-native";
 import {HorizontalContainer} from "@/tamagui.config";
 import Hours from "@/app/(tabs)/(profile)/components/Hours";
@@ -44,7 +44,7 @@ const OpeningHours = (props) => {
         <HorizontalContainer flexWrap="wrap" flexDirection="column" alignSelf="center">
             {Object.keys(openingHours).map((day, index) => (
                 <Hours
-                    key={index}
+                    key={day}
                     day={day}
                     from={openingHours[day].from}
                     to={openingHours[day].to}
@@ -58,4 +58,4 @@ const OpeningHours = (props) => {
     )
 }
 
-export default OpeningHours;
+export default React.memo(OpeningHours);

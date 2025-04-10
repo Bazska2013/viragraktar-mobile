@@ -52,7 +52,7 @@ export default function ManageUsers() {
                                    marginTop="10%"
                         >
                             {Object.keys(users).map((user, index) => (
-                                <Accordion.Item value={user} key={index}>
+                                <Accordion.Item value={user} key={user}>
                                     <Accordion.Trigger flexDirection="row" justifyContent="space-between">
                                         {({open}: {open: boolean}) => (
                                             <>
