@@ -7,6 +7,7 @@ import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {BASE_URL} from "@/scripts/axiosConfig";
 import {Dimensions, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {router} from "expo-router";
 
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
@@ -102,7 +103,7 @@ const Item = ({item}) => {
                         />
                         <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'minus')} />
                     </StyledGroup>
-                    <SmallButton icon={FileSearch}>View details</SmallButton>
+                    <SmallButton icon={FileSearch} onPress={() => router.push(`/viewItem?id=${item.id}`)}>View details</SmallButton>
                     <SmallButtonWithAccent
                         boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}
                         icon={ShoppingCart}

@@ -1,0 +1,111 @@
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useSearchParams} from "expo-router/build/hooks";
+import React, {useEffect, useState} from "react";
+import axios, {BASE_URL} from "@/scripts/axiosConfig";
+import {StatusBar} from "expo-status-bar";
+import {H4, Image, ScrollView, Separator, SizableText} from "tamagui";
+import {EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
+import flowerImage from "@/assets/images/defaultFlower.png";
+import {FileSearch} from "@tamagui/lucide-icons";
+import {router} from "expo-router";
+
+export default function ViewItem() {
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const defaultId = useSearchParams().get('id');
+    const [id, setId] = useState(defaultId);
+    const [screenStack, setScreenStack] = useState([]);
+
+    const [item, setItem] = useState(null);
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchItem = async () => {
+        let response;
+        try {
+            response = await axios.get('/api/item/' + id);
+        } catch (error: any) {
+            setError(error.response.data.message);
+        } finally {
+            if (response?.status === 200) {
+                setItem(response.data);
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchItem();
+    }, [id]);
+
+    useEffect(() => {
+        if (screenStack.length > 0) {
+            setId(screenStack[screenStack.length - 1]);
+        } else {
+            setId(defaultId);
+        }
+    }, [screenStack]);
+
+    return (
+        <SafeAreaView>
+            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                >
+                    {screenStack.length > 0 &&
+                        <SmallButton onPress={() => setScreenStack(screenStack.slice(0, -1))}>Back</SmallButton>
+                    }
+                    <VerticalContainer>
+                        <H4>Name of the item</H4>
+                        <SizableText>{item?.name}</SizableText>
+                    </VerticalContainer>
+                    <Separator />
+                    <VerticalContainer>
+                        <H4>Labels of the item</H4>
+                        <HorizontalContainer flexWrap="wrap">
+                            {item && JSON.parse(item.description).labels.map((label, index) => (
+                                <SizableText key={label}>{label}</SizableText>
+                            ))}
+                        </HorizontalContainer>
+                    </VerticalContainer>
+                    <Separator />
+                    <VerticalContainer>
+                        <H4>Price of the item</H4>
+                        <SizableText>{item?.price}</SizableText>
+                    </VerticalContainer>
+                    <Separator />
+                    <VerticalContainer>
+                        <H4>Stock of the item</H4>
+                        <SizableText>{item?.stock}</SizableText>
+                    </VerticalContainer>
+                    <Separator />
+                    <VerticalContainer>
+                        <H4>Image of the item</H4>
+                        <Image borderRadius="$5" source={{
+                            uri: item?.image ? BASE_URL + "/images/" + item?.image : flowerImage,
+                            width: 120,
+                            height: 120,
+                        }} />
+                    </VerticalContainer>
+                    { item && JSON.parse(item.description).connections.length > 0 &&
+                        <>
+                            <Separator />
+                            <VerticalContainer>
+                                <H4>Created by combining:</H4>
+                                <VerticalContainer>
+                                    {item && JSON.parse(item.description).connections.map((combinedItem, index) => (
+                                        <SmallButton key={combinedItem.id} icon={FileSearch}
+                                                     onPress={() => setScreenStack([...screenStack, combinedItem.id])}
+                                        >
+                                            {combinedItem.name}
+                                        </SmallButton>
+                                    ))}
+                                </VerticalContainer>
+                            </VerticalContainer>
+                        </>
+                    }
+                </EditContainer>
+            </ScrollView>
+        </SafeAreaView>
+    )
+}
