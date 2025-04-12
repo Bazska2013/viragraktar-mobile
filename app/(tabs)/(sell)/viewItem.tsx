@@ -1,16 +1,17 @@
 import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useSearchParams} from "expo-router/build/hooks";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios, {BASE_URL} from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
 import {H4, Image, ScrollView, Separator, SizableText} from "tamagui";
 import {EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import flowerImage from "@/assets/images/defaultFlower.png";
-import {FileSearch} from "@tamagui/lucide-icons";
+import {ChevronLeft, FileSearch} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
 
 export default function ViewItem() {
+    const scrollViewRef = useRef<ScrollView>(null); // Create a ref for the ScrollView
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
     const defaultId = useSearchParams().get('id');
     const [id, setId] = useState(defaultId);
@@ -43,18 +44,20 @@ export default function ViewItem() {
         } else {
             setId(defaultId);
         }
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollTo({ y: 0, animated: true });
+        }
+
     }, [screenStack]);
 
     return (
         <SafeAreaView>
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
+            <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' ref={scrollViewRef}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
                 >
-                    {screenStack.length > 0 &&
-                        <SmallButton onPress={() => setScreenStack(screenStack.slice(0, -1))}>Back</SmallButton>
-                    }
+                    <SmallButton opacity={screenStack.length > 0 ? 1 : 0} icon={ChevronLeft} height={screenStack.length > 0 ? 25 : 0} animation="quickest" onPress={() => setScreenStack(screenStack.slice(0, -1))}>Back</SmallButton>
                     <VerticalContainer>
                         <H4>Name of the item</H4>
                         <SizableText>{item?.name}</SizableText>
@@ -81,7 +84,7 @@ export default function ViewItem() {
                     <Separator />
                     <VerticalContainer>
                         <H4>Image of the item</H4>
-                        <Image borderRadius="$5" source={{
+                        <Image alignSelf="center" borderRadius="$5" source={{
                             uri: item?.image ? BASE_URL + "/images/" + item?.image : flowerImage,
                             width: 120,
                             height: 120,
