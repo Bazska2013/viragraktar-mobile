@@ -3,7 +3,8 @@ import {H2, Input, YStack} from "tamagui";
 import {Filter, FilterX, Search} from "@tamagui/lucide-icons";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import React, {useEffect, useState} from "react";
-import {Dimensions, FlatList} from "react-native";
+import {Dimensions, FlatList, useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const BuyFilterBar = ({onTextChange, onLabelChange}) => {
     const {store} = useUserContext()
@@ -11,6 +12,8 @@ const BuyFilterBar = ({onTextChange, onLabelChange}) => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchField, setSearchField] = useState('');
     const [selectedLabels, setSelectedLabels] = useState([]);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const handleChangeOpen = () => {
         if (searchOpen) {
@@ -66,7 +69,7 @@ const BuyFilterBar = ({onTextChange, onLabelChange}) => {
                 <H2 left={0} position="absolute" animation="quicker" x={searchOpen ? -200 : 0}>Buy</H2>
                 <YStack left={0} position="absolute" animation="quick" scale={searchOpen ? 1 : 0} opacity={searchOpen ? 1 : 0} width="80%">
                     <Input
-                        backgroundColor="none"
+                        backgroundColor={theme.colors.card}
                         type="text"
                         name="search"
                         placeholder="Search..."

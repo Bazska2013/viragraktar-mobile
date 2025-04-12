@@ -47,6 +47,7 @@ export default function ChangeName() {
                         <H4>Name</H4>
                     </Label>
                     <Input
+                        backgroundColor={theme.colors.card}
                         flex={1}
                         borderWidth={2}
                         id="name"

@@ -9,7 +9,7 @@ import {ClipboardCopy} from "@tamagui/lucide-icons";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function StoreDetails() {
-    const {store } = useUserContext();
+    const {store, sign} = useUserContext();
     const openingHours = JSON.parse(store?.opening_hours);
     const [storeId, setStoreId] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -77,8 +77,8 @@ export default function StoreDetails() {
                         </VerticalContainer>
                     ))}
                     <Separator />
-                    <H4>Is calculation enabled?</H4>
-                    <SizableText>{store?.calculation_enabled ? 'Yes' : 'No'}</SizableText>
+                    <H4>Currency used</H4>
+                    <SizableText>{sign}</SizableText>
                     <Separator />
                     <H4>Press the button to copy the Store ID</H4>
                     <SmallButtonWithAccent icon={ClipboardCopy} onPress={copyToClipboard}>{copied? 'Copied!' : storeId}</SmallButtonWithAccent>

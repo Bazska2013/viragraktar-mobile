@@ -16,10 +16,12 @@ import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function Cart() {
 
     const {cartItems, emptyCart, fetchItems, editCart, removeFromCart} = useItemsContext();
+    const {sign, before} = useUserContext();
     const [cash, setCash] = useState(true);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
@@ -111,14 +113,15 @@ export default function Cart() {
                                     <Group orientation="horizontal">
                                         <SmallButton icon={Minus} onPress={() => handleChange('minus', item, 0)} />
                                         <Input
+                                            backgroundColor={theme.colors.card}
                                             value={item.amount.toString()}
                                             keyboardType='numeric'
                                             onChangeText={(value) => handleChange('', item, value)}
                                         />
                                         <SmallButton icon={Plus} onPress={() => handleChange('plus', item, 0)} />
                                     </Group>
-                                    <SizableText>{item.price}</SizableText>
-                                    <SizableText>{item.price * item.amount}</SizableText>
+                                    <SizableText>{before ? sign + item.price : item.price + " " + sign}</SizableText>
+                                    <SizableText>{before ? sign + item.price * item.amount : item.price * item.amount + " " + sign}</SizableText>
                                     <SmallButtonWithAccent icon={Trash} onPress={() => removeFromCart(item)} />
                                 </HorizontalContainer>
                             ))}
@@ -128,7 +131,7 @@ export default function Cart() {
                                     <SmallButton icon={CreditCard} onPress={() => setCash(!cash)}>Credit</SmallButton>
                                 </Group>
                                 <H3>
-                                    Total: {total} HUF
+                                    Total: {before ? sign + total : total + " " + sign}
                                 </H3>
                                 <BigButton icon={DollarSign} onPress={() => handleCheckout()}>{isLoading ? <Spinner /> : 'Sell'}</BigButton>
                                 {error && <SizableText color='red' >{error}</SizableText>}
@@ -147,6 +150,7 @@ export default function Cart() {
                                     <StyledGroup orientation="horizontal" flex={1} alignItems="center">
                                         <SmallButton boxShadow="unset" height="100%" flex={1} icon={Minus} onPress={() => handleChange('minus', item, 0)} />
                                         <Input
+                                            backgroundColor={theme.colors.card}
                                             flex={3}
                                             value={item.amount.toString()}
                                             keyboardType='numeric'
@@ -156,7 +160,7 @@ export default function Cart() {
                                     </StyledGroup>
                                     <Separator />
                                     <HorizontalContainer>
-                                        <H4>HUF {item.price * item.amount}</H4>
+                                        <H4>{before ? sign + item.price * item.amount : item.price * item.amount + " " + sign}</H4>
                                     </HorizontalContainer>
                                     <Separator />
                                     <SmallButtonWithAccent icon={Trash} onPress={() => removeFromCart(item)}>Remove from cart</SmallButtonWithAccent>
@@ -173,7 +177,7 @@ export default function Cart() {
                                 </StyledGroup>
                                 <Separator />
                                 <H4>
-                                    Total: {total} HUF
+                                    Total: {before ? sign + total : total + " " + sign}
                                 </H4>
                                 <Separator />
                                 <BigButton icon={DollarSign} onPress={() => handleCheckout()}>{isLoading ? <Spinner /> : 'Sell'}</BigButton>

@@ -9,8 +9,10 @@ import {HorizontalContainer, SmallButton, VerticalContainer, SmallButtonWithAcce
 import {Minus, Plus, X, Check, CheckSquare, Square} from "@tamagui/lucide-icons";
 import flowerImage from "../../../assets/images/defaultFlower.png";
 import {Group, H4, SizableText, Input, Image} from "tamagui";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 const Item = ({props} : {props: any}) => {
+    const {sign, before} = useUserContext();
 
     const [item, setItem] = useState(props);
     const [isChanged, setIsChanged] = useState(false);
@@ -111,21 +113,23 @@ const Item = ({props} : {props: any}) => {
                     height: 120,
                 }} />
                 <H4>{item.name}</H4>
-                <SizableText>Price: HUF {item.price}</SizableText>
+                <SizableText>{before ? sign + item.price : item.price + " " + sign}</SizableText>
             </VerticalContainer>
             <VerticalContainer
                 flex={1}
             >
                 <StyledGroup orientation='vertical'>
                     <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={() => handleChange('', 'add')} />
-                    <Input flex={1}
-                           keyboardType='numeric'
-                           value={item.stock.toString()}
-                           onChangeText={(value) => handleChange(value, 'field')}
-                           alignSelf="center"
-                           textAlign="center"
-                           width="100%"
-                           borderWidth={0}
+                    <Input
+                        backgroundColor={theme.colors.card}
+                        flex={1}
+                        keyboardType='numeric'
+                        value={item.stock.toString()}
+                        onChangeText={(value) => handleChange(value, 'field')}
+                        alignSelf="center"
+                        textAlign="center"
+                        width="100%"
+                        borderWidth={0}
                     />
                     <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'remove')} />
                 </StyledGroup>

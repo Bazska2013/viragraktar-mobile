@@ -124,8 +124,8 @@ export default function ProfileLayout() {
                                       options={{title: 'Change store name', headerShown: true}} />
                         <Stack.Screen name="changeOpeningHours"
                                       options={{title: 'Change opening hours', headerShown: true}} />
-                        <Stack.Screen name="changePriceCalculation"
-                                      options={{title: 'Change price calculation', headerShown: true}} />
+                        <Stack.Screen name="changeCurrency"
+                                      options={{title: 'Change currency', headerShown: true}} />
                         <Stack.Screen name="manageUsers"
                                       options={{title: 'Manage users', headerShown: true}} />
                         <Stack.Screen name="generateReport"

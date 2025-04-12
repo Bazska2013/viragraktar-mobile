@@ -9,6 +9,7 @@ import {EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from
 import flowerImage from "@/assets/images/defaultFlower.png";
 import {ChevronLeft, FileSearch} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function ViewItem() {
     const scrollViewRef = useRef<ScrollView>(null); // Create a ref for the ScrollView
@@ -16,6 +17,7 @@ export default function ViewItem() {
     const defaultId = useSearchParams().get('id');
     const [id, setId] = useState(defaultId);
     const [screenStack, setScreenStack] = useState([]);
+    const {sign, before} = useUserContext();
 
     const [item, setItem] = useState(null);
     const [error, setError] = useState(null);
@@ -74,7 +76,7 @@ export default function ViewItem() {
                     <Separator />
                     <VerticalContainer>
                         <H4>Price of the item</H4>
-                        <SizableText>{item?.price}</SizableText>
+                        <SizableText>{before ? sign + item?.price : item?.price + " " + sign}</SizableText>
                     </VerticalContainer>
                     <Separator />
                     <VerticalContainer>

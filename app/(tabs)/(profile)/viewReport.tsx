@@ -152,51 +152,6 @@ export default function ViewReport() {
         setIsLoading(false);
     }
 
-    // const handleDownloadReport = async () => {
-    //     try {
-    //         // const pdfDoc = <MyDocument />;
-    //         // const pdfBlob = await pdf(pdfDoc).toBlob(); // Generate PDF as a blob
-    //         let options = {
-    //             html: '<h1>Halo</h1>',
-    //             fileName: 'test',
-    //             directory: 'Documents',
-    //         }
-    //         let file = await RNHTMLtoPDF.convert(options);
-    //
-    //         const pdfUri = FileSystem.cacheDirectory + 'report.pdf';
-    //         await FileSystem.writeAsStringAsync(pdfUri, await pdfBlob.arrayBuffer(), {
-    //             encoding: FileSystem.EncodingType.Base64,
-    //         });
-    //
-    //         if (await Sharing.isAvailableAsync()) {
-    //             await Sharing.shareAsync(pdfUri);
-    //         } else {
-    //             console.log('Sharing is not available');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error generating PDF:', error);
-    //     }
-    // };
-    //
-    // const captureComponent = async (ref: string) => {
-    //     return await captureRef(ref, {format: 'png', quality: 1});
-    // };
-
-    // const MyDocument = () => {
-    //     const distChartImage = captureComponent('distChartRef');
-    //     const revenueChartImage = captureComponent('revenueChartRef');
-    //     const tableImage = captureComponent('tableRef');
-    //     return (
-    //         <Document>
-    //             <Page size="A4">
-    //                 <Text>Report</Text>
-    //                 <Text>This is a report about the transactions made.</Text>
-    //                 {/* Add more content here */}
-    //             </Page>
-    //         </Document>
-    //     );
-    // }
-
     return (
         <SafeAreaView>
             <ScrollView height="100%" refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />} >
@@ -419,9 +374,6 @@ export default function ViewReport() {
                             <H4>No data available for this day</H4>
                         </EditContainer>}
                 </>}
-                {/*<EditContainer>*/}
-                {/*    <BigButton icon={Download} onPress={handleDownloadReport}>Download PDF</BigButton>*/}
-                {/*</EditContainer>*/}
             </ScrollView>
         </SafeAreaView>
     )

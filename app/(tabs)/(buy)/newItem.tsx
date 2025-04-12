@@ -5,14 +5,16 @@ import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import axios from "@/scripts/axiosConfig";
-import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText} from "tamagui";
+import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText, H6} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import * as ImagePicker from 'expo-image-picker';
 import Labels from "@/app/(tabs)/(buy)/Labels";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function NewItem() {
 
     const {fetchItems} = useItemsContext();
+    const {sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -123,6 +125,7 @@ export default function NewItem() {
                             <H4>Name of the item</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="name"
                             flex={1}
                             borderWidth={2}
@@ -149,14 +152,23 @@ export default function NewItem() {
                         <Label htmlFor="price">
                             <H4>Price of the item</H4>
                         </Label>
-                        <Input
-                            flex={1}
-                            borderWidth={2}
-                            id="price"
-                            value={price}
-                            onChangeText={setPrice}
-                            keyboardType="numeric"
-                        />
+                        <HorizontalContainer alignItems="center" justifyContent="space-between">
+                            {before &&
+                                <H6>{sign}</H6>
+                            }
+                            <Input
+                                backgroundColor={theme.colors.card}
+                                flex={1}
+                                borderWidth={2}
+                                id="price"
+                                value={price}
+                                onChangeText={setPrice}
+                                keyboardType="numeric"
+                            />
+                            {!before &&
+                                <H6>{sign}</H6>
+                            }
+                        </HorizontalContainer>
                     </VerticalContainer>
                     <Separator />
                     <VerticalContainer>
@@ -164,6 +176,7 @@ export default function NewItem() {
                             <H4>Stock of the item</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             flex={1}
                             borderWidth={2}
                             id="stock"

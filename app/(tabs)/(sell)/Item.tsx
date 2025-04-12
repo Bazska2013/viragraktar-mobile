@@ -8,12 +8,14 @@ import {BASE_URL} from "@/scripts/axiosConfig";
 import {Dimensions, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {router} from "expo-router";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
     const [amount, setAmount] = useState(0);
 
     const {addToCart, isItemInCart, removeFromCart} = useItemsContext();
+    const {sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -84,7 +86,7 @@ const Item = ({item}) => {
                         height: 120,
                     }} />
                     <H4>{item.name}</H4>
-                    <SizableText>Price: HUF {item.price}</SizableText>
+                    <SizableText>{before ? sign + item.price : item.price + " " + sign}</SizableText>
                     <SizableText>Stock: {item.stock}</SizableText>
                 </VerticalContainer>
                 <VerticalContainer
@@ -92,14 +94,16 @@ const Item = ({item}) => {
                 >
                     <StyledGroup orientation='vertical'>
                         <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={() => handleChange('', 'plus')} />
-                        <Input flex={1}
-                               keyboardType='numeric'
-                               value={amount.toString()}
-                               onChangeText={(value) => handleChange(value, 'field')}
-                               alignSelf="center"
-                               textAlign="center"
-                               width="100%"
-                               borderWidth={0}
+                        <Input
+                            backgroundColor={theme.colors.card}
+                            flex={1}
+                            keyboardType='numeric'
+                            value={amount.toString()}
+                            onChangeText={(value) => handleChange(value, 'field')}
+                            alignSelf="center"
+                            textAlign="center"
+                            width="100%"
+                            borderWidth={0}
                         />
                         <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'minus')} />
                     </StyledGroup>

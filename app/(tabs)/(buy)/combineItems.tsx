@@ -6,7 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
-import {H4, Image, Input, Label, ScrollView, Separator, Sheet, SizableText, Spinner} from "tamagui";
+import {H4, H6, Image, Input, Label, ScrollView, Separator, Sheet, SizableText, Spinner} from "tamagui";
 import {
     BigButton,
     EditContainer,
@@ -15,10 +15,12 @@ import {
     VerticalContainer
 } from "@/tamagui.config";
 import Labels from "@/app/(tabs)/(buy)/Labels";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function CombineItems() {
 
     const {fetchItems, selectedItems, setSelectedItems} = useItemsContext();
+    const {sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -147,6 +149,7 @@ export default function CombineItems() {
                             <H4>Name of the combined item</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="name"
                             flex={1}
                             borderWidth={2}
@@ -173,14 +176,23 @@ export default function CombineItems() {
                         <Label htmlFor="price">
                             <H4>Price of the combined item</H4>
                         </Label>
-                        <Input
-                            flex={1}
-                            borderWidth={2}
-                            id="price"
-                            value={price}
-                            onChangeText={setPrice}
-                            keyboardType="numeric"
-                        />
+                        <HorizontalContainer alignItems="center" justifyContent="space-between">
+                            {before &&
+                                <H6>{sign}</H6>
+                            }
+                            <Input
+                                backgroundColor={theme.colors.card}
+                                flex={1}
+                                borderWidth={2}
+                                id="price"
+                                value={price}
+                                onChangeText={setPrice}
+                                keyboardType="numeric"
+                            />
+                            {!before &&
+                                <H6>{sign}</H6>
+                            }
+                        </HorizontalContainer>
                     </VerticalContainer>
                     <Separator />
                     <VerticalContainer>
@@ -188,6 +200,7 @@ export default function CombineItems() {
                             <H4>Stock of the combined item</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             flex={1}
                             borderWidth={2}
                             id="stock"

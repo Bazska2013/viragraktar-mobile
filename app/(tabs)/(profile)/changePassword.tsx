@@ -60,6 +60,7 @@ export default function ChangePassword() {
                             <H4>Current password</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="current"
                             flex={1}
                             borderWidth={2}
@@ -77,6 +78,7 @@ export default function ChangePassword() {
                             <H4>New password</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="new"
                             flex={1}
                             borderWidth={2}
@@ -93,6 +95,7 @@ export default function ChangePassword() {
                             <H4>Password confirmation</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="confirm"
                             flex={1}
                             borderWidth={2}

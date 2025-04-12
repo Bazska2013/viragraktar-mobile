@@ -46,6 +46,7 @@ export default function ChangeStoreName() {
                         <H4>Store name</H4>
                     </Label>
                     <Input
+                        backgroundColor={theme.colors.card}
                         id="name"
                         flex={1}
                         borderWidth={2}

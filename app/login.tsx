@@ -95,6 +95,7 @@ export default function Login() {
                             <H4>Email</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="email"
                             flex={1}
                             borderWidth={2}
@@ -112,6 +113,7 @@ export default function Login() {
                             <H4>Password</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="password"
                             flex={1}
                             borderWidth={2}

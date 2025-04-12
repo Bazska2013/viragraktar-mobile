@@ -3,6 +3,8 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {H6, Input, Separator} from "tamagui";
 import {Plus, X} from "@tamagui/lucide-icons";
+import {useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const Labels = ({value, id, onChange, combined}) => {
     const {store} = useUserContext();
@@ -11,6 +13,8 @@ const Labels = ({value, id, onChange, combined}) => {
     const [selectedLabels, setSelectedLabels] = useState(value);
     const [searchField, setSearchField] = useState('');
     const [filteredLabels, setFilteredLabels] = useState([]);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     useEffect(() => {
         if (combined) {
@@ -57,7 +61,7 @@ const Labels = ({value, id, onChange, combined}) => {
         <VerticalContainer>
             <H6>Filter available labels</H6>
             <Input
-                backgroundColor="none"
+                backgroundColor={theme.colors.card}
                 type="text"
                 value={searchField}
                 onChangeText={setSearchField}

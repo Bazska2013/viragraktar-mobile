@@ -34,7 +34,7 @@ export default  function Register() {
             setError(error.response?.data?.message);
         } finally {
             setIsLoading(false);
-            if (response?.status === 200) {
+            if (response?.status === 201) {
                 router.back();
             }
         }
@@ -62,6 +62,7 @@ export default  function Register() {
                             <H4>Email</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="email"
                             flex={1}
                             borderWidth={2}
@@ -79,6 +80,7 @@ export default  function Register() {
                             <H4>Name</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="name"
                             flex={1}
                             borderWidth={2}
@@ -94,6 +96,7 @@ export default  function Register() {
                             <H4>Password</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="password"
                             flex={1}
                             borderWidth={2}
@@ -111,6 +114,7 @@ export default  function Register() {
                             <H4>Password again</H4>
                         </Label>
                         <Input
+                            backgroundColor={theme.colors.card}
                             id="password2"
                             flex={1}
                             borderWidth={2}

@@ -15,6 +15,10 @@ const UserContext = createContext<{
     setStore: (store: any) => void,
     getUserData: () => void
     fetchUserData: () => void
+    before: boolean,
+    setBefore: (before: boolean) => void,
+    sign: string,
+    setSign: (sign: string) => void
 } | undefined>(undefined);
 
 export function useUserContext() {
@@ -44,6 +48,8 @@ export default function TabLayout() {
     const colorScheme = useColorScheme();
     const [user, setUser] = useState(null);
     const [store, setStore] = useState(null);
+    const [before, setBefore] = useState(false);
+    const [sign, setSign] = useState('');
     const isWideScreen = useResponsiveLayout();
 
     const fetchUserData = async () => {
@@ -72,13 +78,24 @@ export default function TabLayout() {
         }
     }
 
+    useEffect(() => {
+        if (store) {
+            setBefore(JSON.parse(store.currency).before);
+            setSign(JSON.parse(store.currency).sign);
+        }
+    }, [store]);
+
     const contextValue = {
         user: user,
         setUser: setUser,
         store: store,
         setStore: setStore,
         getUserData: getUserData,
-        fetchUserData: fetchUserData
+        fetchUserData: fetchUserData,
+        before: before,
+        setBefore: setBefore,
+        sign: sign,
+        setSign: setSign
     }
 
     return (

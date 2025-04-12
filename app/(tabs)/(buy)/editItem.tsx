@@ -6,7 +6,7 @@ import axios, {BASE_URL} from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
-import {H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator} from "tamagui";
+import {H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator, H6} from "tamagui";
 import {
     BigButton,
     EditContainer,
@@ -16,11 +16,13 @@ import {
 } from "@/tamagui.config";
 import * as ImagePicker from "expo-image-picker";
 import Labels from "@/app/(tabs)/(buy)/Labels";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     const {fetchItems} = useItemsContext();
+    const {sign, before} = useUserContext();
     const id = useSearchParams().get('id');
 
     const [item, setItem] = useState(null);
@@ -148,6 +150,7 @@ export default function EditItem() {
                                 <H4>Name of the item</H4>
                             </Label>
                             <Input
+                                backgroundColor={theme.colors.card}
                                 flex={1}
                                 borderWidth={2}
                                 id="name"
@@ -174,14 +177,23 @@ export default function EditItem() {
                             <Label htmlFor="price">
                                 <H4>Price of the item</H4>
                             </Label>
-                            <Input
-                                flex={1}
-                                borderWidth={2}
-                                id="price"
-                                value={item.price.toString()}
-                                onChangeText={(value) => setItem({...item, price: value})}
-                                keyboardType="numeric"
-                            />
+                            <HorizontalContainer alignItems="center" justifyContent="space-between">
+                                {before &&
+                                    <H6>{sign}</H6>
+                                }
+                                <Input
+                                    backgroundColor={theme.colors.card}
+                                    flex={1}
+                                    borderWidth={2}
+                                    id="price"
+                                    value={item.price.toString()}
+                                    onChangeText={(value) => setItem({...item, price: value})}
+                                    keyboardType="numeric"
+                                />
+                                {!before &&
+                                    <H6>{sign}</H6>
+                                }
+                            </HorizontalContainer>
                         </VerticalContainer>
                         <Separator />
                         <VerticalContainer>
@@ -189,6 +201,7 @@ export default function EditItem() {
                                 <H4>Stock of the item</H4>
                             </Label>
                             <Input
+                                backgroundColor={theme.colors.card}
                                 flex={1}
                                 borderWidth={2}
                                 id="stock"

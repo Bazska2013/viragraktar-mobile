@@ -57,6 +57,7 @@ export default function JoinStore() {
                 >
                     <H4>Enter the unique ID of the Store you want to join</H4>
                     <Input
+                        backgroundColor={theme.colors.card}
                         flex={1}
                         borderWidth={2}
                         value={code ? code.toString() : ''}

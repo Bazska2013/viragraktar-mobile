@@ -36,7 +36,7 @@ export default function Profile() {
 
     const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const {user, setUser, store, setStore, getUserData, fetchUserData} = useUserContext();
+    const {user, setUser, store, setStore, getUserData, fetchUserData, sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -137,7 +137,7 @@ export default function Profile() {
                     >
                         <H4>Hello {user?.name}!</H4>
                         {store &&
-                            <H6>Today's profit of {store?.name} is HUF {profit}</H6>
+                            <H6>Today's profit of {store?.name} is {before ? sign + profit : profit + " " + sign}</H6>
                         }
                     </VerticalContainer>
                     <VerticalContainer width="90%" alignSelf="center">
@@ -203,10 +203,10 @@ export default function Profile() {
                                 </Group.Item>
                                 <Group.Item>
                                     <StyledListItem
-                                        title="Enable/Disable price calculation"
+                                        title="Change currency"
                                         icon={DollarSign}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/changePriceCalculation')}}
+                                        onPress={() => {router.push('/changeCurrency')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>

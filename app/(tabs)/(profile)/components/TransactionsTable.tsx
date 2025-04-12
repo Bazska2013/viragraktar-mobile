@@ -4,9 +4,12 @@ import React, {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {Dimensions, useColorScheme, View} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useUserContext} from "@/app/(tabs)/_layout";
 
 const TransactionsTable = (props) => {
     const [storeUsers, setStoreUsers] = useState([]);
+
+    const {before, sign} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
@@ -87,9 +90,9 @@ const TransactionsTable = (props) => {
                                     <View key={item.id}>
                                         <HorizontalContainer alignItems="center">
                                             <SizableText width="25%" textAlign="center" alignSelf="center">{item.name}</SizableText>
-                                            <SizableText width="25%" textAlign="center" alignSelf="center">{item.price}</SizableText>
+                                            <SizableText width="25%" textAlign="center" alignSelf="center">{before ? sign + item.price : item.price + " " + sign}</SizableText>
                                             <SizableText width="20%" textAlign="center" alignSelf="center">{item.amount}</SizableText>
-                                            <SizableText width="20%" textAlign="center" alignSelf="center">{item.amount * item.price}</SizableText>
+                                            <SizableText width="20%" textAlign="center" alignSelf="center">{before ? sign + item.amount * item.price : item.amount * item.price + " " + sign}</SizableText>
                                         </HorizontalContainer>
                                         <Separator />
                                     </View>
@@ -124,7 +127,7 @@ const TransactionsTable = (props) => {
                                             <SizableText width="6%" textAlign="center" alignSelf="center">{generateTime(item.created_at)}</SizableText>
                                             <SizableText width="18%" textAlign="center" alignSelf="center">{findUserName(item.user_id)}</SizableText>
                                             <SizableText width="20%" textAlign="center" alignSelf="center">{item.credit ? 'Credit card' : 'Cash'}</SizableText>
-                                            <SizableText width="25%" textAlign="center" alignSelf="center">{item.total}</SizableText>
+                                            <SizableText width="25%" textAlign="center" alignSelf="center">{before ? sign + item.total : item.total + " " + sign}</SizableText>
                                         </HorizontalContainer>
                                         <Separator />
                                     </View>
@@ -164,9 +167,9 @@ const TransactionsTable = (props) => {
                                     <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%">
                                             <SizableText width="18%" textAlign="center" alignSelf="center">{item.name}</SizableText>
-                                            <SizableText width="15%" textAlign="center" alignSelf="center">{item.price}</SizableText>
+                                            <SizableText width="15%" textAlign="center" alignSelf="center">{before ? sign + item.price : item.price + " " + sign}</SizableText>
                                             <SizableText width="20%" textAlign="center" alignSelf="center">{item.amount}</SizableText>
-                                            <SizableText width="22%" textAlign="center" alignSelf="center">{item.amount * item.price}</SizableText>
+                                            <SizableText width="22%" textAlign="center" alignSelf="center">{before ? sign + item.amount * item.price : item.amount * item.price + " " + sign}</SizableText>
                                         </HorizontalContainer>
                                         <Separator />
                                     </View>
@@ -193,7 +196,7 @@ const TransactionsTable = (props) => {
                                             <SizableText textAlign="center" fontSize="$2" width="11%" alignSelf="center">{generateTime(item.created_at)}</SizableText>
                                             <SizableText textAlign="center" fontSize="$2" width="12%" alignSelf="center">{findUserName(item.user_id)}</SizableText>
                                             <SizableText textAlign="center" fontSize="$2" width="18%" alignSelf="center">{item.credit ? 'Credit card' : 'Cash'}</SizableText>
-                                            <SizableText textAlign="center" fontSize="$2" width="18%" alignSelf="center">{item.total}</SizableText>
+                                            <SizableText textAlign="center" fontSize="$2" width="18%" alignSelf="center">{before ? sign + item.total : item.total + " " + sign}</SizableText>
                                         </HorizontalContainer>
                                         <Separator />
                                     </View>
@@ -205,7 +208,7 @@ const TransactionsTable = (props) => {
                         <EditContainer backgroundColor={theme.colors.card}>
                             <HorizontalContainer alignItems="center" justifyContent="space-between">
                                 <H6>Total</H6>
-                                <H6>HUF {props.items.reduce((acc, item) => acc + item.amount * item.price, 0)}</H6>
+                                <H6>{before ? sign + props.items.reduce((acc, item) => acc + item.amount * item.price, 0) : props.items.reduce((acc, item) => acc + item.amount * item.price, 0) + " " + sign}</H6>
                             </HorizontalContainer>
                         </EditContainer>
                     }

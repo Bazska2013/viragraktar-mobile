@@ -1,10 +1,11 @@
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {RefreshControl, SafeAreaView} from "react-native";
+import {RefreshControl, SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Paragraph, ScrollView, Separator, SizableText} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, SmallButton, SmallButtonWithAccent} from "@/tamagui.config";
 import {useEffect, useState} from "react";
 import {Plus, Save, X} from "@tamagui/lucide-icons";
 import axios from "@/scripts/axiosConfig";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 export default function ModifyLabels() {
     const {store, setStore} = useUserContext();
@@ -13,6 +14,8 @@ export default function ModifyLabels() {
     const [error, setError] = useState(null);
     const [label, setLabel] = useState('');
     const [isChanged, setIsChanged] = useState(false);
+
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     useEffect(() => {
         setLabels(JSON.parse(store.labels));
@@ -77,7 +80,7 @@ export default function ModifyLabels() {
                     <Paragraph>Type in a new label in the input field below and press the button next to it to add it to the available labels. Press the Save changes button below to save your modifications. If you wish to revert the changes made pull down the screen.</Paragraph>
                     <HorizontalContainer alignItems="center">
                         <Input
-                            backgroundColor="none"
+                            backgroundColor={theme.colors.card}
                             flex={1}
                             borderWidth={2}
                             type="text"
