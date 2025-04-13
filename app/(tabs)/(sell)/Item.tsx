@@ -79,6 +79,7 @@ const Item = ({item}) => {
                 <VerticalContainer
                     flex={3}
                     alignItems="center"
+                    onPress={() => handleChange('', 'plus')}
                 >
                     <Image borderRadius="$5" source={{
                         uri: item.image ? BASE_URL + "/images/" + item.image : flowerImage,

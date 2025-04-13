@@ -102,7 +102,7 @@ export default function TabLayout() {
         <UserContext.Provider value={contextValue}>
             {isWideScreen ? <>
                 <GestureHandlerRootView style={{ flex: 1 }}>
-                    <Drawer screenOptions={{drawerActiveBackgroundColor: colorScheme === 'light' ? "rgba(1,1,1,0.1)" : "rgba(255,255,255,0.1)", drawerInactiveTintColor: colorScheme === 'light' ? "black" : "white", drawerActiveTintColor: colorScheme === 'light' ? "black" : "white", drawerStyle: {width: 200}}}>
+                    <Drawer screenOptions={{drawerActiveBackgroundColor: colorScheme === 'light' ? "#292023" : "#FBF9EF", drawerInactiveTintColor: colorScheme === 'light' ? "#292023" : "#FBF9EF", drawerActiveTintColor: colorScheme === 'light' ? "#292023" : "#FBF9EF", drawerStyle: {width: 200}}}>
                         <Drawer.Screen
                             name="(sell)"
                             options={{
@@ -133,7 +133,7 @@ export default function TabLayout() {
                     </Drawer>
                 </GestureHandlerRootView>
             </> : <>
-                <Tabs screenOptions={{tabBarActiveTintColor: colorScheme === "light" ? "#292023" : "white", tabBarInactiveTintColor: 'gray', tabBarButton: (props) => (
+                <Tabs screenOptions={{tabBarActiveTintColor: colorScheme === "light" ? "#292023" : "#FBF9EF", tabBarInactiveTintColor: 'gray', tabBarButton: (props) => (
                         <TouchableOpacity {...props} onPress={() => {Haptics.selectionAsync(); props.onPress();}} />
                     )}}>
                     <Tabs.Screen name="(sell)"

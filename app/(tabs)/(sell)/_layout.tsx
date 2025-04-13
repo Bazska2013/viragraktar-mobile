@@ -1,7 +1,8 @@
 import {router, Stack} from "expo-router";
 import React, {createContext, useContext, useState} from "react";
 import axios from "@/scripts/axiosConfig";
-import {Button, Dimensions, Platform} from "react-native";
+import {Button, Dimensions, Platform, useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const ItemsContext = createContext<{
     items: any,
@@ -72,15 +73,17 @@ export default function SellLayout() {
         isItemInCart: isItemInCart
     }
 
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+
     return (
         <ItemsContext.Provider value={contextValue}>
             <Stack>
                 <Stack.Screen name="index"
                               options={{title: 'Sell', headerShown: false}} />
                 <Stack.Screen name="cart"
-                              options={{title: 'Cart', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                              options={{title: 'Cart', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                 <Stack.Screen name="viewItem"
-                              options={{title: 'View item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                              options={{title: 'View item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
             </Stack>
         </ItemsContext.Provider>
     )

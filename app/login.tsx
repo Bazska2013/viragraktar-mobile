@@ -4,7 +4,6 @@ import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from '../scripts/axiosConfig';
-import CookieManager from '@react-native-cookies/cookies';
 import {H4, Input, Label, Separator, SizableText, Spinner} from 'tamagui';
 import {BigButton, EditContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import {ScrollView} from "tamagui";
@@ -26,7 +25,6 @@ export default function Login() {
         let response;
         setIsLoading(true);
         setError('');
-        await CookieManager.clearAll();
         try {
             response = await axios.post('/api/login', {
                 email: email,

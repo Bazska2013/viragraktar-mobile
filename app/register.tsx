@@ -34,7 +34,7 @@ export default  function Register() {
             setError(error.response?.data?.message);
         } finally {
             setIsLoading(false);
-            if (response?.status === 201) {
+            if (response?.status === 200) {
                 router.back();
             }
         }

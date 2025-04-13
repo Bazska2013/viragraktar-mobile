@@ -1,7 +1,8 @@
 import {router, Stack} from "expo-router";
 import React, {createContext, useContext, useState} from "react";
 import axios from "@/scripts/axiosConfig";
-import {Button, Dimensions, Platform} from "react-native";
+import {Button, Dimensions, Platform, useColorScheme} from "react-native";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const ItemsContext = createContext<{
     items: any,
@@ -58,17 +59,19 @@ export default function BuyLayout() {
         removeFromSelected: removeFromSelected,
     };
 
+    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+
     return (
         <ItemsContext.Provider value={contextValue}>
             <Stack>
                 <Stack.Screen name="index"
                               options={{title: 'Buy', headerShown: false}} />
                 <Stack.Screen name="newItem"
-                              options={{title: 'New item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                              options={{title: 'New item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                 <Stack.Screen name='editItem'
-                              options={{title: 'Edit item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                              options={{title: 'Edit item', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                 <Stack.Screen name='combineItems'
-                              options={{title: 'Combine items', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                              options={{title: 'Combine items', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
             </Stack>
         </ItemsContext.Provider>
     )

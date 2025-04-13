@@ -1,6 +1,7 @@
 import {router, Stack} from "expo-router";
-import {Button, Dimensions, Platform} from "react-native";
+import {Button, Dimensions, Platform, useColorScheme} from "react-native";
 import React, {createContext, useContext, useState} from "react";
+import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
 const ReportContext = createContext<{
         data: any,
@@ -103,15 +104,17 @@ export default function ProfileLayout() {
                 getReadableDate: getReadableDate,
         }
 
+        const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+
     return (
         <ReportContext.Provider value={contextValue}>
-                <Stack screenOptions={{ headerTintColor: "#292023" }}>
+                <Stack screenOptions={{ headerTintColor: theme.dark ? '#FBF9EF' : "#292023" }}>
                         <Stack.Screen name="index"
                                       options={{title: 'Profile', headerShown: false}} />
                         <Stack.Screen name="joinStore"
-                                      options={{title: 'Join Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                                      options={{title: 'Join Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                         <Stack.Screen name="createStore"
-                                      options={{title: 'Create Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color="#292023" title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                                      options={{title: 'Create Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                         <Stack.Screen name='storeDetails'
                                       options={{title: 'Store details', headerShown: true }} />
                         <Stack.Screen name="profileDetails"
