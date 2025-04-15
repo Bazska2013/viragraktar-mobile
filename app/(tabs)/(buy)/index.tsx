@@ -8,7 +8,6 @@ import Item from "@/app/(tabs)/(buy)/Item";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent,} from "@/tamagui.config";
 import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {Combine, Plus, Search, X} from "@tamagui/lucide-icons";
-import FilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
 import BuyFilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
 
 export default  function Buy() {

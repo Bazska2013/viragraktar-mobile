@@ -3,9 +3,9 @@ import {Dimensions} from "react-native";
 import {HorizontalContainer} from "@/tamagui.config";
 import Hours from "@/app/(tabs)/(profile)/components/Hours";
 
-const OpeningHours = (props) => {
+const OpeningHours = ({openingHours, setFieldValue}) => {
 
-    const [openingHours, setOpeningHours] = useState(props.openingHours ? props.openingHours : {
+    const [openingHoursField, setOpeningHoursField] = useState(openingHours ? openingHours : {
         Mon: { from: "00:00", to: "00:00", closed: false },
         Tue: { from: "00:00", to: "00:00", closed: false },
         Wed: { from: "00:00", to: "00:00", closed: false },
@@ -16,25 +16,25 @@ const OpeningHours = (props) => {
     });
 
     useEffect(() => {
-        props.setFieldValue(openingHours);
-    }, [openingHours]);
+        setFieldValue(openingHoursField);
+    }, [openingHoursField]);
 
     const handleSelectFrom = (day: string, value: string) => {
-        setOpeningHours(prev => ({
+        setOpeningHoursField(prev => ({
             ...prev,
             [day]: { ...prev[day], from: value }
         }));
     };
 
     const handleSelectTo = (day: string, value: string) => {
-        setOpeningHours(prev => ({
+        setOpeningHoursField(prev => ({
             ...prev,
             [day]: { ...prev[day], to: value }
         }));
     };
 
     const handleClick = (day: string) => {
-        setOpeningHours(prev => ({
+        setOpeningHoursField(prev => ({
             ...prev,
             [day]: { ...prev[day], closed: !prev[day].closed }
         }));
@@ -42,13 +42,13 @@ const OpeningHours = (props) => {
 
     return (
         <HorizontalContainer flexWrap="wrap" flexDirection="column" alignSelf="center">
-            {Object.keys(openingHours).map((day, index) => (
+            {Object.keys(openingHoursField).map((day, index) => (
                 <Hours
                     key={day}
                     day={day}
-                    from={openingHours[day].from}
-                    to={openingHours[day].to}
-                    closed={openingHours[day].closed}
+                    from={openingHoursField[day].from}
+                    to={openingHoursField[day].to}
+                    closed={openingHoursField[day].closed}
                     onSelectFrom={(value) => handleSelectFrom(day, value)}
                     onSelectTo={(value) => handleSelectTo(day, value)}
                     onClick={() => handleClick(day)}

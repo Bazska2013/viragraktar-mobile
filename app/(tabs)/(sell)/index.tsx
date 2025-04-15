@@ -17,7 +17,6 @@ import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} fr
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
 import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
-import BuyFilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
 import SellFilterBar from "@/app/(tabs)/(sell)/SellFilterBar";
 
 export default function Sell() {

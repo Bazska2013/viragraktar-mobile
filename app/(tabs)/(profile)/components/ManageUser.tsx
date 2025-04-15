@@ -5,10 +5,10 @@ import React, {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 
-const ManageUser = (props) => {
-    const [isSeller, setIsSeller] = useState(!!props.isSeller);
-    const [isBuyer, setIsBuyer] = useState(!!props.isBuyer);
-    const [isAdmin, setIsAdmin] = useState(!!props.isAdmin);
+const ManageUser = ({isSeller, isBuyer, isAdmin, id, refetchUsers, name, email }) => {
+    const [isSellerField, setIsSellerField] = useState(!!isSeller);
+    const [isBuyerField, setIsBuyerField] = useState(!!isBuyer);
+    const [isAdminField, setIsAdminField] = useState(!!isAdmin);
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -20,16 +20,16 @@ const ManageUser = (props) => {
         setIsChanged(true);
         switch (type) {
             case 'seller':
-                setIsSeller(checked);
+                setIsSellerField(checked);
                 break;
             case 'buyer':
-                setIsBuyer(checked);
+                setIsBuyerField(checked);
                 break;
             case 'admin':
-                if (user.id === props.id) {
+                if (user.id === id) {
                     return;
                 }
-                setIsAdmin(checked);
+                setIsAdminField(checked);
                 break;
         }
     }
@@ -38,10 +38,10 @@ const ManageUser = (props) => {
         let response;
         setIsLoading(true);
         try {
-            response = await axios.post('/api/update-privileges/' + props.id, {
-                is_seller: isSeller,
-                is_buyer: isBuyer,
-                is_admin: isAdmin
+            response = await axios.post('/api/update-privileges/' + id, {
+                is_seller: isSellerField,
+                is_buyer: isBuyerField,
+                is_admin: isAdminField
             });
         } catch (error: any) {
             setIsLoading(false);
@@ -67,7 +67,7 @@ const ManageUser = (props) => {
             setIsLoading(false);
             if (response?.status === 200) {
                 setUser(response.data);
-                props.refetchUsers();
+                refetchUsers();
             }
         }
     }
@@ -76,7 +76,7 @@ const ManageUser = (props) => {
         let response;
         setIsLoading(true);
         try {
-            response = await axios.post('/api/store/users/remove/' + props.id);
+            response = await axios.post('/api/store/users/remove/' + id);
         } catch (error: any) {
             setIsLoading(false);
             setError(error.response.data.message);
@@ -84,7 +84,7 @@ const ManageUser = (props) => {
             setIsLoading(false);
             setIsChanged(false);
             if (response?.status === 204) {
-                props.refetchUsers();
+                refetchUsers();
             }
         }
     }
@@ -93,44 +93,44 @@ const ManageUser = (props) => {
         <VerticalContainer>
             <HorizontalContainer flex={1} alignItems="center">
                 <H4 flex={1}>Name</H4>
-                <SizableText flex={2}>{props.name}</SizableText>
+                <SizableText flex={2}>{name}</SizableText>
             </HorizontalContainer>
             <Separator />
             <HorizontalContainer flex={1} alignItems="center">
                 <H4 flex={1}>Email</H4>
-                <SizableText flex={2}>{props.email}</SizableText>
+                <SizableText flex={2}>{email}</SizableText>
             </HorizontalContainer>
             <Separator />
             <HorizontalContainer flex={1} alignItems="center" justifyContent="space-between">
-                <Label htmlFor={props.name + 'seller'}>
+                <Label htmlFor={name + 'seller'}>
                     <H4>Seller</H4>
                 </Label>
-                <Switch checked={isSeller} id={props.name + 'seller'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'seller')}>
+                <Switch checked={isSellerField} id={name + 'seller'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'seller')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
             <Separator />
             <HorizontalContainer flex={1} alignItems="center" justifyContent="space-between">
-                <Label htmlFor={props.name + 'buyer'}>
+                <Label htmlFor={name + 'buyer'}>
                     <H4>Buyer</H4>
                 </Label>
-                <Switch checked={isBuyer} id={props.name + 'buyer'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'buyer')}>
+                <Switch checked={isBuyerField} id={name + 'buyer'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'buyer')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
             <Separator />
             <HorizontalContainer flex={1} alignItems="center" justifyContent="space-between">
-                <Label htmlFor={props.name + 'admin'}>
+                <Label htmlFor={name + 'admin'}>
                     <H4>Admin</H4>
                 </Label>
-                <Switch checked={isAdmin} disabled={user.id === props.id} opacity={user.id !== props.id ? 1 : 0.5} id={props.name + 'admin'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'admin')}>
+                <Switch checked={isAdminField} disabled={user.id === id} opacity={user.id !== id ? 1 : 0.5} id={name + 'admin'} size="$3" onCheckedChange={(checked) => handleChange(checked, 'admin')}>
                     <Switch.Thumb animation="bouncy" />
                 </Switch>
             </HorizontalContainer>
             <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
                 <SmallButtonWithAccent boxShadow="unset" icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
-                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === props.id} opacity={user.id !== props.id ? 1 : 0.5} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === id} opacity={user.id !== id ? 1 : 0.5} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
             </StyledGroup>
             {error && <SizableText color="$red1">{error}</SizableText>}
         </VerticalContainer>

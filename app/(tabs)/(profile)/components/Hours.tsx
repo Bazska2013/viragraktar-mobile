@@ -5,13 +5,13 @@ import React, {useState} from "react";
 import {Check} from "@tamagui/lucide-icons";
 import {Platform} from "react-native";
 
-const Hours = (props) => {
+const Hours = ({from, to, onSelectFrom, onSelectTo, day, closed, onClick}) => {
     const [fromDate, setFromDate] = useState(() => {
-        const [hours, minutes] = (props.from || "00:00").split(':').map(Number);
+        const [hours, minutes] = (from || "00:00").split(':').map(Number);
         return new Date(1970, 0, 1, hours, minutes);
     });
     const [toDate, setToDate] = useState(() => {
-        const [hours, minutes] = (props.to || "00:00").split(':').map(Number);
+        const [hours, minutes] = (to || "00:00").split(':').map(Number);
         return new Date(1970, 0, 1, hours, minutes);
     });
 
@@ -28,7 +28,7 @@ const Hours = (props) => {
             return;
         }
         setFromDate(new Date(date));
-        props.onSelectFrom(date.getHours() + ':' + date.getMinutes());
+        onSelectFrom(date.getHours() + ':' + date.getMinutes());
         setShowFromPicker(false);
     }
 
@@ -42,28 +42,28 @@ const Hours = (props) => {
             return;
         }
         setToDate(new Date(date));
-        props.onSelectTo(date.getHours() + ':' + date.getMinutes());
+        onSelectTo(date.getHours() + ':' + date.getMinutes());
         setShowToPicker(false);
     }
 
     return (
         <VerticalContainer width="100%">
             <H4>
-                {props.day}
+                {day}
             </H4>
 
             <Group orientation="horizontal" width="100%" justifyContent="space-between">
                 {Platform.OS === 'android' ? <>
                     <Group.Item>
                         <H6>From</H6>
-                        <SmallButtonWithAccent onPress={setShowFromPicker}>{props.from}</SmallButtonWithAccent>
+                        <SmallButtonWithAccent onPress={setShowFromPicker}>{from}</SmallButtonWithAccent>
                         {showFromPicker &&
                             <RNDateTimePicker is24Hour display="clock" style={{width: '100%'}} alignSelf="center" value={fromDate} onChange={handleFrom} mode="time" />
                         }
                     </Group.Item>
                     <Group.Item>
                         <H6>to</H6>
-                        <SmallButtonWithAccent onPress={setShowToPicker}>{props.to}</SmallButtonWithAccent>
+                        <SmallButtonWithAccent onPress={setShowToPicker}>{to}</SmallButtonWithAccent>
                         {showToPicker &&
                             <RNDateTimePicker is24Hour display="clock" alignSelf="center" value={toDate} onChange={handleTo} mode="time" />
                         }
@@ -83,14 +83,14 @@ const Hours = (props) => {
                                  justifyContent="space-between"
                                  alignItems="center"
             >
-                <Label htmlFor={'closed' + props.day}>Closed</Label>
-                <Checkbox id={'closed' + props.day} name="closed" checked={!!props.closed} onCheckedChange={props.onClick}>
+                <Label htmlFor={'closed' + day}>Closed</Label>
+                <Checkbox id={'closed' + day} name="closed" checked={!!closed} onCheckedChange={onClick}>
                     <Checkbox.Indicator>
                         <Check />
                     </Checkbox.Indicator>
                 </Checkbox>
             </HorizontalContainer>
-            {props.day !== 'Sun' &&
+            {day !== 'Sun' &&
                 <Separator />
             }
         </VerticalContainer>

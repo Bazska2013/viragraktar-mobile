@@ -6,7 +6,7 @@ import {Dimensions, useColorScheme, View} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useUserContext} from "@/app/(tabs)/_layout";
 
-const TransactionsTable = (props) => {
+const TransactionsTable = ({distShown, items, transShown, transactions, totalShown}) => {
     const [storeUsers, setStoreUsers] = useState([]);
 
     const {before, sign} = useUserContext();
@@ -67,7 +67,7 @@ const TransactionsTable = (props) => {
         <>
             {Dimensions.get('window').width > 768 ?
                 <VerticalContainer>
-                    {props.distShown && <VerticalContainer
+                    {distShown && <VerticalContainer
                         padding="$5"
                         borderRadius="$5"
                         marginTop="$5"
@@ -85,7 +85,7 @@ const TransactionsTable = (props) => {
                                 <H6 width="20%" textAlign="center">Revenue</H6>
                             </HorizontalContainer>
                             <Separator />
-                            {props.items.map((item, index) => {
+                            {items.map((item, index) => {
                                 return (
                                     <View key={item.id}>
                                         <HorizontalContainer alignItems="center">
@@ -99,7 +99,7 @@ const TransactionsTable = (props) => {
                                 )
                             })}
                     </VerticalContainer>}
-                    {props.transShown && <VerticalContainer
+                    {transShown && <VerticalContainer
                         backgroundColor={theme.colors.card}
                         padding="$5"
                         borderRadius="$5"
@@ -119,7 +119,7 @@ const TransactionsTable = (props) => {
                                 <H6 width="25%" textAlign="center">Total income</H6>
                             </HorizontalContainer>
                             <Separator />
-                            {props.transactions.map((item, index) => {
+                            {transactions.map((item, index) => {
                                 return (
                                     <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%">
@@ -135,7 +135,7 @@ const TransactionsTable = (props) => {
                             })}
                         </VerticalContainer>
                     </VerticalContainer>}
-                    {props.totalShown &&
+                    {totalShown &&
                         <HorizontalContainer alignItems="center" justifyContent="space-between"
                                              padding="$5"
                                              borderRadius="$5"
@@ -147,12 +147,12 @@ const TransactionsTable = (props) => {
                                              backgroundColor={theme.colors.card}
                         >
                             <H6>Total</H6>
-                            <H6>HUF {props.items.reduce((acc, item) => acc + item.amount * item.price, 0)}</H6>
+                            <H6>HUF {items.reduce((acc, item) => acc + item.amount * item.price, 0)}</H6>
                         </HorizontalContainer>
                     }
                 </VerticalContainer> :
                 <>
-                    {props.distShown && <EditContainer backgroundColor={theme.colors.card}>
+                    {distShown && <EditContainer backgroundColor={theme.colors.card}>
                         <H4 alignSelf="center">Item distribution</H4>
                         <VerticalContainer>
                             <HorizontalContainer alignItems="center">
@@ -162,7 +162,7 @@ const TransactionsTable = (props) => {
                                 <SizableText width="22%" textAlign="center" fontSize="$5">Revenue</SizableText>
                             </HorizontalContainer>
                             <Separator />
-                            {props.items.map((item, index) => {
+                            {items.map((item, index) => {
                                 return (
                                     <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%">
@@ -177,7 +177,7 @@ const TransactionsTable = (props) => {
                             })}
                         </VerticalContainer>
                     </EditContainer>}
-                    {props.transShown && <EditContainer backgroundColor={theme.colors.card}>
+                    {transShown && <EditContainer backgroundColor={theme.colors.card}>
                         <H4 alignSelf="center">Transactions history</H4>
                         <VerticalContainer>
                             <HorizontalContainer alignItems="center">
@@ -188,7 +188,7 @@ const TransactionsTable = (props) => {
                                 <SizableText textAlign="center" fontSize="$3" width="18%">Total income</SizableText>
                             </HorizontalContainer>
                             <Separator />
-                            {props.transactions.map((item, index) => {
+                            {transactions.map((item, index) => {
                                 return (
                                     <View key={item.id}>
                                         <HorizontalContainer alignItems="center" width="100%" justifyContent="space-between">
@@ -204,11 +204,11 @@ const TransactionsTable = (props) => {
                             })}
                         </VerticalContainer>
                     </EditContainer>}
-                    {props.totalShown &&
+                    {totalShown &&
                         <EditContainer backgroundColor={theme.colors.card}>
                             <HorizontalContainer alignItems="center" justifyContent="space-between">
                                 <H6>Total</H6>
-                                <H6>{before ? sign + props.items.reduce((acc, item) => acc + item.amount * item.price, 0) : props.items.reduce((acc, item) => acc + item.amount * item.price, 0) + " " + sign}</H6>
+                                <H6>{before ? sign + items.reduce((acc, item) => acc + item.amount * item.price, 0) : items.reduce((acc, item) => acc + item.amount * item.price, 0) + " " + sign}</H6>
                             </HorizontalContainer>
                         </EditContainer>
                     }

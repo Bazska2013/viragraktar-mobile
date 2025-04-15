@@ -12,7 +12,7 @@ import {router} from "expo-router";
 import {useUserContext} from "@/app/(tabs)/_layout";
 
 export default function ViewItem() {
-    const scrollViewRef = useRef<ScrollView>(null); // Create a ref for the ScrollView
+    const scrollViewRef = useRef<ScrollView>(null);
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
     const defaultId = useSearchParams().get('id');
     const [id, setId] = useState(defaultId);
