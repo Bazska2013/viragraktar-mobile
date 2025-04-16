@@ -1,4 +1,4 @@
-import {EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import {H2, Input, YStack} from "tamagui";
 import {Filter, FilterX, Search} from "@tamagui/lucide-icons";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -77,7 +77,7 @@ const SellFilterBar = ({onTextChange, onLabelChange}) => {
                         onChangeText={handleChangeSearch}
                     />
                 </YStack>
-                <SmallButton right={0} position="absolute" icon={searchOpen ? FilterX : Filter} onPress={() => handleChangeOpen()}>{Dimensions.get('window').width > 768 ? searchOpen ? 'Remove filters' : 'Filter' : ''}</SmallButton>
+                <BigButton size="$3" right={0} position="absolute" icon={searchOpen ? FilterX : Filter} onPress={() => handleChangeOpen()}>{Dimensions.get('window').width > 768 ? searchOpen ? 'Remove filters' : 'Filter' : ''}</BigButton>
             </HorizontalContainer>
             <YStack animation="quick" opacity={searchOpen ? 1 : 0} height={searchOpen ? '100%' : '0%'}>
                 <FlatList

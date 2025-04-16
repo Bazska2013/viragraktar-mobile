@@ -13,11 +13,17 @@
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to take picture of the items you want to upload."
       },
-      "bundleIdentifier": "com.anonymous.viragraktarmobile"
+      "bundleIdentifier": "com.anonymous.viragraktarmobile",
+      "icon": {
+        "dark": "./assets/icons/icon-dark.png",
+        "light": "./assets/icons/icon-light.png",
+        "tinted": "./assets/icons/icon-tinted.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -36,10 +42,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/icons/splash-icon-dark.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "image": "./assets/icons/splash-icon-light.png",
+            "backgroundColor": "#000000"
+          }
         }
       ],
       [

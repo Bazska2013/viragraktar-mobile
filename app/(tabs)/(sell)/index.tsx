@@ -84,10 +84,15 @@ export default function Sell() {
                               keyExtractor={(item) => item.id.toString()}
                               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
-                              initialNumToRender={10}
+                              initialNumToRender={5}
                               maxToRenderPerBatch={10}
+                              getItemLayout={(data, index) => ({
+                                  length: Dimensions.get('window').width >= 768 ? 200 : 300,
+                                  offset: Dimensions.get('window').width >= 768 ? 200 : 300 * index,
+                                  index
+                              })}
                               columnWrapperStyle={Dimensions.get('window').width >= 768 ? {gap: 20, width: '90%', alignSelf: 'center'} : undefined}
-                              windowSize={10}
+                              windowSize={5}
                               ListEmptyComponent={
                                   <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
                                       <H4>Oops!</H4>

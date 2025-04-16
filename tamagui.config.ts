@@ -51,6 +51,7 @@ export const SmallButtonWithAccent = styled(Button, {
     backgroundColor: '#FBF9EF',
     boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
     animation: 'quick',
+    color: 'black',
     hoverStyle: {
         backgroundColor: '#faf0e6',
     },
@@ -72,6 +73,7 @@ export const SmallButton = styled(Button, {
     backgroundColor: '#f5f5f5',
     boxShadow: "0px 0px 10px 1px rgba(0,0,0,0.1)",
     animation: 'quick',
+    color: 'black',
     hoverStyle: {
         backgroundColor: '#f0f0f0',
     },
@@ -90,9 +92,9 @@ export const SmallButton = styled(Button, {
 });
 
 export const StyledListItem = styled(ListItem, {
-    backgroundColor: '#ffffff',
     pressStyle: {
-        backgroundColor: '#fafafa',
+        backgroundColor: '#292023',
+        color: 'white',
     }
 });
 

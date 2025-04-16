@@ -109,7 +109,6 @@ export default function Profile() {
         Alert.alert(type ? 'Leave store' : 'Log out', type ? 'Please confirm if you want to leave the store\n(Note: you will also be logged out)' : 'Please confirm if you want to log out', [
             {
                 text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
             },
             (type ? {
