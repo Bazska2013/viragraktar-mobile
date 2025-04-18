@@ -14,6 +14,7 @@ import {router} from "expo-router";
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
 import {useState} from "react";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function GenerateReport() {
     const {date, setDate, start, setStart, end, setEnd, oneDay, setOneDay, showDistribution, setShowDistribution, showRevenue, setShowRevenue, showTable, setShowTable, showPie, setShowPie, showLine, setShowLine, showDistTable, setShowDistTable, setShowTransactionTable, showTotal, setShowTotal, getReadableDate} = useReportContext();
@@ -22,6 +23,7 @@ export default function GenerateReport() {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const handleSetDate = (event: DateTimePickerEvent, date: Date) => {
         const {
@@ -87,6 +89,7 @@ export default function GenerateReport() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <VerticalContainer>
                         <H4>Get data from</H4>

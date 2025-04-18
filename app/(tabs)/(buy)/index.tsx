@@ -1,6 +1,6 @@
 import {Dimensions, FlatList, RefreshControl, SafeAreaView, useColorScheme, View, StyleSheet, Platform, StatusBar} from "react-native";
-import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import {useEffect, useState} from "react";
+import {DarkTheme, DefaultTheme, useIsFocused} from "@react-navigation/native";
+import {useCallback, useEffect, useState} from "react";
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -9,6 +9,7 @@ import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent,} f
 import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {Combine, Plus, Search, X} from "@tamagui/lucide-icons";
 import BuyFilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default  function Buy() {
 
@@ -19,12 +20,15 @@ export default  function Buy() {
     const [filterLabels, setFilterLabels] = useState([]);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const {user, store, getUserData} = useUserContext();
 
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
     const [showCombine, setShowCombine] = useState(false);
+
+    const isFocused = useIsFocused();
 
     const handleScroll = (event) => {
         const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -37,6 +41,18 @@ export default  function Buy() {
         fetchItems().then(() => setIsRefreshing(false));
     }
 
+    const handleNewItem = useCallback(() => {
+        router.push('/newItem');
+    }, []);
+
+    const handleCombineItems = useCallback(() => {
+        router.push('/combineItems');
+    }, []);
+
+    const handleGoToProfile = useCallback(() => {
+        router.push('/(tabs)/(profile)');
+    }, []);
+
     useEffect(() => {
         getUserData()
         fetchItems().then(() => {
@@ -48,20 +64,22 @@ export default  function Buy() {
     }, []);
 
     useEffect(() => {
-        if (filterString.length > 0) {
-            setFilteredItems(items.filter((item) => item.name.toLowerCase().includes(filterString.toLowerCase())));
-        } else {
-            setFilteredItems(items);
-        }
-    }, [filterString]);
+        let result = items;
 
-    useEffect(() => {
-        if (filterLabels.length > 0) {
-            setFilteredItems(items.filter((item) => JSON.parse(item.description).labels.some(label => filterLabels.includes(label))));
-        } else {
-            setFilteredItems(items);
+        if (filterString.length > 0) {
+            result = result.filter(item =>
+                item.name.toLowerCase().includes(filterString.toLowerCase())
+            );
         }
-    }, [filterLabels]);
+
+        if (filterLabels.length > 0) {
+            result = result.filter(item =>
+                JSON.parse(item.description).labels.some(label => filterLabels.includes(label))
+            );
+        }
+
+        setFilteredItems(result);
+    }, [filterString, filterLabels, items]);
 
     useEffect(() => {
         if (selectedItems.length > 1) {
@@ -72,18 +90,20 @@ export default  function Buy() {
     }, [selectedItems]);
 
     return (
-        <SafeAreaView style={[styles.AndroidSafeArea]}>
+        <SafeAreaView style={[styles.SafeArea]}>
             {store ? <>
                 {user?.is_buyer ? <>
                     <FlatList data={filteredItems}
                               style={{height: '100%'}}
+                              contentContainerStyle={{paddingBottom: tabBarHeight + 40}}
                               numColumns={Dimensions.get('window').width >= 768 ? 2 : 1}
                               renderItem={({item}) => <Item key={item.id} props={item} />}
                               keyExtractor={(item) => item.id.toString()}
                               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
-                              initialNumToRender={5}
+                              initialNumToRender={10}
                               maxToRenderPerBatch={10}
+                              updateCellsBatchingPeriod={25}
                               getItemLayout={(data, index) => ({
                                     length: Dimensions.get('window').width >= 768 ? 200 : 300,
                                     offset: Dimensions.get('window').width >= 768 ? 200 : 300 * index,
@@ -103,29 +123,29 @@ export default  function Buy() {
                                   <BuyFilterBar onTextChange={setFilterString} onLabelChange={setFilterLabels} />
                               }
                               ListFooterComponent={
-                                  <BigButton marginTop={20} marginBottom="5%" width="90%" alignSelf="center" icon={Plus} onPress={() => {router.push('/newItem')}}>{Dimensions.get('window').width >= 768 ? ' New item' : ''}</BigButton>
+                                  <BigButton marginTop={20} width="90%" alignSelf="center" icon={Plus} onPress={handleNewItem}>{Dimensions.get('window').width >= 768 ? ' New item' : ''}</BigButton>
                               }
                     />
                     <BigButton
-                        x={!isAtBottom ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
+                        x={isFocused && !isAtBottom ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
                         animation="quick"
                         icon={Plus}
                         position="absolute"
-                        bottom={10}
+                        bottom={tabBarHeight + 10}
                         right={10}
-                        onPress={() => {router.push('/newItem')}}
+                        onPress={handleNewItem}
                     >
                         {Dimensions.get('window').width >= 768 ? 'New item' : ''}
                     </BigButton>
                     <SmallButtonWithAccent
-                        x={showCombine ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
+                        x={isFocused && showCombine ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
                         size="$5"
                         animation="quick"
                         icon={Combine}
                         position="absolute"
-                        bottom={100}
+                        bottom={tabBarHeight + 100}
                         right={20}
-                        onPress={() => router.push('/combineItems')}
+                        onPress={handleCombineItems}
                     >
                         {Dimensions.get('window').width >= 768 ? 'New item' : ''}
                     </SmallButtonWithAccent>
@@ -139,7 +159,7 @@ export default  function Buy() {
                 <View justifyContent="center" alignItems="center" alignSelf="center" height="100%">
                     <H2>No store membership found</H2>
                     <Paragraph>You are not yet a part of a store. Navigate to the Profile page to join or create one.</Paragraph>
-                    <SmallButtonWithAccent onPress={() => router.replace('/(tabs)/(profile)')}>Go to Profile</SmallButtonWithAccent>
+                    <SmallButtonWithAccent onPress={handleGoToProfile}>Go to Profile</SmallButtonWithAccent>
                 </View>
             </>}
         </SafeAreaView>
@@ -147,7 +167,7 @@ export default  function Buy() {
 }
 
 const styles = StyleSheet.create({
-    AndroidSafeArea: {
+    SafeArea: {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         flex: 1,
     }

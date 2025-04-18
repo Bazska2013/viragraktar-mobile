@@ -1,5 +1,5 @@
 import {SafeAreaView, useColorScheme, Platform} from "react-native";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import * as SecureStore from 'expo-secure-store';
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -15,6 +15,8 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(false);
 
+    const passwordRef = useRef(null)
+
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
 
     async function save(key: string, value: any) {
@@ -25,6 +27,11 @@ export default function Login() {
         let response;
         setIsLoading(true);
         setError('');
+        if (!validInput) {
+            setError('Invalid email or password');
+            setIsLoading(false);
+            return;
+        }
         try {
             response = await axios.post('/api/login', {
                 email: email,
@@ -103,6 +110,8 @@ export default function Login() {
                             autoFocus
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            returnKeyType="next"
+                            onSubmitEditing={() => passwordRef.current?.focus()}
                         />
                     </VerticalContainer>
                     <Separator />
@@ -111,6 +120,7 @@ export default function Login() {
                             <H4>Password</H4>
                         </Label>
                         <Input
+                            ref={passwordRef}
                             backgroundColor={theme.colors.card}
                             id="password"
                             flex={1}
@@ -120,10 +130,12 @@ export default function Login() {
                             value={password}
                             secureTextEntry
                             autoCapitalize="none"
+                            returnKeyType="send"
+                            onSubmitEditing={handleLogin}
                         />
                     </VerticalContainer>
                     <Separator />
-                    <SizableText color="$red1">{error}</SizableText>
+                    <SizableText>{error}</SizableText>
                     <BigButton onPress={() => {handleLogin()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign in"}</BigButton>
                     <Separator />
                     <SizableText>Don't have an account yet?</SizableText>

@@ -1,7 +1,7 @@
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
 import {Button, H4, Image, Input, SizableText, Square} from "tamagui";
 import flowerImage from "@/assets/images/defaultFlower.png";
-import React, {memo, useEffect, useState} from "react";
+import React, {memo, useCallback, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {BASE_URL} from "@/scripts/axiosConfig";
@@ -42,12 +42,44 @@ const Item = ({item}) => {
         }
     };
 
-    useEffect(() => {
-        if (amount === 0) {
-            setIsChanged(false);
-            removeFromCart(item)
+    const handleAdd = useCallback(() => {
+        if (amount < item.stock) {
+            setAmount(amount + 1);
+            setIsChanged(true);
         }
     }, [amount]);
+
+    const handleRemove = useCallback(() => {
+        if (amount > 0) {
+            setAmount(amount - 1);
+            setIsChanged(true);
+        } else {
+            setAmount(0);
+            setIsChanged(false);
+            removeFromCart(item);
+        }
+    }, [amount]);
+
+    const handleField = useCallback((value: string) => {
+        if (Number(value) > 0 && Number(value) <= item.stock) {
+            setAmount(Number(value));
+            setIsChanged(true);
+        } else if (Number(value) === 0 && Number(value) <= item.stock) {
+            setAmount(0);
+            setIsChanged(false);
+            removeFromCart(item);
+        }
+    }, [item]);
+
+    const handleSetAmountToZero = useCallback(() => {
+        setAmount(0);
+        setIsChanged(false);
+        removeFromCart(item);
+    }, [item]);
+
+    const handleViewItem = useCallback(() => {
+        router.push(`/viewItem?id=${item.id}`);
+    }, [item]);
 
     const handleAddToCart = () => {
         if (amount > 0) {
@@ -70,7 +102,7 @@ const Item = ({item}) => {
             opacity={item.stock === 0 ? 0.5 : 1}
             gap={0}
         >
-            <Square animation="quick" pressStyle={{scale: 0.9}} scale={isChanged ? 1 : 0} opacity={isChanged ? 1 : 0} alignSelf="flex-end" marginBottom={0} onPress={() => setAmount(0)}>
+            <Square animation="quick" pressStyle={{scale: 0.9}} scale={isChanged ? 1 : 0} opacity={isChanged ? 1 : 0} alignSelf="flex-end" marginBottom={0} onPress={handleSetAmountToZero}>
                 <X color="#292023" size="$1" />
             </Square>
             <HorizontalContainer
@@ -79,7 +111,7 @@ const Item = ({item}) => {
                 <VerticalContainer
                     flex={3}
                     alignItems="center"
-                    onPress={() => handleChange('', 'plus')}
+                    onPress={handleAdd}
                 >
                     <Image borderRadius="$5" source={{
                         uri: item.image ? BASE_URL + "/images/" + item.image : flowerImage,
@@ -94,27 +126,27 @@ const Item = ({item}) => {
                     flex={2}
                 >
                     <StyledGroup orientation='vertical'>
-                        <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={() => handleChange('', 'plus')} />
+                        <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={handleAdd} />
                         <Input
                             backgroundColor={theme.colors.card}
                             flex={1}
                             keyboardType='numeric'
                             value={amount.toString()}
-                            onChangeText={(value) => handleChange(value, 'field')}
+                            onChangeText={handleField}
                             alignSelf="center"
                             textAlign="center"
                             width="100%"
                             borderWidth={0}
                         />
-                        <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'minus')} />
+                        <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={handleRemove} />
                     </StyledGroup>
-                    <SmallButton icon={FileSearch} onPress={() => router.push(`/viewItem?id=${item.id}`)}>View details</SmallButton>
+                    <SmallButton icon={FileSearch} onPress={handleViewItem}>View details</SmallButton>
                     <SmallButtonWithAccent
                         boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}
                         icon={ShoppingCart}
                         disabled={!isChanged}
                         opacity={isChanged ? 1 : 0.5}
-                        onPress={() => handleAddToCart()}
+                        onPress={handleAddToCart}
                     >Add to cart</SmallButtonWithAccent>
                 </VerticalContainer>
             </HorizontalContainer>

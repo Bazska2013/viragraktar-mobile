@@ -3,11 +3,13 @@ import {H4, ScrollView, Separator, SizableText} from "tamagui";
 import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ProfileDetails() {
     const {user, store} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     return (
         <SafeAreaView>
@@ -15,6 +17,7 @@ export default function ProfileDetails() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <HorizontalContainer
                         alignItems="center"

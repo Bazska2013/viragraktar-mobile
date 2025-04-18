@@ -2,7 +2,7 @@ import {BigButton, EditContainer, HorizontalContainer, SmallButton, VerticalCont
 import {H2, Input, YStack} from "tamagui";
 import {Filter, FilterX, Search} from "@tamagui/lucide-icons";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Dimensions, FlatList, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 
@@ -30,13 +30,13 @@ const SellFilterBar = ({onTextChange, onLabelChange}) => {
         onTextChange(value);
     }
 
-    const handleChangeLabel = (label) => {
-        if (selectedLabels.includes(label)) {
-            removeLabel(label);
+    const handleChangeLabel = useCallback((value: string) => {
+        if (selectedLabels.includes(value)) {
+            removeLabel(value);
         } else {
-            addLabel(label);
+            addLabel(value);
         }
-    }
+    }, [selectedLabels]);
 
     useEffect(() => {
         onLabelChange(selectedLabels);
@@ -77,7 +77,7 @@ const SellFilterBar = ({onTextChange, onLabelChange}) => {
                         onChangeText={handleChangeSearch}
                     />
                 </YStack>
-                <BigButton size="$3" right={0} position="absolute" icon={searchOpen ? FilterX : Filter} onPress={() => handleChangeOpen()}>{Dimensions.get('window').width > 768 ? searchOpen ? 'Remove filters' : 'Filter' : ''}</BigButton>
+                <BigButton size="$3" right={0} position="absolute" icon={searchOpen ? FilterX : Filter} onPress={handleChangeOpen}>{Dimensions.get('window').width > 768 ? searchOpen ? 'Remove filters' : 'Filter' : ''}</BigButton>
             </HorizontalContainer>
             <YStack animation="quick" opacity={searchOpen ? 1 : 0} height={searchOpen ? '100%' : '0%'}>
                 <FlatList

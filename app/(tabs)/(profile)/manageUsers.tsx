@@ -5,6 +5,7 @@ import axios from "@/scripts/axiosConfig";
 import {VerticalContainer} from "@/tamagui.config";
 import {ChevronDown} from "@tamagui/lucide-icons";
 import ManageUser from "@/app/(tabs)/(profile)/components/ManageUser";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ManageUsers() {
     const [users, setUsers] = useState([]);
@@ -12,6 +13,8 @@ export default function ManageUsers() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const tabBarHeight = useBottomTabBarHeight();
 
     const fetchUsers = async () => {
         let response;
@@ -44,7 +47,7 @@ export default function ManageUsers() {
                         automaticallyAdjustKeyboardInsets={true}
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <VerticalContainer width="90%" alignSelf="center">
+                <VerticalContainer width="90%" alignSelf="center" marginBottom={tabBarHeight}>
                     {isLoading ? <Spinner /> : error ? <H4>An error occurred while fetching the users. Error: {error}</H4> :
                         <Accordion overflow="hidden" type="multiple"
                                    boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"

@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {Plus, Save, X} from "@tamagui/lucide-icons";
 import axios from "@/scripts/axiosConfig";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ModifyLabels() {
     const {store, setStore} = useUserContext();
@@ -16,13 +17,19 @@ export default function ModifyLabels() {
     const [isChanged, setIsChanged] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     useEffect(() => {
         setLabels(JSON.parse(store.labels));
     }, [store]);
 
     const handleAddLabel = () => {
+        setError(null);
         if (label.length > 0) {
+            if (labels.includes(label)) {
+                setError('Label already exists');
+                return;
+            }
             setLabels([...labels, label]);
             setLabel('');
         }
@@ -30,6 +37,7 @@ export default function ModifyLabels() {
     }
 
     const handleRemoveLabel = (label) => {
+        setError(null);
         setLabels(labels.filter((l) => l !== label));
         setIsChanged(true);
     }
@@ -59,6 +67,7 @@ export default function ModifyLabels() {
         setLabels(JSON.parse(store.labels));
         setLabel('');
         setIsChanged(false);
+        setError(null);
     }
 
     return (
@@ -66,8 +75,15 @@ export default function ModifyLabels() {
             <ScrollView style={{height: '100%'}}
                         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={resetChanges} />}
                         keyboardDismissMode='interactive'
+                        contentInsetAdjustmentBehavior="automatic"
+                        contentContainerStyle={{
+                            flexGrow: 1,
+                        }}
                         automaticallyAdjustKeyboardInsets={true}>
-                <EditContainer>
+                <EditContainer
+                    backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
+                >
                     <H4>Available labels</H4>
                     <Paragraph>Press the available labels listed below to remove them from your store. Items that already have the selected label will continue to have it. You have to manually remove them from the individual items.</Paragraph>
                     <HorizontalContainer flexWrap="wrap">
@@ -83,10 +99,12 @@ export default function ModifyLabels() {
                             backgroundColor={theme.colors.card}
                             flex={1}
                             borderWidth={2}
-                            type="text"
                             name="label"
                             value={label}
+                            returnKeyType="send"
+                            blurOnSubmit={false}
                             onChangeText={setLabel}
+                            onSubmitEditing={handleAddLabel}
                         />
                         <SmallButtonWithAccent icon={Plus} onPress={() => handleAddLabel()} />
                     </HorizontalContainer>

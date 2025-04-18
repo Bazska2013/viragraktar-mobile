@@ -8,9 +8,9 @@ import {
     useColorScheme,
     View
 } from "react-native";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {router} from "expo-router";
-import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {DarkTheme, DefaultTheme, useIsFocused} from "@react-navigation/native";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
@@ -18,10 +18,12 @@ import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
 import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import SellFilterBar from "@/app/(tabs)/(sell)/SellFilterBar";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function Sell() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const {user, store, getUserData} = useUserContext();
     const {items, fetchItems, cartItems} = useItemsContext();
@@ -30,9 +32,19 @@ export default function Sell() {
     const [filterString, setFilterString] = useState('');
     const [filterLabels, setFilterLabels] = useState([]);
 
+    const isFocused = useIsFocused();
+
     const [showCartButton, setShowCartButton] = useState(false);
 
     const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const handleGoToProfile = useCallback(() => {
+        router.push('/(tabs)/(profile)');
+    }, []);
+
+    const handleShowCart = useCallback(() => {
+        router.push('/cart');
+    }, []);
 
     const handleRefresh = () => {
         setIsRefreshing(true);
@@ -73,19 +85,21 @@ export default function Sell() {
     }, [filterLabels]);
 
     return (
-        <SafeAreaView style={[styles.AndroidSafeArea]}>
+        <SafeAreaView style={[styles.SafeArea]}>
             {store ? <>
                 {user?.is_seller ? <>
                     <FlatList data={filteredItems}
                               style={{height: '100%'}}
+                              contentContainerStyle={{paddingBottom: tabBarHeight + 40}}
                               numColumns={Dimensions.get('window').width >= 768 ? 2 : 1}
                               renderItem={({item}) =>
                                   <Item key={item.id} item={item} />}
                               keyExtractor={(item) => item.id.toString()}
                               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
-                              initialNumToRender={5}
+                              initialNumToRender={10}
                               maxToRenderPerBatch={10}
+                              updateCellsBatchingPeriod={25}
                               getItemLayout={(data, index) => ({
                                   length: Dimensions.get('window').width >= 768 ? 200 : 300,
                                   offset: Dimensions.get('window').width >= 768 ? 200 : 300 * index,
@@ -105,12 +119,12 @@ export default function Sell() {
                     />
                     <BigButton
                         animation="quick"
-                        x={showCartButton ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
+                        x={isFocused && showCartButton ? 0 : Dimensions.get('window').width >= 768 ? 200 : 100}
                         position="absolute"
-                        bottom={10}
+                        bottom={tabBarHeight + 10}
                         right={10}
                         icon={ShoppingBasket}
-                        onPress={() => router.push('/cart')}
+                        onPress={handleShowCart}
                     >
                         {Dimensions.get('window').width >= 768 ? 'Checkout' : ''}
                     </BigButton>
@@ -124,7 +138,7 @@ export default function Sell() {
                 <View justifyContent="center" alignItems="center" alignSelf="center" height="100%">
                     <H2>No store membership found</H2>
                     <Paragraph>You are not yet a part of a store. Navigate to the Profile page to join or create one.</Paragraph>
-                    <SmallButtonWithAccent onPress={() => router.replace('/(tabs)/(profile)')}>Go to Profile</SmallButtonWithAccent>
+                    <SmallButtonWithAccent onPress={handleGoToProfile}>Go to Profile</SmallButtonWithAccent>
                 </View>
             </>}
         </SafeAreaView>
@@ -132,7 +146,7 @@ export default function Sell() {
 }
 
 const styles = StyleSheet.create({
-    AndroidSafeArea: {
+    SafeArea: {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
         flex: 1,
     }

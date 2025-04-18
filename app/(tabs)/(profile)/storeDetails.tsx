@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import * as Clipboard from 'expo-clipboard';
 import {ClipboardCopy} from "@tamagui/lucide-icons";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function StoreDetails() {
     const {store, sign} = useUserContext();
@@ -16,6 +17,7 @@ export default function StoreDetails() {
     const [copied, setCopied] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const getStoreId = async () => {
         let response;
@@ -65,6 +67,7 @@ export default function StoreDetails() {
             >
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <H4>Store name</H4>
                     <SizableText>{store?.name}</SizableText>

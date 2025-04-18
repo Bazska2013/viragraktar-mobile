@@ -1,6 +1,6 @@
 import {SafeAreaView, useColorScheme, Platform,} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {router} from "expo-router";
 import axios from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
@@ -19,9 +19,19 @@ export default  function Register() {
     const [isLoading, setIsLoading] = useState(false);
     const [validInput, setValidInput] = useState(false);
 
+    const nameRef = useRef(null);
+    const passwordRef = useRef(null);
+    const passwordConfirmRef = useRef(null);
+
     const handleRegister = async () => {
         let response;
         setIsLoading(true);
+        setError('');
+        if (!validInput) {
+            setError('Invalid email or password');
+            setIsLoading(false);
+            return;
+        }
         try {
             response = await axios.post('/api/register', {
                 email: email,
@@ -34,9 +44,7 @@ export default  function Register() {
             setError(error.response?.data?.message);
         } finally {
             setIsLoading(false);
-            if (response?.status === 200) {
-                router.back();
-            }
+            router.back();
         }
     }
 
@@ -72,6 +80,8 @@ export default  function Register() {
                             autoFocus
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            returnKeyType="next"
+                            onSubmitEditing={() => nameRef.current?.focus()}
                         />
                     </VerticalContainer>
                     <Separator />
@@ -80,6 +90,7 @@ export default  function Register() {
                             <H4>Name</H4>
                         </Label>
                         <Input
+                            ref={nameRef}
                             backgroundColor={theme.colors.card}
                             id="name"
                             flex={1}
@@ -88,6 +99,8 @@ export default  function Register() {
                             onChangeText={setName}
                             value={name}
                             autoCapitalize="words"
+                            returnKeyType="next"
+                            onSubmitEditing={() => passwordRef.current?.focus()}
                         />
                     </VerticalContainer>
                     <Separator />
@@ -96,6 +109,7 @@ export default  function Register() {
                             <H4>Password</H4>
                         </Label>
                         <Input
+                            ref={passwordRef}
                             backgroundColor={theme.colors.card}
                             id="password"
                             flex={1}
@@ -106,6 +120,8 @@ export default  function Register() {
                             secureTextEntry
                             autoCapitalize="none"
                             textContentType='oneTimeCode'
+                            returnKeyType="next"
+                            onSubmitEditing={() => passwordConfirmRef.current?.focus()}
                         />
                     </VerticalContainer>
                     <Separator />
@@ -114,6 +130,7 @@ export default  function Register() {
                             <H4>Password again</H4>
                         </Label>
                         <Input
+                            ref={passwordConfirmRef}
                             backgroundColor={theme.colors.card}
                             id="password2"
                             flex={1}
@@ -124,9 +141,11 @@ export default  function Register() {
                             secureTextEntry
                             autoCapitalize="none"
                             textContentType='oneTimeCode'
+                            returnKeyType="send"
+                            onSubmitEditing={handleRegister}
                         />
                     </VerticalContainer>
-                    <SizableText color="$red1">{error}</SizableText>
+                    <SizableText>{error}</SizableText>
                     <Separator />
                     <BigButton onPress={() => {handleRegister()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Sign up"}</BigButton>
                 </EditContainer>

@@ -7,11 +7,13 @@ import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {UserPen} from "@tamagui/lucide-icons";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ChangeName() {
     const {user, setUser} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [name, setName] = useState(user?.name);
     const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +44,7 @@ export default function ChangeName() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <Label htmlFor="name">
                         <H4>Name</H4>
@@ -55,6 +58,8 @@ export default function ChangeName() {
                         onChangeText={setName}
                         autoFocus
                         autoCapitalize="words"
+                        returnKeyType="send"
+                        onSubmitEditing={handleSubmit}
                     />
                     <Separator />
                     <BigButton icon={UserPen} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> : 'Change name'}</BigButton>

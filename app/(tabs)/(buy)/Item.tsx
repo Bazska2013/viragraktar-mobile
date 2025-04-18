@@ -1,5 +1,5 @@
 import {Dimensions, Text, useColorScheme} from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {BASE_URL} from "@/scripts/axiosConfig";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
@@ -42,25 +42,33 @@ const Item = ({props} : {props: any}) => {
         }
     }
 
-    const handleChange = (value: string, type: string) => {
-        switch (type) {
-            case 'add':
-                setItem({...item, stock: item.stock + 1});
-                break;
-            case 'remove':
-                if (item.stock > 0) {
-                    setItem({...item, stock: item.stock - 1});
-                }
-                break;
-            case 'field':
-                const parsedValue = parseInt(value);
-                if (!isNaN(parsedValue) && parsedValue >= 0) {
-                    setItem({...item, stock: parsedValue});
-                }
-                break;
-        }
+    const handleAdd = useCallback(() => {
+        setItem({...item, stock: item.stock + 1});
         setIsChanged(true);
-    }
+    }, [item]);
+
+    const handleRemove = useCallback(() => {
+        if (item.stock > 0) {
+            setItem({...item, stock: item.stock - 1});
+            setIsChanged(true);
+        }
+    }, [item]);
+
+    const handleField = useCallback((value: string) => {
+        const parsedValue = parseInt(value);
+        if (!isNaN(parsedValue) && parsedValue >= 0) {
+            setItem({...item, stock: parsedValue});
+            setIsChanged(true);
+        }
+    }, [item]);
+
+    const handleSetSelected = useCallback(() => {
+        setSelected(!selected);
+    }, [selected]);
+
+    const handleEditItem = useCallback(() => {
+        router.push(`/editItem?id=${item.id}`);
+    }, [item]);
 
     const handleCancel = () => {
         setItem(props);
@@ -106,7 +114,7 @@ const Item = ({props} : {props: any}) => {
             <VerticalContainer
                 flex={2}
                 alignItems="center"
-                onPress={() => handleChange('', 'add')}
+                onPress={handleAdd}
             >
                 <Image borderRadius="$5" source={{
                     uri: item.image ? BASE_URL + "/images/" + item.image : flowerImage,
@@ -120,33 +128,33 @@ const Item = ({props} : {props: any}) => {
                 flex={1}
             >
                 <StyledGroup orientation='vertical'>
-                    <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={() => handleChange('', 'add')} />
+                    <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={handleAdd} />
                     <Input
                         backgroundColor={theme.colors.card}
                         flex={1}
                         keyboardType='numeric'
                         value={item.stock.toString()}
-                        onChangeText={(value) => handleChange(value, 'field')}
+                        onChangeText={handleField}
                         alignSelf="center"
                         textAlign="center"
                         width="100%"
                         borderWidth={0}
                     />
-                    <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={() => handleChange('', 'remove')} />
+                    <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={handleRemove} />
                 </StyledGroup>
                 <Group
                     orientation='horizontal'
                     boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}
                 >
-                    <SmallButton boxShadow='unset' icon={X} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleCancel()} width="50%" />
-                    <SmallButton boxShadow='unset' icon={Check} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSubmit()} width="50%" />
+                    <SmallButton boxShadow='unset' icon={X} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={handleCancel} width="50%" />
+                    <SmallButton boxShadow='unset' icon={Check} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={handleSubmit} width="50%" />
                 </Group>
                 <SmallButtonWithAccent
-                    onPress={() => {router.push(`/editItem?id=${item.id}`);}}
+                    onPress={handleEditItem}
                 >
                     Edit Item
                 </SmallButtonWithAccent>
-                <SmallButton width="100%" icon={selected ? CheckSquare : Square} onPress={() => setSelected(!selected)}>Select</SmallButton>
+                <SmallButton width="100%" icon={selected ? CheckSquare : Square} onPress={handleSetSelected}>Select</SmallButton>
             </VerticalContainer>
         </HorizontalContainer>
     )

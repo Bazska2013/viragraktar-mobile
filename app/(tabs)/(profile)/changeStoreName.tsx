@@ -7,12 +7,14 @@ import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tam
 import {BigButton, EditContainer} from "@/tamagui.config";
 import {FilePen} from "@tamagui/lucide-icons";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ChangeStoreName() {
     const {store, setStore} = useUserContext()
 
     const [name, setName] = useState(store?.name)
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -41,6 +43,7 @@ export default function ChangeStoreName() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <Label htmlFor="name">
                         <H4>Store name</H4>
@@ -54,6 +57,8 @@ export default function ChangeStoreName() {
                         value={name}
                         autoCapitalize="words"
                         autoFocus
+                        returnKeyType="send"
+                        onSubmitEditing={handleSubmit}
                     />
                     <Separator />
                     <BigButton icon={FilePen} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change store name'}</BigButton>

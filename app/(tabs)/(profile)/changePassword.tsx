@@ -1,11 +1,12 @@
 import {SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {BookKey} from "@tamagui/lucide-icons";
 import axios from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ChangePassword() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -13,11 +14,15 @@ export default function ChangePassword() {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [validData, setValidData] = useState<boolean>(false);
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const newPasswordRef = useRef(null);
+    const passwordConfirmationRef = useRef(null);
 
     const handleSubmit = async () => {
         if (validData) {
@@ -54,6 +59,7 @@ export default function ChangePassword() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <VerticalContainer>
                         <Label htmlFor="current">
@@ -70,6 +76,8 @@ export default function ChangePassword() {
                             secureTextEntry
                             autoCapitalize="none"
                             autoFocus
+                            returnKeyType="next"
+                            onSubmitEditing={() => newPasswordRef.current?.focus()}
                         />
                     </VerticalContainer>
                     <Separator />
@@ -78,6 +86,7 @@ export default function ChangePassword() {
                             <H4>New password</H4>
                         </Label>
                         <Input
+                            ref={newPasswordRef}
                             backgroundColor={theme.colors.card}
                             id="new"
                             flex={1}
@@ -87,6 +96,8 @@ export default function ChangePassword() {
                             value={newPassword}
                             secureTextEntry
                             autoCapitalize="none"
+                            returnKeyType="next"
+                            onSubmitEditing={() => passwordConfirmationRef.current?.focus()}
                         />
                     </VerticalContainer>
                     <Separator />
@@ -95,6 +106,7 @@ export default function ChangePassword() {
                             <H4>Password confirmation</H4>
                         </Label>
                         <Input
+                            ref={passwordConfirmationRef}
                             backgroundColor={theme.colors.card}
                             id="confirm"
                             flex={1}
@@ -104,6 +116,8 @@ export default function ChangePassword() {
                             value={passwordConfirmation}
                             secureTextEntry
                             autoCapitalize="none"
+                            returnKeyType="send"
+                            onSubmitEditing={handleSubmit}
                         />
                     </VerticalContainer>
                     <Separator />

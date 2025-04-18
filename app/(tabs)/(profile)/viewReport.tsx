@@ -20,12 +20,14 @@ import {captureRef} from 'react-native-view-shot';
 import {Download} from "@tamagui/lucide-icons";
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ViewReport() {
     const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal, getReadableDate} = useReportContext();
     const [isLoading, setIsLoading] = useState(true);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const fetchDayData = async () => {
         setIsLoading(true);

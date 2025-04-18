@@ -8,12 +8,14 @@ import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {Calendar} from "@tamagui/lucide-icons";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ChangeOpeningHours () {
     const {store, setStore} = useUserContext()
     const [openingHours, setOpeningHours] = useState(JSON.parse(store.opening_hours));
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -42,6 +44,7 @@ export default function ChangeOpeningHours () {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <OpeningHours openingHours={openingHours} setFieldValue={(value)=> setOpeningHours(value)} />
                     <Separator />

@@ -1,5 +1,5 @@
 import {router, Tabs} from "expo-router";
-import {Dimensions, TouchableOpacity, useColorScheme} from "react-native";
+import {Dimensions, TouchableOpacity, useColorScheme, StyleSheet} from "react-native";
 import * as Haptics from "expo-haptics";
 import {createContext, useContext, useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
@@ -7,6 +7,7 @@ import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Drawer} from "expo-router/drawer";
 import {ShoppingCart, Store, User} from "@tamagui/lucide-icons";
 import axios from "@/scripts/axiosConfig";
+import {BlurView} from "expo-blur";
 
 const UserContext = createContext<{
     user: any,
@@ -57,7 +58,9 @@ export default function TabLayout() {
         try {
             response = await axios.get('/api/user');
         } catch (error: any) {
-            console.error(error.response.data.message);
+            if (error.response.data.message === 'Unauthenticated.') {
+                router.replace('/login');
+            }
         } finally {
             if (response?.status === 200) {
                 setUser(response.data);
@@ -135,7 +138,12 @@ export default function TabLayout() {
             </> : <>
                 <Tabs screenOptions={{tabBarActiveTintColor: colorScheme === "light" ? "#292023" : "#FBF9EF", tabBarInactiveTintColor: 'gray', tabBarButton: (props) => (
                         <TouchableOpacity {...props} onPress={() => {Haptics.selectionAsync(); props.onPress();}} />
-                    )}}>
+                    ), animation: "fade",
+                    tabBarStyle: { position: 'absolute' },
+                    tabBarBackground: () => (
+                        <BlurView tint={colorScheme === 'light' ? 'light' : "prominent"} intensity={50} style={StyleSheet.absoluteFill} />
+                    ),
+                }}>
                     <Tabs.Screen name="(sell)"
                                  options={{title: 'Sell', headerShown: false,tabBarIcon: ({ color }) => <Store color={color} />,}}
                     />

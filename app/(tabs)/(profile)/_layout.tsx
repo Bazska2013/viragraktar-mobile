@@ -1,7 +1,9 @@
-import {router, Stack} from "expo-router";
+import {router, withLayoutContext} from "expo-router";
 import {Button, Dimensions, Platform, useColorScheme} from "react-native";
 import React, {createContext, useContext, useState} from "react";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Stack as DefaultStack } from 'expo-router';
 
 const ReportContext = createContext<{
         data: any,
@@ -42,6 +44,10 @@ export function useReportContext() {
         }
         return context;
 }
+
+const { Navigator } = createNativeStackNavigator();
+
+const Stack = withLayoutContext(Navigator);
 
 export default function ProfileLayout() {
         const [data, setData] = useState([]);
@@ -108,35 +114,43 @@ export default function ProfileLayout() {
 
     return (
         <ReportContext.Provider value={contextValue}>
-                <Stack screenOptions={{ headerTintColor: theme.dark ? '#FBF9EF' : "#292023" }}>
+                <Stack
+                    screenOptions={{
+                            headerTintColor: theme.dark ? '#FBF9EF' : "#292023",
+                            headerLargeTitleStyle: {
+                                    fontWeight: '300',
+                                    fontSize: 40,
+                            },
+                    }}
+                >
                         <Stack.Screen name="index"
-                                      options={{title: 'Profile', headerShown: false}} />
+                                      options={{title: 'Profile', headerLargeTitle: true, headerTransparent: true}} />
                         <Stack.Screen name="joinStore"
-                                      options={{title: 'Join Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                                      options={{title: 'Join Store', headerTransparent: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                         <Stack.Screen name="createStore"
-                                      options={{title: 'Create Store', headerShown: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                                      options={{title: 'Create Store', headerTransparent: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                         <Stack.Screen name='storeDetails'
-                                      options={{title: 'Store details', headerShown: true }} />
+                                      options={{title: 'Store details', headerTransparent: true }} />
                         <Stack.Screen name="profileDetails"
-                                      options={{title: 'Profile details', headerShown: true }} />
+                                      options={{title: 'Profile details', headerTransparent: true }} />
                         <Stack.Screen name="changeName"
-                                      options={{title: 'Change name', headerShown: true}} />
+                                      options={{title: 'Change name', headerTransparent: true}} />
                         <Stack.Screen name="changePassword"
-                                      options={{title: 'Change password', headerShown: true}} />
+                                      options={{title: 'Change password', headerTransparent: true}} />
                         <Stack.Screen name="changeStoreName"
-                                      options={{title: 'Change store name', headerShown: true}} />
+                                      options={{title: 'Change store name', headerTransparent: true}} />
                         <Stack.Screen name="changeOpeningHours"
-                                      options={{title: 'Change opening hours', headerShown: true}} />
+                                      options={{title: 'Change opening hours', headerTransparent: true}} />
                         <Stack.Screen name="changeCurrency"
-                                      options={{title: 'Change currency', headerShown: true}} />
+                                      options={{title: 'Change currency', headerTransparent: true}} />
                         <Stack.Screen name="manageUsers"
-                                      options={{title: 'Manage users', headerShown: true}} />
+                                      options={{title: 'Manage users', headerTransparent: true}} />
                         <Stack.Screen name="generateReport"
-                                      options={{title: 'Generate report', headerShown: true}} />
+                                      options={{title: 'Generate report', headerTransparent: true}} />
                         <Stack.Screen name="viewReport"
-                                      options={{title: 'View report', headerShown: true, headerBackTitle: 'Generate report'}} />
+                                      options={{title: 'View report', headerTransparent: true, headerBackTitle: 'Generate report'}} />
                         <Stack.Screen name="modifyLabels"
-                                        options={{title: 'Modify labels', headerShown: true}} />
+                                      options={{title: 'Modify labels', headerTransparent: true}} />
                 </Stack>
         </ReportContext.Provider>
     )

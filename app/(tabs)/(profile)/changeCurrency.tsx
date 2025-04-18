@@ -7,12 +7,14 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ChangeCurrency() {
 
     const {setStore, sign, before} = useUserContext()
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [signField, setSignField] = useState(sign);
     const [beforeField, setBeforeField] = useState(before);
@@ -48,6 +50,7 @@ export default function ChangeCurrency() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight}
                 >
                     <Label htmlFor="sign">
                         <H4>Set the currency sign used in this store</H4>

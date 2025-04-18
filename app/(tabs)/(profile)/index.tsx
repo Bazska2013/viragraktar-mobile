@@ -8,7 +8,7 @@ import {
     StyleSheet,
     useColorScheme
 } from "react-native";
-import {router} from "expo-router";
+import {router, useNavigation} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -30,6 +30,7 @@ import {
     UserPen,
     UserSearch
 } from "@tamagui/lucide-icons";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function Profile() {
     const [profit, setProfit] = useState(0);
@@ -39,6 +40,7 @@ export default function Profile() {
     const {user, setUser, store, setStore, getUserData, fetchUserData, sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const getTodayProfit = async () => {
         let response;
@@ -122,10 +124,10 @@ export default function Profile() {
         <SafeAreaView style={[styles.AndroidSafeArea]}>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
+                        contentInsetAdjustmentBehavior="automatic"
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <VerticalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0}>
-                    <H2 width="90%" alignSelf="center">Profile</H2>
+                <VerticalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0} marginBottom={tabBarHeight}>
                     <VerticalContainer
                         borderRadius="$5"
                         width="90%"
@@ -149,7 +151,7 @@ export default function Profile() {
                                     title="Profile details"
                                     icon={UserSearch}
                                     iconAfter={ChevronRight}
-                                    onPress={() => {router.push('/profileDetails')}}
+                                    onPress={() => {router.navigate('/profileDetails')}}
                                 />
                             </Group.Item>
                             <Group.Item>
@@ -157,7 +159,7 @@ export default function Profile() {
                                     title="Change profile name"
                                     icon={UserPen}
                                     iconAfter={ChevronRight}
-                                    onPress={() => {router.push('/changeName')}}
+                                    onPress={() => {router.navigate('/changeName')}}
                                 />
                             </Group.Item>
                             <Group.Item>
@@ -165,7 +167,7 @@ export default function Profile() {
                                     title="Change password"
                                     icon={BookKey}
                                     iconAfter={ChevronRight}
-                                    onPress={() => {router.push('/changePassword')}}
+                                    onPress={() => {router.navigate('/changePassword')}}
                                 />
                             </Group.Item>
                         </StyledGroup>
@@ -181,7 +183,7 @@ export default function Profile() {
                                         title="Store details"
                                         icon={TextSearch}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/storeDetails')}}
+                                        onPress={() => {router.navigate('/storeDetails')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>
@@ -189,7 +191,7 @@ export default function Profile() {
                                         title="Change store name"
                                         icon={FilePen}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/changeStoreName')}}
+                                        onPress={() => {router.navigate('/changeStoreName')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>
@@ -197,7 +199,7 @@ export default function Profile() {
                                         title="Change opening hours"
                                         icon={Calendar}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/changeOpeningHours')}}
+                                        onPress={() => {router.navigate('/changeOpeningHours')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>
@@ -205,7 +207,7 @@ export default function Profile() {
                                         title="Change currency"
                                         icon={DollarSign}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/changeCurrency')}}
+                                        onPress={() => {router.navigate('/changeCurrency')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>
@@ -213,7 +215,7 @@ export default function Profile() {
                                         title="View report"
                                         icon={LineChart}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/generateReport')}}
+                                        onPress={() => {router.navigate('/generateReport')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>
@@ -221,7 +223,7 @@ export default function Profile() {
                                         title="Manage users"
                                         icon={BookUser}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/manageUsers')}}
+                                        onPress={() => {router.navigate('/manageUsers')}}
                                     />
                                 </Group.Item>
                                 <Group.Item>
@@ -229,7 +231,7 @@ export default function Profile() {
                                         title="Modify labels"
                                         icon={Tags}
                                         iconAfter={ChevronRight}
-                                        onPress={() => {router.push('/modifyLabels')}}
+                                        onPress={() => {router.navigate('/modifyLabels')}}
                                     />
                                 </Group.Item>
                             </StyledGroup>
@@ -245,7 +247,7 @@ export default function Profile() {
                                             title="Store details"
                                             icon={TextSearch}
                                             iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/storeDetails')}}
+                                            onPress={() => {router.navigate('/storeDetails')}}
                                         />
                                     </Group.Item>
                                     <Group.Item>
@@ -269,7 +271,7 @@ export default function Profile() {
                                             title="Join store"
                                             icon={TextSearch}
                                             iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/joinStore')}}
+                                            onPress={() => {router.navigate('/joinStore')}}
                                         />
                                     </Group.Item>
                                     <Group.Item>
@@ -277,7 +279,7 @@ export default function Profile() {
                                             title="Create store"
                                             icon={TextSearch}
                                             iconAfter={ChevronRight}
-                                            onPress={() => {router.push('/createStore')}}
+                                            onPress={() => {router.navigate('/createStore')}}
                                         />
                                     </Group.Item>
                                 </StyledGroup>
