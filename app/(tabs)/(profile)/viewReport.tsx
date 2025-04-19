@@ -1,5 +1,5 @@
 import {Dimensions, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
-import {H4, ScrollView} from "tamagui";
+import {H4, ScrollView, YStack} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
 import {
@@ -18,7 +18,6 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import {captureRef} from 'react-native-view-shot';
 import {Download} from "@tamagui/lucide-icons";
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
@@ -39,7 +38,11 @@ export default function ViewReport() {
             console.error(error);
         } finally {
             setIsLoading(false);
-            setData(response?.data);
+            setData((response?.data).sort((a, b) => {
+                const dateA = new Date(a.created_at);
+                const dateB = new Date(b.created_at);
+                return dateA.getTime() - dateB.getTime();
+            }));
         }
     }
 
@@ -59,7 +62,7 @@ export default function ViewReport() {
 
     useEffect(() => {
         setItemsFromData()
-    }, [data])
+    }, [data, setItems])
 
     useEffect(() => {
         if (oneDay) {
@@ -81,7 +84,7 @@ export default function ViewReport() {
 
 
     const aggregateItems = () => {
-        const itemCounts = items.reduce((acc, item) => {
+        const itemCounts = items.reduce((acc: Record<string, number>, item: {name: string, amount: number}) => {
             acc[item.name] = (acc[item.name] || 0) + item.amount;
             return acc;
         }, {});
@@ -94,15 +97,15 @@ export default function ViewReport() {
     }
 
     const aggregateTransactions = () => {
-        const modifiedData = data.map((transaction: any) => {
+        const modifiedData = data.map(transaction => {
             const date = new Date(transaction.created_at);
             let year = date.getFullYear();
-            let month = (date.getMonth() + 1).toString();
-            let day = (date.getDate()).toString();
-            if (parseInt(month) < 10) {
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            if (month < 10) {
                 month = '0' + month;
             }
-            if (parseInt(day) < 10) {
+            if (day < 10) {
                 day = '0' + day;
             }
             return {
@@ -110,7 +113,7 @@ export default function ViewReport() {
                 total: transaction.total
             }
         });
-        const transactionCounts = modifiedData.reduce((acc: any, transaction: any) => {
+        const transactionCounts = modifiedData.reduce((acc, transaction) => {
             acc[transaction.created_at] = (acc[transaction.created_at] || 0) + transaction.total;
             return acc;
         }, {});
@@ -118,25 +121,33 @@ export default function ViewReport() {
         return Object.keys(transactionCounts).map(created_at => ({
             created_at,
             total: transactionCounts[created_at]
-        }));
+        })).sort((a, b) => {
+            const dateA = new Date(a.created_at);
+            const dateB = new Date(b.created_at);
+            return dateA.getTime() - dateB.getTime();
+        });
     }
 
     const readableData = () => {
         if (oneDay) {
-            return data.map((transaction: any) => {
+            return data.map(transaction => {
                 const date = new Date(transaction.created_at);
-                let hour = (date.getHours()).toString();
-                let minute = (date.getMinutes()).toString();
-                if (parseInt(hour) < 10) {
+                let hour = date.getHours();
+                let minute = date.getMinutes();
+                if (hour < 10) {
                     hour = '0' + hour;
                 }
-                if (parseInt(minute) < 10) {
+                if (minute < 10) {
                     minute = '0' + minute;
                 }
                 return {
                     created_at: hour + ':' + minute,
                     total: transaction.total
                 }
+            }).sort((a, b) => {
+                const dateA = new Date(`1970-01-01T${a.created_at}:00`);
+                const dateB = new Date(`1970-01-01T${b.created_at}:00`);
+                return dateA.getTime() - dateB.getTime();
             })
         }
         return aggregateTransactions();
@@ -154,42 +165,97 @@ export default function ViewReport() {
         setIsLoading(false);
     }
 
+    useEffect(() => {
+        return () => {
+            setItems([]);
+            setData([]);
+        };
+    }, []);
+
     return (
         <SafeAreaView>
-            <ScrollView height="100%" refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />} >
-                {Dimensions.get('window').width >= 768 ? <>
-                    <VerticalContainer>
-                        <H4
-                            padding="$5"
-                            borderRadius="$5"
-                            marginTop="$5"
-                            marginBottom="$5"
-                            boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
-                            width="90%"
-                            alignSelf="center"
-                            backgroundColor={theme.colors.card}
-                        >{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
-                        {data.length > 0 ? <>
-                            <HorizontalContainer width="90%" alignSelf="center">
-                                {showDistribution &&
-                                    <EditContainer alignItems="center" backgroundColor={theme.colors.card}>
-                                        <H4>Distribution of items sold</H4>
-                                        <View id="distChartRef">
-                                            {showPie ?
-                                                <VictoryPie
-                                                    data={aggregateItems()}
-                                                    x="name"
-                                                    y="amount"
-                                                    theme={VictoryTheme.grayscale}
-                                                    categories={{x: items.map(item => item.name)}}
-                                                    width={400}
+            <ScrollView height="100%" refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}>
+                <YStack marginBottom={tabBarHeight}>
+                    {Dimensions.get('window').width >= 768 ? <>
+                        <VerticalContainer>
+                            <H4
+                                padding="$5"
+                                borderRadius="$5"
+                                marginTop="$5"
+                                marginBottom="$5"
+                                boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
+                                width="90%"
+                                alignSelf="center"
+                                backgroundColor={theme.colors.card}
+                            >{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
+                            {data.length > 0 ? <>
+                                    <HorizontalContainer width="90%" alignSelf="center">
+                                        {showDistribution &&
+                                            <EditContainer alignItems="center" backgroundColor={theme.colors.card}>
+                                                <H4>Distribution of items sold</H4>
+                                                <View id="distChartRef">
+                                                    {showPie ?
+                                                        <VictoryPie
+                                                            data={aggregateItems()}
+                                                            x="name"
+                                                            y="amount"
+                                                            key={date ? 'pieChart-' + date : 'pieChart-' + start + '-' + end}
+                                                            theme={VictoryTheme.grayscale}
+                                                            categories={{x: items.map(item => item.name)}}
+                                                            width={400}
+                                                            height={400}
+                                                            padding={60}
+                                                        />
+                                                        :
+                                                        <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}
+                                                                      width={500}
+                                                                      height={400}
+                                                                      key={date ? 'barChart-' + date : 'barChart-' + start + '-' + end}
+                                                        >
+                                                            <VictoryAxis
+                                                                fixLabelOverlap
+                                                                style={{
+                                                                    tickLabels: {
+                                                                        angle: 0,
+                                                                        fontSize: 15,
+                                                                        padding: 5
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <VictoryAxis
+                                                                dependentAxis
+                                                                style={{
+                                                                    tickLabels: {
+                                                                        angle: 0,
+                                                                        fontSize: 15,
+                                                                        padding: 5
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <VictoryBar
+                                                                x="name"
+                                                                y="amount"
+                                                                data={aggregateItems()}
+                                                                animate={{duration: 500}}
+                                                            />
+                                                        </VictoryChart>
+                                                    }
+                                                </View>
+                                            </EditContainer>
+                                        }
+                                        {showRevenue &&
+                                            <EditContainer
+                                                alignItems="center"
+                                                backgroundColor={theme.colors.card}
+                                            >
+                                                <H4>Revenue from transactions</H4>
+                                                <VictoryChart
+                                                    width={500}
                                                     height={400}
-                                                    padding={60}
-                                                />
-                                                :
-                                                <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}
-                                                              width={500}
-                                                              height={400}
+                                                    theme={VictoryTheme.grayscale}
+                                                    domainPadding={50}
+                                                    animate={{duration: 500}}
+                                                    key={date ? 'lineChart-' + date : 'lineChart-' + start + '-' + end}
                                                 >
                                                     <VictoryAxis
                                                         fixLabelOverlap
@@ -211,29 +277,94 @@ export default function ViewReport() {
                                                             }
                                                         }}
                                                     />
-                                                    <VictoryBar
-                                                        x="name"
-                                                        y="amount"
-                                                        data={aggregateItems()}
-                                                        animate={{duration: 500}}
-                                                    />
+                                                    {showLine ?
+                                                        <VictoryLine data={readableData()} x='created_at' y='total' />
+                                                        :
+                                                        <VictoryScatter data={readableData()} x='created_at' y='total' />
+                                                    }
                                                 </VictoryChart>
-                                            }
-                                        </View>
+                                            </EditContainer>
+                                        }
+                                    </HorizontalContainer>
+                                    {showTable &&
+                                        <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
+                                    }
+                                </> :
+                                <EditContainer
+                                    backgroundColor={theme.colors.card}
+                                >
+                                    <H4>No data available for this day</H4>
+                                </EditContainer>}
+                        </VerticalContainer>
+                    </> : <>
+                        <EditContainer
+                            backgroundColor={theme.colors.card}
+                        >
+                            <H4>{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
+                        </EditContainer>
+                        {data.length > 0 ? <>
+                                {showDistribution &&
+                                    <EditContainer alignItems="center"
+                                                   backgroundColor={theme.colors.card}
+                                    >
+                                        <H4>Distribution of items sold</H4>
+                                        {showPie ?
+                                            <VictoryPie
+                                                data={aggregateItems()}
+                                                x="name"
+                                                y="amount"
+                                                theme={VictoryTheme.grayscale}
+                                                categories={{x: items.map(item => item.name)}}
+                                                width={300}
+                                                height={300}
+                                                padding={60}
+                                                key={date ? 'pieChart-' + date : 'pieChart-' + start + '-' + end}
+                                            />
+                                            :
+                                            <VictoryChart
+                                                theme={VictoryTheme.grayscale}
+                                                domainPadding={50}
+                                                key={data ? 'barChart-' + date : 'barChart-' + start + '-' + end}
+                                            >
+                                                <VictoryAxis
+                                                    fixLabelOverlap
+                                                    style={{
+                                                        tickLabels: {
+                                                            angle: 0,
+                                                            fontSize: 15,
+                                                            padding: 5
+                                                        }
+                                                    }}
+                                                />
+                                                <VictoryAxis
+                                                    dependentAxis
+                                                    style={{
+                                                        tickLabels: {
+                                                            angle: 0,
+                                                            fontSize: 15,
+                                                            padding: 5
+                                                        }
+                                                    }}
+                                                />
+                                                <VictoryBar
+                                                    x="name"
+                                                    y="amount"
+                                                    data={aggregateItems()}
+                                                    animate={{duration: 500}}
+                                                />
+                                            </VictoryChart>
+                                        }
                                     </EditContainer>
                                 }
                                 {showRevenue &&
-                                    <EditContainer
-                                        alignItems="center"
-                                        backgroundColor={theme.colors.card}
-                                    >
+                                    <EditContainer alignItems="center" backgroundColor={theme.colors.card}>
                                         <H4>Revenue from transactions</H4>
                                         <VictoryChart
-                                            width={500}
-                                            height={400}
+                                            width={350}
                                             theme={VictoryTheme.grayscale}
                                             domainPadding={50}
                                             animate={{duration: 500}}
+                                            key={`lineChart-${date || `${start}-${end}`}`}
                                         >
                                             <VictoryAxis
                                                 fixLabelOverlap
@@ -263,7 +394,6 @@ export default function ViewReport() {
                                         </VictoryChart>
                                     </EditContainer>
                                 }
-                            </HorizontalContainer>
                                 {showTable &&
                                     <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
                                 }
@@ -273,109 +403,8 @@ export default function ViewReport() {
                             >
                                 <H4>No data available for this day</H4>
                             </EditContainer>}
-                    </VerticalContainer>
-                </> : <>
-                    <EditContainer
-                        backgroundColor={theme.colors.card}
-                    >
-                        <H4>{oneDay ? 'Report about ' + getReadableDate(date) : 'Report made from ' + getReadableDate(start) + ' to ' + getReadableDate(end)}</H4>
-                    </EditContainer>
-                    {data.length > 0 ? <>
-                            {showDistribution &&
-                                <EditContainer alignItems="center"
-                                               backgroundColor={theme.colors.card}
-                                >
-                                    <H4>Distribution of items sold</H4>
-                                    {showPie ?
-                                        <VictoryPie
-                                            data={aggregateItems()}
-                                            x="name"
-                                            y="amount"
-                                            theme={VictoryTheme.grayscale}
-                                            categories={{x: items.map(item => item.name)}}
-                                            width={300}
-                                            height={300}
-                                            padding={60}
-                                        />
-                                        :
-                                        <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}>
-                                            <VictoryAxis
-                                                fixLabelOverlap
-                                                style={{
-                                                    tickLabels: {
-                                                        angle: 0,
-                                                        fontSize: 15,
-                                                        padding: 5
-                                                    }
-                                                }}
-                                            />
-                                            <VictoryAxis
-                                                dependentAxis
-                                                style={{
-                                                    tickLabels: {
-                                                        angle: 0,
-                                                        fontSize: 15,
-                                                        padding: 5
-                                                    }
-                                                }}
-                                            />
-                                            <VictoryBar
-                                                x="name"
-                                                y="amount"
-                                                data={aggregateItems()}
-                                                animate={{duration: 500}}
-                                            />
-                                        </VictoryChart>
-                                    }
-                                </EditContainer>
-                            }
-                            {showRevenue &&
-                                <EditContainer alignItems="center" backgroundColor={theme.colors.card}>
-                                    <H4>Revenue from transactions</H4>
-                                    <VictoryChart
-                                        width={350}
-                                        theme={VictoryTheme.grayscale}
-                                        domainPadding={50}
-                                        animate={{duration: 500}}
-                                    >
-                                        <VictoryAxis
-                                            fixLabelOverlap
-                                            style={{
-                                                tickLabels: {
-                                                    angle: 0,
-                                                    fontSize: 15,
-                                                    padding: 5
-                                                }
-                                            }}
-                                        />
-                                        <VictoryAxis
-                                            dependentAxis
-                                            style={{
-                                                tickLabels: {
-                                                    angle: 0,
-                                                    fontSize: 15,
-                                                    padding: 5
-                                                }
-                                            }}
-                                        />
-                                        {showLine ?
-                                            <VictoryLine key="lineChart" data={readableData()} x='created_at' y='total' />
-                                            :
-                                            <VictoryScatter key="scatterChart" data={readableData()} x='created_at' y='total' />
-                                        }
-                                    </VictoryChart>
-                                </EditContainer>
-                            }
-                            {showTable &&
-                                <TransactionsTable items={aggregateItems()} transactions={data} distShown={showDistribution} transShown={showTransactionTable} totalShown={showTotal} />
-                            }
-                        </> :
-                        <EditContainer
-                            backgroundColor={theme.colors.card}
-                        >
-                            <H4>No data available for this day</H4>
-                        </EditContainer>}
-                </>}
+                    </>}
+                </YStack>
             </ScrollView>
         </SafeAreaView>
     )
