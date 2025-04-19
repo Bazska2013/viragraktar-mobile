@@ -124,33 +124,33 @@ export default function ProfileLayout() {
                     }}
                 >
                         <Stack.Screen name="index"
-                                      options={{title: 'Profile', headerLargeTitle: true, headerTransparent: true}} />
+                                      options={{title: 'Profile', headerLargeTitle: true, headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="joinStore"
-                                      options={{title: 'Join Store', headerTransparent: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                                      options={{title: 'Join Store', headerTransparent: Platform.OS === 'ios', presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                         <Stack.Screen name="createStore"
-                                      options={{title: 'Create Store', headerTransparent: true, presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
+                                      options={{title: 'Create Store', headerTransparent: Platform.OS === 'ios', presentation: Dimensions.get('window').width >= 768 ? "fullScreenModal" : "modal", headerLeft: Platform.OS === 'ios' ? () => <Button color={theme.dark ? '#FBF9EF' : "#292023"} title="Cancel" onPress={() => router.back()} /> : undefined}} />
                         <Stack.Screen name='storeDetails'
-                                      options={{title: 'Store details', headerTransparent: true }} />
+                                      options={{title: 'Store details', headerTransparent: Platform.OS === 'ios' }} />
                         <Stack.Screen name="profileDetails"
-                                      options={{title: 'Profile details', headerTransparent: true }} />
+                                      options={{title: 'Profile details', headerTransparent: Platform.OS === 'ios' }} />
                         <Stack.Screen name="changeName"
-                                      options={{title: 'Change name', headerTransparent: true}} />
+                                      options={{title: 'Change name', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="changePassword"
-                                      options={{title: 'Change password', headerTransparent: true}} />
+                                      options={{title: 'Change password', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="changeStoreName"
-                                      options={{title: 'Change store name', headerTransparent: true}} />
+                                      options={{title: 'Change store name', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="changeOpeningHours"
-                                      options={{title: 'Change opening hours', headerTransparent: true}} />
+                                      options={{title: 'Change opening hours', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="changeCurrency"
-                                      options={{title: 'Change currency', headerTransparent: true}} />
+                                      options={{title: 'Change currency', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="manageUsers"
-                                      options={{title: 'Manage users', headerTransparent: true}} />
+                                      options={{title: 'Manage users', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="generateReport"
-                                      options={{title: 'Generate report', headerTransparent: true}} />
+                                      options={{title: 'Generate report', headerTransparent: Platform.OS === 'ios'}} />
                         <Stack.Screen name="viewReport"
-                                      options={{title: 'View report', headerTransparent: true, headerBackTitle: 'Generate report'}} />
+                                      options={{title: 'View report', headerTransparent: Platform.OS === 'ios', headerBackTitle: 'Generate report'}} />
                         <Stack.Screen name="modifyLabels"
-                                      options={{title: 'Modify labels', headerTransparent: true}} />
+                                      options={{title: 'Modify labels', headerTransparent: Platform.OS === 'ios'}} />
                 </Stack>
         </ReportContext.Provider>
     )

@@ -113,7 +113,7 @@ export default function GenerateReport() {
                 >
                     <VerticalContainer>
                         <H4>Get data from</H4>
-                        <Picker id="day" selectedValue={oneDay ? 'one day' : 'range'} onValueChange={(itemValue) => setOneDay(itemValue === 'one day')}>
+                        <Picker id="day" selectedValue={oneDay ? 'one day' : 'range'} style={{color: Platform.OS === 'android' ? theme.colors.text : undefined}} onValueChange={(itemValue) => setOneDay(itemValue === 'one day')}>
                             <Picker.Item label="one day" value="one day"/>
                             <Picker.Item label="range" value="range"/>
                         </Picker>
@@ -171,7 +171,7 @@ export default function GenerateReport() {
                         {showDistribution &&
                             <>
                                 <H6>Style:</H6>
-                                <Picker selectedValue={showPie ? 'Pie' : 'Bar'} onValueChange={(itemValue) => setShowPie(itemValue === 'Pie')}>
+                                <Picker selectedValue={showPie ? 'Pie' : 'Bar'} style={{color: Platform.OS === 'android' ? theme.colors.text : undefined}} onValueChange={(itemValue) => setShowPie(itemValue === 'Pie')}>
                                     <Picker.Item label="Pie" value="Pie"/>
                                     <Picker.Item label="Bar" value="Bar"/>
                                 </Picker>
@@ -193,7 +193,7 @@ export default function GenerateReport() {
                         {showRevenue &&
                             <>
                                 <H6>Style:</H6>
-                                <Picker selectedValue={Platform.OS === 'ios' ? showLine ? 'Line' : 'Scatter' : 'Scatter'} onValueChange={(itemValue) => setShowLine(itemValue === 'Line')}>
+                                <Picker selectedValue={Platform.OS === 'ios' ? showLine ? 'Line' : 'Scatter' : 'Scatter'} style={{color: Platform.OS === 'android' ? theme.colors.text : undefined}} onValueChange={(itemValue) => setShowLine(itemValue === 'Line')}>
                                     {Platform.OS === 'android' ?
                                         <Picker.Item enabled={false} label="Line (This option is unavailable on android)" value="Line"/>
                                         :
@@ -220,7 +220,7 @@ export default function GenerateReport() {
                             {showTable &&
                                 <>
                                     <H6>Show:</H6>
-                                    <Picker selectedValue={showTotal ? 'All' : showDistTable ? 'Distribution' : 'Transactions'} onValueChange={(itemValue) => handleTableStyle(itemValue)} >
+                                    <Picker selectedValue={showTotal ? 'All' : showDistTable ? 'Distribution' : 'Transactions'} style={{color: Platform.OS === 'android' ? theme.colors.text : undefined}} onValueChange={(itemValue) => handleTableStyle(itemValue)} >
                                         <Picker.Item label="Distribution" value="Distribution"/>
                                         <Picker.Item label="Transactions" value="Transactions"/>
                                         <Picker.Item label="All" value="All"/>

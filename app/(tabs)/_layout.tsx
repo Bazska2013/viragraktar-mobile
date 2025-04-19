@@ -1,5 +1,5 @@
 import {router, Tabs} from "expo-router";
-import {Dimensions, TouchableOpacity, useColorScheme, StyleSheet} from "react-native";
+import {Dimensions, TouchableOpacity, useColorScheme, StyleSheet, Platform} from "react-native";
 import * as Haptics from "expo-haptics";
 import {createContext, useContext, useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
@@ -139,10 +139,10 @@ export default function TabLayout() {
                 <Tabs screenOptions={{tabBarActiveTintColor: colorScheme === "light" ? "#292023" : "#FBF9EF", tabBarInactiveTintColor: 'gray', tabBarButton: (props) => (
                         <TouchableOpacity {...props} onPress={() => {Haptics.selectionAsync(); props.onPress();}} />
                     ), animation: "fade",
-                    tabBarStyle: { position: 'absolute' },
-                    tabBarBackground: () => (
-                        <BlurView tint={colorScheme === 'light' ? 'light' : "prominent"} intensity={50} style={StyleSheet.absoluteFill} />
-                    ),
+                    tabBarStyle: { position: 'absolute', zIndex: Platform.OS === "android" ? 1 : undefined, elevation: 0},
+                    tabBarBackground : Platform.OS === 'ios' ? () => (
+                            <BlurView tint={colorScheme === 'light' ? 'light' : "prominent"} intensity={50} style={StyleSheet.absoluteFill} />
+                        ) : undefined,
                 }}>
                     <Tabs.Screen name="(sell)"
                                  options={{title: 'Sell', headerShown: false,tabBarIcon: ({ color }) => <Store color={color} />,}}

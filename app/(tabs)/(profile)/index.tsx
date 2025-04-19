@@ -121,7 +121,7 @@ export default function Profile() {
         ]);
 
     return (
-        <SafeAreaView style={[styles.AndroidSafeArea]}>
+        <SafeAreaView style={[styles.SafeArea]}>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'
                         automaticallyAdjustKeyboardInsets={true}
                         contentInsetAdjustmentBehavior="automatic"
@@ -135,6 +135,7 @@ export default function Profile() {
                         boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"
                         backgroundColor={theme.colors.card}
                         padding="$3"
+                        marginTop={Platform.OS === 'android' ? StatusBar.currentHeight : 0}
                     >
                         <H4>Hello {user?.name}!</H4>
                         {store &&
@@ -293,8 +294,7 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
-    AndroidSafeArea: {
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    SafeArea: {
         flex: 1,
     }
 })
