@@ -76,7 +76,7 @@ export default function ChangeCurrency() {
                         <SizableText>before</SizableText>
                     </HorizontalContainer>
                     <Separator />
-                    <BigButton icon={DollarSign} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change currency'}</BigButton>
+                    <BigButton icon={DollarSign} onPress={handleSubmit}>{isLoading? <Spinner /> : 'Change currency'}</BigButton>
                     <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>

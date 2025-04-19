@@ -66,7 +66,7 @@ export default function JoinStore() {
                         autoFocus
                     />
                     <Separator />
-                    <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Join store"}</BigButton>
+                    <BigButton onPress={handleSubmit} disabled={!validInput}>{isLoading ? <Spinner /> : "Join store"}</BigButton>
                     {error && <SizableText color="$red1">{error}</SizableText>}
                 </EditContainer>
             </ScrollView>

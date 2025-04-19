@@ -25,7 +25,8 @@ export default function ViewReport() {
     const {oneDay, date, start, end, showDistribution, showPie, items, data, setItems, setData, showLine, showRevenue, showTable, showTransactionTable, showTotal, getReadableDate} = useReportContext();
     const [isLoading, setIsLoading] = useState(true);
 
-    const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
     const tabBarHeight = useBottomTabBarHeight();
 
     const fetchDayData = async () => {
@@ -200,14 +201,14 @@ export default function ViewReport() {
                                                             x="name"
                                                             y="amount"
                                                             key={date ? 'pieChart-' + date : 'pieChart-' + start + '-' + end}
-                                                            theme={VictoryTheme.grayscale}
+                                                            theme={colorScheme === 'dark' ? VictoryTheme.material : VictoryTheme.grayscale}
                                                             categories={{x: items.map(item => item.name)}}
                                                             width={400}
                                                             height={400}
                                                             padding={60}
                                                         />
                                                         :
-                                                        <VictoryChart theme={VictoryTheme.grayscale} domainPadding={50}
+                                                        <VictoryChart theme={colorScheme === 'dark' ? VictoryTheme.material : VictoryTheme.grayscale} domainPadding={50}
                                                                       width={500}
                                                                       height={400}
                                                                       key={date ? 'barChart-' + date : 'barChart-' + start + '-' + end}
@@ -218,7 +219,8 @@ export default function ViewReport() {
                                                                     tickLabels: {
                                                                         angle: 0,
                                                                         fontSize: 15,
-                                                                        padding: 5
+                                                                        padding: 5,
+                                                                        color: theme.colors.text
                                                                     }
                                                                 }}
                                                             />
@@ -228,7 +230,8 @@ export default function ViewReport() {
                                                                     tickLabels: {
                                                                         angle: 0,
                                                                         fontSize: 15,
-                                                                        padding: 5
+                                                                        padding: 5,
+                                                                        color: theme.colors.text
                                                                     }
                                                                 }}
                                                             />
@@ -252,7 +255,7 @@ export default function ViewReport() {
                                                 <VictoryChart
                                                     width={500}
                                                     height={400}
-                                                    theme={VictoryTheme.grayscale}
+                                                    theme={colorScheme === 'dark' ? VictoryTheme.material : VictoryTheme.grayscale}
                                                     domainPadding={50}
                                                     animate={{duration: 500}}
                                                     key={date ? 'lineChart-' + date : 'lineChart-' + start + '-' + end}
@@ -263,7 +266,8 @@ export default function ViewReport() {
                                                             tickLabels: {
                                                                 angle: 0,
                                                                 fontSize: 15,
-                                                                padding: 5
+                                                                padding: 5,
+                                                                color: theme.colors.text
                                                             }
                                                         }}
                                                     />
@@ -273,7 +277,8 @@ export default function ViewReport() {
                                                             tickLabels: {
                                                                 angle: 0,
                                                                 fontSize: 15,
-                                                                padding: 5
+                                                                padding: 5,
+                                                                color: theme.colors.text
                                                             }
                                                         }}
                                                     />
@@ -313,7 +318,7 @@ export default function ViewReport() {
                                                 data={aggregateItems()}
                                                 x="name"
                                                 y="amount"
-                                                theme={VictoryTheme.grayscale}
+                                                theme={colorScheme === 'dark' ? VictoryTheme.material : VictoryTheme.grayscale}
                                                 categories={{x: items.map(item => item.name)}}
                                                 width={300}
                                                 height={300}
@@ -322,7 +327,7 @@ export default function ViewReport() {
                                             />
                                             :
                                             <VictoryChart
-                                                theme={VictoryTheme.grayscale}
+                                                theme={colorScheme === 'dark' ? VictoryTheme.material : VictoryTheme.grayscale}
                                                 domainPadding={50}
                                                 key={data ? 'barChart-' + date : 'barChart-' + start + '-' + end}
                                             >
@@ -332,7 +337,8 @@ export default function ViewReport() {
                                                         tickLabels: {
                                                             angle: 0,
                                                             fontSize: 15,
-                                                            padding: 5
+                                                            padding: 5,
+                                                            color: theme.colors.text
                                                         }
                                                     }}
                                                 />
@@ -342,15 +348,16 @@ export default function ViewReport() {
                                                         tickLabels: {
                                                             angle: 0,
                                                             fontSize: 15,
-                                                            padding: 5
+                                                            padding: 5,
+                                                            color: theme.colors.text
                                                         }
                                                     }}
                                                 />
                                                 <VictoryBar
+                                                    data={aggregateItems().filter(item => item.name && item.amount && !isNaN(item.amount))}
                                                     x="name"
                                                     y="amount"
-                                                    data={aggregateItems()}
-                                                    animate={{duration: 500}}
+                                                    animate={{ duration: 500 }}
                                                 />
                                             </VictoryChart>
                                         }
@@ -361,7 +368,7 @@ export default function ViewReport() {
                                         <H4>Revenue from transactions</H4>
                                         <VictoryChart
                                             width={350}
-                                            theme={VictoryTheme.grayscale}
+                                            theme={colorScheme === 'dark' ? VictoryTheme.material : VictoryTheme.grayscale}
                                             domainPadding={50}
                                             animate={{duration: 500}}
                                             key={`lineChart-${date || `${start}-${end}`}`}
@@ -372,7 +379,8 @@ export default function ViewReport() {
                                                     tickLabels: {
                                                         angle: 0,
                                                         fontSize: 15,
-                                                        padding: 5
+                                                        padding: 5,
+                                                        color: theme.colors.text
                                                     }
                                                 }}
                                             />
@@ -382,7 +390,8 @@ export default function ViewReport() {
                                                     tickLabels: {
                                                         angle: 0,
                                                         fontSize: 15,
-                                                        padding: 5
+                                                        padding: 5,
+                                                        color: theme.colors.text
                                                     }
                                                 }}
                                             />

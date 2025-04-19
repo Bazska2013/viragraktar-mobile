@@ -62,7 +62,7 @@ export default function ChangeName() {
                         onSubmitEditing={handleSubmit}
                     />
                     <Separator />
-                    <BigButton icon={UserPen} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> : 'Change name'}</BigButton>
+                    <BigButton icon={UserPen} onPress={handleSubmit}>{isLoading ? <Spinner /> : 'Change name'}</BigButton>
                     <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>

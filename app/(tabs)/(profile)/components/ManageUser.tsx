@@ -129,8 +129,8 @@ const ManageUser = ({isSeller, isBuyer, isAdmin, id, refetchUsers, name, email }
             </HorizontalContainer>
             <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
-                <SmallButtonWithAccent boxShadow="unset" icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={() => handleSave()} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
-                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === id} opacity={user.id !== id ? 1 : 0.5} onPress={() => handleDelete()} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent boxShadow="unset" icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={handleSave} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === id} opacity={user.id !== id ? 1 : 0.5} onPress={handleDelete} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
             </StyledGroup>
             {error && <SizableText color="$red1">{error}</SizableText>}
         </VerticalContainer>

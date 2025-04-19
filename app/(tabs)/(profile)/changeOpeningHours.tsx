@@ -48,7 +48,7 @@ export default function ChangeOpeningHours () {
                 >
                     <OpeningHours openingHours={openingHours} setFieldValue={(value)=> setOpeningHours(value)} />
                     <Separator />
-                    <BigButton icon={Calendar} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> :'Change opening hours'}</BigButton>
+                    <BigButton icon={Calendar} onPress={handleSubmit}>{isLoading ? <Spinner /> :'Change opening hours'}</BigButton>
                     <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>

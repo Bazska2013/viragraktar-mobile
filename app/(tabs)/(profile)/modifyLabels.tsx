@@ -106,9 +106,9 @@ export default function ModifyLabels() {
                             onChangeText={setLabel}
                             onSubmitEditing={handleAddLabel}
                         />
-                        <SmallButtonWithAccent icon={Plus} onPress={() => handleAddLabel()} />
+                        <SmallButtonWithAccent icon={Plus} onPress={handleAddLabel} />
                     </HorizontalContainer>
-                    <BigButton disabled={!isChanged} icon={Save} onPress={() => handleSubmit()}>Save changes</BigButton>
+                    <BigButton disabled={!isChanged} icon={Save} onPress={handleSubmit}>Save changes</BigButton>
                     {error && <SizableText color='red' >{error}</SizableText>}
                 </EditContainer>
             </ScrollView>

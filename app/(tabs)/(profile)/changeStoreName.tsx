@@ -61,7 +61,7 @@ export default function ChangeStoreName() {
                         onSubmitEditing={handleSubmit}
                     />
                     <Separator />
-                    <BigButton icon={FilePen} onPress={() => handleSubmit()}>{isLoading? <Spinner /> : 'Change store name'}</BigButton>
+                    <BigButton icon={FilePen} onPress={handleSubmit}>{isLoading? <Spinner /> : 'Change store name'}</BigButton>
                     <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>

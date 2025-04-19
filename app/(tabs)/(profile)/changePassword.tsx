@@ -121,7 +121,7 @@ export default function ChangePassword() {
                         />
                     </VerticalContainer>
                     <Separator />
-                    <BigButton disabled={!validData} icon={BookKey} onPress={() => handleSubmit()}>{isLoading ? <Spinner /> : 'Change password'}</BigButton>
+                    <BigButton disabled={!validData} icon={BookKey} onPress={handleSubmit}>{isLoading ? <Spinner /> : 'Change password'}</BigButton>
                     <SizableText color="$red1">{error}</SizableText>
                 </EditContainer>
             </ScrollView>

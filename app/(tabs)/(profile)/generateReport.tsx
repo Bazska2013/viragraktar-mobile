@@ -84,6 +84,26 @@ export default function GenerateReport() {
         }
     }
 
+    const handleOpenViewReport = () => {
+        router.push('/viewReport');
+    }
+
+    const handleSetShowDistribution = () => {
+        setShowDistribution(!showDistribution);
+    }
+
+    const handleSetShowRevenue = () => {
+        setShowRevenue(!showRevenue);
+    }
+
+    const handleSetShowTable = () => {
+        setShowTable(!showTable);
+    }
+
+    const handleSetShowTotal = () => {
+        setShowTotal(!showTotal);
+    }
+
     return (
         <SafeAreaView>
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' automaticallyAdjustKeyboardInsets={true}>
@@ -142,7 +162,7 @@ export default function GenerateReport() {
                             <Label htmlFor="dist">
                                 <H6>Distribution</H6>
                             </Label>
-                            <Checkbox id="dist" checked={showDistribution} onCheckedChange={() => setShowDistribution(!showDistribution)}>
+                            <Checkbox id="dist" checked={showDistribution} onCheckedChange={handleSetShowDistribution}>
                                 <Checkbox.Indicator>
                                     <Check />
                                 </Checkbox.Indicator>
@@ -164,7 +184,7 @@ export default function GenerateReport() {
                             <Label htmlFor="rev">
                                 <H6>Revenue</H6>
                             </Label>
-                            <Checkbox id="rev" checked={showRevenue} onCheckedChange={() => setShowRevenue(!showRevenue)}>
+                            <Checkbox id="rev" checked={showRevenue} onCheckedChange={handleSetShowRevenue}>
                                 <Checkbox.Indicator>
                                     <Check />
                                 </Checkbox.Indicator>
@@ -191,7 +211,7 @@ export default function GenerateReport() {
                                 <Label htmlFor="table">
                                     <H6>Transactions table</H6>
                                 </Label>
-                                <Checkbox id="table" checked={showTable} onCheckedChange={() => setShowTable(!showTable)}>
+                                <Checkbox id="table" checked={showTable} onCheckedChange={handleSetShowTable}>
                                     <Checkbox.Indicator>
                                         <Check />
                                     </Checkbox.Indicator>
@@ -212,14 +232,14 @@ export default function GenerateReport() {
                             <Label htmlFor="tableTotal">
                                 <H6>Show total</H6>
                             </Label>
-                            <Checkbox id="tableTotal" checked={showTotal} onCheckedChange={() => setShowTotal(!showTotal)}>
+                            <Checkbox id="tableTotal" checked={showTotal} onCheckedChange={handleSetShowTotal}>
                                 <Checkbox.Indicator>
                                     <Check />
                                 </Checkbox.Indicator>
                             </Checkbox>
                         </HorizontalContainer>}
                         <Separator />
-                        <BigButton icon={LineChart} onPress={() => router.push('/viewReport')}>Generate report</BigButton>
+                        <BigButton icon={LineChart} onPress={handleOpenViewReport}>Generate report</BigButton>
                     </VerticalContainer>
                 </EditContainer>
             </ScrollView>

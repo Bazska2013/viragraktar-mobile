@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Dimensions} from "react-native";
 import {HorizontalContainer} from "@/tamagui.config";
 import Hours from "@/app/(tabs)/(profile)/components/Hours";
@@ -19,26 +19,26 @@ const OpeningHours = ({openingHours, setFieldValue}) => {
         setFieldValue(openingHoursField);
     }, [openingHoursField]);
 
-    const handleSelectFrom = (day: string, value: string) => {
+    const handleSelectFrom = useCallback((day: string, value: string) => {
         setOpeningHoursField(prev => ({
             ...prev,
             [day]: { ...prev[day], from: value }
         }));
-    };
+    }, []);
 
-    const handleSelectTo = (day: string, value: string) => {
+    const handleSelectTo = useCallback((day: string, value: string) => {
         setOpeningHoursField(prev => ({
             ...prev,
             [day]: { ...prev[day], to: value }
         }));
-    };
+    }, []);
 
-    const handleClick = (day: string) => {
+    const handleClick = useCallback((day: string) => {
         setOpeningHoursField(prev => ({
             ...prev,
             [day]: { ...prev[day], closed: !prev[day].closed }
         }));
-    };
+    }, []);
 
     return (
         <HorizontalContainer flexWrap="wrap" flexDirection="column" alignSelf="center">

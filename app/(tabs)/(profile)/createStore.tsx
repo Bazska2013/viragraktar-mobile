@@ -112,7 +112,7 @@ export default function CreateStore() {
                         </HorizontalContainer>
                     </VerticalContainer>
                     <Separator />
-                    <BigButton onPress={() => handleSubmit()} disabled={!validInput}>{isLoading ? <Spinner /> : "Create store"}</BigButton>
+                    <BigButton onPress={handleSubmit} disabled={!validInput}>{isLoading ? <Spinner /> : "Create store"}</BigButton>
                 </EditContainer>
                 {error && <SizableText color="$red1">{error}</SizableText>}
             </ScrollView>
