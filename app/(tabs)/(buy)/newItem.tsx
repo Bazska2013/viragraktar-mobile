@@ -1,15 +1,24 @@
-import {Platform, SafeAreaView, useColorScheme} from "react-native";
+import {Platform, SafeAreaView, useColorScheme, View} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import axios from "@/scripts/axiosConfig";
-import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText, H6} from "tamagui";
-import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText, H6, Square} from "tamagui";
+import {
+    BigButton,
+    EditContainer,
+    HorizontalContainer,
+    SmallButton,
+    SmallButtonWithAccent,
+    VerticalContainer
+} from "@/tamagui.config";
 import * as ImagePicker from 'expo-image-picker';
 import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {Camera, FileImage} from "@tamagui/lucide-icons";
+import CameraComponent from "@/app/(tabs)/(buy)/CameraComponent";
 
 export default function NewItem() {
 
@@ -29,6 +38,8 @@ export default function NewItem() {
     const [labels, setLabels] = useState([]);
 
     const [image, setImage] = useState<string | null>(null);
+
+    const [cameraOpen, setCameraOpen] = useState(false);
 
     const pickImage = async () => {
         setImageModal(false);
@@ -82,6 +93,11 @@ export default function NewItem() {
         }
     }
 
+    const handleOpenCamera = () => {
+        setCameraOpen(true);
+        setImageModal(false);
+    }
+
     useEffect(() => {
         if (name.length > 0 && price.length > 0 && stock.length > 0) {
             setValidInput(true);
@@ -112,10 +128,18 @@ export default function NewItem() {
                 />
                 <Sheet.Frame>
                     <HorizontalContainer width="100%" justifyContent="space-around">
-                        <SmallButtonWithAccent onPress={pickImage}>Pick an image</SmallButtonWithAccent>
+                        <Square onPress={pickImage}>
+                            <FileImage />
+                            <SizableText>Upload from gallery</SizableText>
+                        </Square>
+                        <Square onPress={handleOpenCamera}>
+                            <Camera />
+                            <SizableText>Take a picture</SizableText>
+                        </Square>
                     </HorizontalContainer>
                 </Sheet.Frame>
             </Sheet>
+            <CameraComponent open={cameraOpen} setOpen={setCameraOpen} setImage={setImage} />
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <EditContainer
                     backgroundColor={theme.colors.card}

@@ -6,7 +6,7 @@ import axios, {BASE_URL} from '@/scripts/axiosConfig';
 import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {StatusBar} from "expo-status-bar";
-import {H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator, H6} from "tamagui";
+import {H4, ScrollView, Label, Input, Spinner, SizableText, Sheet, Image, Separator, H6, Square} from "tamagui";
 import {
     BigButton,
     EditContainer,
@@ -17,6 +17,8 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {Camera, FileImage} from "@tamagui/lucide-icons";
+import CameraComponent from "@/app/(tabs)/(buy)/CameraComponent";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
@@ -33,6 +35,8 @@ export default function EditItem() {
     const [labels, setLabels] = useState([]);
 
     const [image, setImage] = useState<string | null>(null);
+
+    const [cameraOpen, setCameraOpen] = useState(false);
 
     const pickImage = async () => {
         setImageModal(false);
@@ -100,6 +104,11 @@ export default function EditItem() {
         }
     }
 
+    const handleOpenCamera = () => {
+        setCameraOpen(true);
+        setImageModal(false);
+    }
+
     useEffect(() => {
         fetchItem();
     }, []);
@@ -136,10 +145,18 @@ export default function EditItem() {
                 />
                 <Sheet.Frame>
                     <HorizontalContainer width="100%" justifyContent="space-around">
-                        <SmallButtonWithAccent onPress={pickImage}>Pick an image</SmallButtonWithAccent>
+                        <Square onPress={pickImage}>
+                            <FileImage />
+                            <SizableText>Upload from gallery</SizableText>
+                        </Square>
+                        <Square onPress={handleOpenCamera}>
+                            <Camera />
+                            <SizableText>Take a picture</SizableText>
+                        </Square>
                     </HorizontalContainer>
                 </Sheet.Frame>
             </Sheet>
+            <CameraComponent open={cameraOpen} setOpen={setCameraOpen} setImage={setImage} />
             {item &&
                 <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                     <EditContainer
