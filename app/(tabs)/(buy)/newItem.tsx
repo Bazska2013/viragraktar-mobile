@@ -113,7 +113,7 @@ export default function NewItem() {
                 modal={false}
                 open={imageModal}
                 onOpenChange={setImageModal}
-                snapPoints={[20]}
+                snapPoints={[Platform.OS === 'ios' ? 20 : 30]}
                 snapPointsMode='percent'
                 dismissOnSnapToBottom
                 position={0}

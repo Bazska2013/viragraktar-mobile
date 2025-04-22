@@ -3,6 +3,7 @@ import {CameraType, CameraView, useCameraPermissions} from "expo-camera";
 import {Spinner, YStack, Square, Circle, Image, SizableText} from "tamagui";
 import {SmallButton} from "@/tamagui.config";
 import {RotateCcw, X, Save} from "@tamagui/lucide-icons"
+import {Platform} from "react-native";
 
 const CameraComponent = ({open, setOpen, setImage}) => {
     const [facingMode, setFacingMode] = useState<CameraType>('back');
@@ -32,11 +33,11 @@ const CameraComponent = ({open, setOpen, setImage}) => {
                     width: '100%',
                     height: '100%',
                 }} />
-                <Square position="absolute" bottom={10} left={10} onPress={() => setUri(null)}>
+                <Square position="absolute" bottom={Platform.OS === 'ios' ? 10 : 60} left={10} onPress={() => setUri(null)}>
                     <RotateCcw />
                     <SizableText>Retake picture</SizableText>
                 </Square>
-                <Square position="absolute" bottom={10} right={10} onPress={handleSavePicture}>
+                <Square position="absolute" bottom={Platform.OS === 'ios' ? 10 : 60} right={10} onPress={handleSavePicture}>
                     <Save />
                     <SizableText>Save picture</SizableText>
                 </Square>
@@ -60,7 +61,7 @@ const CameraComponent = ({open, setOpen, setImage}) => {
                     </Square>
                     <Circle position="absolute" elevation="$4" pressStyle={{
                         opacity: 0.5,
-                    }} backgroundColor="white" bottom={10} alignSelf="center" size={80} onPress={handleTakePicture} />
+                    }} backgroundColor="white" bottom={Platform.OS === 'ios' ? 10 : 60} alignSelf="center" size={80} onPress={handleTakePicture} />
                 </CameraView>
             </>
         )
