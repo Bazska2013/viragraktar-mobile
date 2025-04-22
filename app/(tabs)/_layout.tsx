@@ -14,8 +14,10 @@ const UserContext = createContext<{
     setUser: (user: any) => void,
     store: any,
     setStore: (store: any) => void,
-    getUserData: () => void
-    fetchUserData: () => void
+    save: (key: string, value: any) => Promise<void>,
+    getUserData: () => void,
+    fetchStoreData: () => void,
+    fetchUserData: () => void,
     before: boolean,
     setBefore: (before: boolean) => void,
     sign: string,
@@ -64,8 +66,29 @@ export default function TabLayout() {
         } finally {
             if (response?.status === 200) {
                 setUser(response.data);
+                await save('user', JSON.stringify(response.data));
             }
         }
+    }
+
+    const fetchStoreData = async () => {
+        let response;
+        try {
+            response = await axios.get('/api/store');
+        } catch (error: any) {
+            if (error.response.data.message === 'Unauthenticated.') {
+                router.replace('/login');
+            }
+        } finally {
+            if (response?.status === 200) {
+                setStore(response.data);
+                await save('store', JSON.stringify(response.data));
+            }
+        }
+    }
+
+    async function save(key: string, value: any) {
+        await SecureStore.setItemAsync(key, value);
     }
 
     const getUserData = async () => {
@@ -74,7 +97,10 @@ export default function TabLayout() {
         if (user) {
             setUser(user);
             if (store) {
-                setStore(store);
+                fetchStoreData().then(() => {
+                    setBefore(JSON.parse(store.currency).before);
+                    setSign(JSON.parse(store.currency).sign);
+                })
             }
         } else {
             router.replace('/login');
@@ -95,6 +121,7 @@ export default function TabLayout() {
         setStore: setStore,
         getUserData: getUserData,
         fetchUserData: fetchUserData,
+        fetchStoreData: fetchStoreData,
         before: before,
         setBefore: setBefore,
         sign: sign,
