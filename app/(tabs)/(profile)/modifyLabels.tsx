@@ -1,6 +1,6 @@
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {RefreshControl, SafeAreaView, useColorScheme} from "react-native";
-import {H4, Input, Paragraph, ScrollView, Separator, SizableText} from "tamagui";
+import {H4, Input, Paragraph, ScrollView, Separator, SizableText, Square} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, SmallButton, SmallButtonWithAccent} from "@/tamagui.config";
 import {useEffect, useState} from "react";
 import {Plus, Save, X} from "@tamagui/lucide-icons";
@@ -82,13 +82,16 @@ export default function ModifyLabels() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <H4>Available labels</H4>
                     <Paragraph>Press the available labels listed below to remove them from your store. Items that already have the selected label will continue to have it. You have to manually remove them from the individual items.</Paragraph>
                     <HorizontalContainer flexWrap="wrap">
                         {labels && labels.map((label, index) => (
-                            <SmallButton iconAfter={X} padding="$2" borderRadius="$5" key={label} onPress={() => handleRemoveLabel(label)}>{label}</SmallButton>
+                            <Square boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)" pressStyle={{backgroundColor: '#f1f1f1', scale: 0.95}} backgroundColor="#f5f5f5" padding="$2" borderRadius="$5" key={label} onPress={() => handleRemoveLabel(label)} flexDirection="row" alignItems="center" justifyContent="space-between">
+                                <SizableText>{label}</SizableText>
+                                <X size="$1" />
+                            </Square>
                         ))}
                     </HorizontalContainer>
                     <Separator />

@@ -17,7 +17,7 @@ export default function ProfileDetails() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <HorizontalContainer
                         alignItems="center"

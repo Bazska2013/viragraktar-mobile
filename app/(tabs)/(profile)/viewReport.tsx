@@ -176,7 +176,7 @@ export default function ViewReport() {
     return (
         <SafeAreaView>
             <ScrollView height="100%" refreshControl={<RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />}>
-                <YStack marginBottom={tabBarHeight}>
+                <YStack marginBottom={tabBarHeight + 20}>
                     {Dimensions.get('window').width >= 768 ? <>
                         <VerticalContainer>
                             <H4

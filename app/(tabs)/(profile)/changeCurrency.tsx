@@ -50,7 +50,7 @@ export default function ChangeCurrency() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <Label htmlFor="sign">
                         <H4>Set the currency sign used in this store</H4>

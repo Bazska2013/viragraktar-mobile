@@ -47,7 +47,7 @@ export default function ManageUsers() {
                         automaticallyAdjustKeyboardInsets={true}
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <VerticalContainer width="90%" alignSelf="center" marginBottom={tabBarHeight}>
+                <VerticalContainer width="90%" alignSelf="center" marginBottom={tabBarHeight + 20}>
                     {isLoading ? <Spinner /> : error ? <H4>An error occurred while fetching the users. Error: {error}</H4> :
                         <Accordion overflow="hidden" type="multiple"
                                    boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)"

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
-import {H6, Input, Separator} from "tamagui";
+import {H6, Input, Separator, SizableText, Square} from "tamagui";
 import {Plus, X} from "@tamagui/lucide-icons";
 import {useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
@@ -22,19 +22,19 @@ const Labels = ({value, id, onChange, combined}) => {
         }
     }, [value]);
 
-    const handleAddToSelected = (label) => {
+    const handleAddToSelected = useCallback((label) => {
         if (!selectedLabels.includes(label)) {
             setSelectedLabels([...selectedLabels, label]);
             setLabels(labels.filter((l) => l !== label));
         }
-    }
+    }, [selectedLabels, labels]);
 
-    const handleRemoveFromSelected = (label) => {
+    const handleRemoveFromSelected = useCallback((label) => {
         if (selectedLabels.includes(label)) {
             setSelectedLabels(selectedLabels.filter((l) => l !== label));
             setLabels([...labels, label]);
         }
-    }
+    }, [selectedLabels, labels]);
 
     useEffect(() => {
         if (searchField.length > 0) {
@@ -70,14 +70,20 @@ const Labels = ({value, id, onChange, combined}) => {
             <H6>Available labels</H6>
             <HorizontalContainer flexWrap="wrap">
                 {filteredLabels.map((label, index) => (
-                    <SmallButton iconAfter={Plus} onPress={() => handleAddToSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label}>{label}</SmallButton>
+                    <Square boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)" pressStyle={{backgroundColor: '#f1f1f1', scale: 0.95}} backgroundColor="#f5f5f5" onPress={() => handleAddToSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label} flexDirection="row" alignItems="center" justifyContent="space-between">
+                        <SizableText>{label}</SizableText>
+                        <Plus size="$1" />
+                    </Square>
                 ))}
             </HorizontalContainer>
             <Separator />
             <H6>Selected labels</H6>
             <HorizontalContainer flexWrap="wrap">
                 {selectedLabels && selectedLabels.map((label, index) => (
-                    <SmallButtonWithAccent iconAfter={X} onPress={() => handleRemoveFromSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label}>{label}</SmallButtonWithAccent>
+                    <Square boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)" pressStyle={{backgroundColor: '#f5ebe1', scale: 0.95}} backgroundColor="#FBF9EF" onPress={() => handleRemoveFromSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label} flexDirection="row" alignItems="center" justifyContent="space-between">
+                        <SizableText>{label}</SizableText>
+                        <X size="$1" />
+                    </Square>
                 ))}
             </HorizontalContainer>
         </VerticalContainer>

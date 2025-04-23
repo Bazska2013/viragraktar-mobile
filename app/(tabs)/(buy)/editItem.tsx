@@ -19,9 +19,11 @@ import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {Camera, FileImage} from "@tamagui/lucide-icons";
 import CameraComponent from "@/app/(tabs)/(buy)/CameraComponent";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const {fetchItems} = useItemsContext();
     const {sign, before} = useUserContext();
@@ -145,11 +147,11 @@ export default function EditItem() {
                 />
                 <Sheet.Frame>
                     <HorizontalContainer width="100%" justifyContent="space-around">
-                        <Square onPress={pickImage}>
+                        <Square onPress={pickImage} pressStyle={{opacity: 0.95}}>
                             <FileImage />
                             <SizableText>Upload from gallery</SizableText>
                         </Square>
-                        <Square onPress={handleOpenCamera}>
+                        <Square onPress={handleOpenCamera} pressStyle={{opacity: 0.95}}>
                             <Camera />
                             <SizableText>Take a picture</SizableText>
                         </Square>
@@ -161,6 +163,7 @@ export default function EditItem() {
                 <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                     <EditContainer
                         backgroundColor={theme.colors.card}
+                        marginBottom={tabBarHeight + 20}
                     >
                         <VerticalContainer>
                             <Label htmlFor="name">

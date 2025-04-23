@@ -44,7 +44,7 @@ export default function ChangeOpeningHours () {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <OpeningHours openingHours={openingHours} setFieldValue={(value)=> setOpeningHours(value)} />
                     <Separator />

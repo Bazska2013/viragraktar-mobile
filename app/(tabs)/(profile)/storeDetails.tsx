@@ -67,7 +67,7 @@ export default function StoreDetails() {
             >
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <H4>Store name</H4>
                     <SizableText>{store?.name}</SizableText>

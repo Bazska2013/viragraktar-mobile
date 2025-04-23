@@ -140,14 +140,14 @@ const Item = ({item}) => {
                         />
                         <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={handleRemove} />
                     </StyledGroup>
-                    <SmallButton icon={FileSearch} onPress={handleViewItem}>View details</SmallButton>
+                    <SmallButton icon={FileSearch} onPress={handleViewItem}>{Dimensions.get('window').width >= 768 && 'View details'}</SmallButton>
                     <SmallButtonWithAccent
                         boxShadow={isChanged ? "0px 0px 10px 1px rgba(0,0,0,0.1)" : "none"}
                         icon={ShoppingCart}
                         disabled={!isChanged}
                         opacity={isChanged ? 1 : 0.5}
                         onPress={handleAddToCart}
-                    >Add to cart</SmallButtonWithAccent>
+                    >{Dimensions.get('window').width >= 768 && 'Add to cart'}</SmallButtonWithAccent>
                 </VerticalContainer>
             </HorizontalContainer>
         </VerticalContainer>

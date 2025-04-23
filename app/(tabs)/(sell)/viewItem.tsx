@@ -10,6 +10,7 @@ import flowerImage from "@/assets/images/defaultFlower.png";
 import {ChevronLeft, FileSearch} from "@tamagui/lucide-icons";
 import {router} from "expo-router";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function ViewItem() {
     const scrollViewRef = useRef<ScrollView>(null);
@@ -22,6 +23,8 @@ export default function ViewItem() {
     const [item, setItem] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    const tabBarHeight = useBottomTabBarHeight();
 
     const fetchItem = async () => {
         let response;
@@ -58,6 +61,7 @@ export default function ViewItem() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' ref={scrollViewRef}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <SmallButton opacity={screenStack.length > 0 ? 1 : 0} icon={ChevronLeft} height={screenStack.length > 0 ? 25 : 0} animation="quickest" onPress={() => setScreenStack(screenStack.slice(0, -1))}>Back</SmallButton>
                     <VerticalContainer>

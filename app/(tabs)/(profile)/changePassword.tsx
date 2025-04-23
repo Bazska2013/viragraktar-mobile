@@ -59,7 +59,7 @@ export default function ChangePassword() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <VerticalContainer>
                         <Label htmlFor="current">

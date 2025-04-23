@@ -17,6 +17,7 @@ import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useUserContext} from "@/app/(tabs)/_layout";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function Cart() {
 
@@ -27,6 +28,7 @@ export default function Cart() {
     const [isLoading, setIsLoading] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [error, setError] = useState(null);
 
@@ -169,6 +171,7 @@ export default function Cart() {
                         </EditContainer>
                         <EditContainer
                             backgroundColor={theme.colors.card}
+                            marginBottom={tabBarHeight + 20}
                         >
                             <VerticalContainer>
                                 <StyledGroup orientation='horizontal' flex={1}>

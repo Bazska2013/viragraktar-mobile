@@ -127,7 +127,7 @@ export default function Profile() {
                         contentInsetAdjustmentBehavior="automatic"
                         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
             >
-                <VerticalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0} marginBottom={tabBarHeight}>
+                <VerticalContainer marginTop={Dimensions.get('window').width >= 768 ? 20 : 0} marginBottom={tabBarHeight + 20}>
                     <VerticalContainer
                         borderRadius="$5"
                         width="90%"

@@ -109,7 +109,7 @@ export default function GenerateReport() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <VerticalContainer>
                         <H4>Get data from</H4>

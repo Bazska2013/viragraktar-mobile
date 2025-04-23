@@ -18,6 +18,7 @@ import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import CameraComponent from "@/app/(tabs)/(buy)/CameraComponent";
 import {Camera, FileImage} from "@tamagui/lucide-icons";
+import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function CombineItems() {
 
@@ -25,6 +26,7 @@ export default function CombineItems() {
     const {sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
+    const tabBarHeight = useBottomTabBarHeight();
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -145,11 +147,11 @@ export default function CombineItems() {
                 />
                 <Sheet.Frame>
                     <HorizontalContainer width="100%" justifyContent="space-around">
-                        <Square onPress={pickImage}>
+                        <Square onPress={pickImage} pressStyle={{opacity: 0.95}}>
                             <FileImage />
                             <SizableText>Upload from gallery</SizableText>
                         </Square>
-                        <Square onPress={handleOpenCamera}>
+                        <Square onPress={handleOpenCamera} pressStyle={{opacity: 0.95}}>
                             <Camera />
                             <SizableText>Take a picture</SizableText>
                         </Square>
@@ -160,6 +162,7 @@ export default function CombineItems() {
             <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive'>
                 <EditContainer
                     backgroundColor={theme.colors.card}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <VerticalContainer>
                         <Label htmlFor="name">

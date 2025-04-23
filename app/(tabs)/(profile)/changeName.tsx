@@ -44,7 +44,7 @@ export default function ChangeName() {
                         automaticallyAdjustKeyboardInsets={true}>
                 <EditContainer
                     backgroundColor={theme.colors.card}
-                    marginBottom={tabBarHeight}
+                    marginBottom={tabBarHeight + 20}
                 >
                     <Label htmlFor="name">
                         <H4>Name</H4>
