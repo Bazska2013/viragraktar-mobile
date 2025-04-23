@@ -71,8 +71,8 @@ const Labels = ({value, id, onChange, combined}) => {
             <HorizontalContainer flexWrap="wrap">
                 {filteredLabels.map((label, index) => (
                     <Square boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)" pressStyle={{backgroundColor: '#f1f1f1', scale: 0.95}} backgroundColor="#f5f5f5" onPress={() => handleAddToSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label} flexDirection="row" alignItems="center" justifyContent="space-between">
-                        <SizableText>{label}</SizableText>
-                        <Plus size="$1" />
+                        <SizableText color="black">{label}</SizableText>
+                        <Plus color="black" size="$1" />
                     </Square>
                 ))}
             </HorizontalContainer>
@@ -81,8 +81,8 @@ const Labels = ({value, id, onChange, combined}) => {
             <HorizontalContainer flexWrap="wrap">
                 {selectedLabels && selectedLabels.map((label, index) => (
                     <Square boxShadow="0px 0px 10px 1px rgba(0,0,0,0.1)" pressStyle={{backgroundColor: '#f5ebe1', scale: 0.95}} backgroundColor="#FBF9EF" onPress={() => handleRemoveFromSelected(label)} borderWidth={1} padding="$2" borderRadius="$5" key={label} flexDirection="row" alignItems="center" justifyContent="space-between">
-                        <SizableText>{label}</SizableText>
-                        <X size="$1" />
+                        <SizableText color="black">{label}</SizableText>
+                        <X size="$1" color="black" />
                     </Square>
                 ))}
             </HorizontalContainer>
