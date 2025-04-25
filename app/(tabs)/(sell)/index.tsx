@@ -15,7 +15,7 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
-import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
+import {AnimatePresence, H2, H4, Input, Paragraph, Spinner} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import SellFilterBar from "@/app/(tabs)/(sell)/SellFilterBar";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
@@ -26,7 +26,7 @@ export default function Sell() {
     const tabBarHeight = useBottomTabBarHeight();
 
     const {user, store, getUserData} = useUserContext();
-    const {items, fetchItems, cartItems} = useItemsContext();
+    const {items, fetchItems, cartItems, isLoading} = useItemsContext();
 
     const [filteredItems, setFilteredItems] = useState([]);
     const [filterString, setFilterString] = useState('');
@@ -36,7 +36,7 @@ export default function Sell() {
 
     const [showCartButton, setShowCartButton] = useState(false);
 
-    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     const handleGoToProfile = useCallback(() => {
         router.push('/(tabs)/(profile)');
@@ -47,17 +47,13 @@ export default function Sell() {
     }, []);
 
     const handleRefresh = () => {
-        setIsRefreshing(true);
-        fetchItems().then(() => setIsRefreshing(false));
+        setFilteredItems([]);
+        fetchItems();
     }
 
     useEffect(() => {
-        getUserData()
-        fetchItems().then(() => {
-            setFilteredItems(items);
-            setFilterString('');
-            setFilterLabels([]);
-        });
+        getUserData();
+        fetchItems();
     }, []);
 
     useEffect(() => {
@@ -84,6 +80,13 @@ export default function Sell() {
         }
     }, [filterLabels]);
 
+    useEffect(() => {
+        if (items.length > 0) {
+            setRefresh(true);
+            setFilteredItems(items);
+        }
+    }, [items]);
+
     return (
         <SafeAreaView style={[styles.SafeArea]}>
             {store ? <>
@@ -95,9 +98,9 @@ export default function Sell() {
                               renderItem={({item}) =>
                                   <Item key={item.id} item={item} />}
                               keyExtractor={(item) => item.id.toString()}
-                              refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
+                              refreshControl={<RefreshControl refreshing={isLoading && refresh} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
-                              initialNumToRender={10}
+                              initialNumToRender={15}
                               maxToRenderPerBatch={10}
                               updateCellsBatchingPeriod={25}
                               getItemLayout={(data, index) => ({
@@ -107,11 +110,14 @@ export default function Sell() {
                               })}
                               columnWrapperStyle={Dimensions.get('window').width >= 768 ? {gap: 20, width: '90%', alignSelf: 'center'} : undefined}
                               windowSize={5}
-                              ListEmptyComponent={
-                                  <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
-                                      <H4>Oops!</H4>
-                                      <Paragraph>{filterString ? "It looks like there's no item named " + filterString + " available in your store. Pull down to refresh this page or if you have permission add it on the Buy page!" : "It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!"}</Paragraph>
-                                  </EditContainer>
+                              ListEmptyComponent={refresh ? <></> :
+                                  isLoading ?
+                                      <Spinner size="large" />
+                                      :
+                                      items.length === 0 && <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
+                                          <H4>Oops!</H4>
+                                          <Paragraph>{filterString ? "It looks like there's no item named " + filterString + " available in your store. Pull down to refresh this page or if you have permission add it on the Buy page!" : "It looks like there's nothing left to sell. Pull down to refresh this page and wait for the items to appear or add them yourself on the Buy page!"}</Paragraph>
+                                      </EditContainer>
                               }
                               ListHeaderComponent={
                                   <SellFilterBar onTextChange={setFilterString} onLabelChange={setFilterLabels} />

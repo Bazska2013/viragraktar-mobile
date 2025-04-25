@@ -13,6 +13,7 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 const Item = ({item}) => {
     const [isChanged, setIsChanged] = useState(false);
     const [amount, setAmount] = useState(0);
+    const [thereIsStock, setThereIsStock] = useState(false);
 
     const {addToCart, isItemInCart, removeFromCart} = useItemsContext();
     const {sign, before} = useUserContext();
@@ -88,6 +89,14 @@ const Item = ({item}) => {
         }
     };
 
+    useEffect(() => {
+        if (item.stock > 0) {
+            setThereIsStock(true);
+        } else {
+            setThereIsStock(false);
+        }
+    }, [item]);
+
     return (
         <VerticalContainer
             borderRadius="$5"
@@ -99,7 +108,6 @@ const Item = ({item}) => {
             marginTop={Dimensions.get('window').width >= 768 ? 20 : 10}
             marginBottom={Dimensions.get('window').width >= 768 ? 20 : 10}
             backgroundColor={isItemInCart(item) ? 'rgba(251,249,239,0.9)' : theme.colors.card}
-            opacity={item.stock === 0 ? 0.5 : 1}
             gap={0}
         >
             <Square animation="quick" pressStyle={{scale: 0.9}} scale={isChanged ? 1 : 0} opacity={isChanged ? 1 : 0} alignSelf="flex-end" marginBottom={0} onPress={handleSetAmountToZero}>
@@ -120,13 +128,13 @@ const Item = ({item}) => {
                     }} />
                     <H4>{item.name}</H4>
                     <SizableText>{before ? sign + item.price : item.price + " " + sign}</SizableText>
-                    <SizableText>Stock: {item.stock}</SizableText>
+                    <SizableText>{thereIsStock ? 'Stock: ' + item.stock : 'Out of stock'}</SizableText>
                 </VerticalContainer>
                 <VerticalContainer
                     flex={2}
                 >
                     <StyledGroup orientation='vertical'>
-                        <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={handleAdd} />
+                        <SmallButtonWithAccent boxShadow="unset" icon={Plus} onPress={handleAdd} disabled={!thereIsStock} />
                         <Input
                             backgroundColor={theme.colors.card}
                             flex={1}
@@ -137,8 +145,9 @@ const Item = ({item}) => {
                             textAlign="center"
                             width="100%"
                             borderWidth={0}
+                            disabled={!thereIsStock}
                         />
-                        <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={handleRemove} />
+                        <SmallButtonWithAccent boxShadow="unset" icon={Minus} onPress={handleRemove} disabled={!thereIsStock} />
                     </StyledGroup>
                     <SmallButton icon={FileSearch} onPress={handleViewItem}>{Dimensions.get('window').width >= 768 && 'View details'}</SmallButton>
                     <SmallButtonWithAccent

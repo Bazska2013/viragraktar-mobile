@@ -101,7 +101,7 @@ export default  function Buy() {
                               keyExtractor={(item) => item.id.toString()}
                               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
-                              initialNumToRender={10}
+                              initialNumToRender={100}
                               maxToRenderPerBatch={10}
                               updateCellsBatchingPeriod={25}
                               getItemLayout={(data, index) => ({

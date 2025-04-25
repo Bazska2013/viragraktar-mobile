@@ -14,7 +14,9 @@ const ItemsContext = createContext<{
     removeFromCart: (item: any) => void,
     emptyCart: () => void,
     editCart: (item: any) => void,
-    isItemInCart: (item: any) => boolean
+    isItemInCart: (item: any) => boolean,
+    isLoading: boolean,
+    setIsLoading: (isLoading: boolean) => void,
 } | undefined>(undefined);
 
 export function useItemsContext() {
@@ -28,12 +30,15 @@ export function useItemsContext() {
 export default function SellLayout() {
     const [items, setItems] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchItems = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get('/api/items');
             if (response.status === 200) {
                 setItems(response.data);
+                setIsLoading(false);
             }
         } catch (error: any) {
             console.log(error.response.data.message);
@@ -70,7 +75,9 @@ export default function SellLayout() {
         removeFromCart: removeFromCart,
         emptyCart: emptyCart,
         editCart: editCart,
-        isItemInCart: isItemInCart
+        isItemInCart: isItemInCart,
+        isLoading: isLoading,
+        setIsLoading: setIsLoading,
     }
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
