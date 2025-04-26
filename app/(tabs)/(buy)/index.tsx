@@ -6,18 +6,20 @@ import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent,} from "@/tamagui.config";
-import {AnimatePresence, H2, H4, Input, Paragraph} from "tamagui";
+import {AnimatePresence, H2, H4, Input, Paragraph, Spinner} from "tamagui";
 import {Combine, Plus, Search, X} from "@tamagui/lucide-icons";
 import BuyFilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default  function Buy() {
 
-    const {items, fetchItems, selectedItems, setSelectedItems} = useItemsContext();
+    const {items, fetchItems, selectedItems, setSelectedItems, isLoading} = useItemsContext();
 
     const [filteredItems, setFilteredItems] = useState([]);
     const [filterString, setFilterString] = useState('');
     const [filterLabels, setFilterLabels] = useState([]);
+
+    const [refresh, setRefresh] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
     const tabBarHeight = useBottomTabBarHeight();
@@ -37,8 +39,8 @@ export default  function Buy() {
     }
 
     const handleRefresh = () => {
-        setIsRefreshing(true);
-        fetchItems().then(() => setIsRefreshing(false));
+        setFilteredItems([]);
+        fetchItems();
     }
 
     const handleNewItem = useCallback(() => {
@@ -55,12 +57,10 @@ export default  function Buy() {
 
     useEffect(() => {
         getUserData()
-        fetchItems().then(() => {
-            setFilteredItems(items);
-            setFilterString('');
-            setFilterLabels([]);
-        });
+        setFilterString('');
+        setFilterLabels([]);
         setSelectedItems([]);
+        fetchItems();
     }, []);
 
     useEffect(() => {
@@ -89,6 +89,13 @@ export default  function Buy() {
         }
     }, [selectedItems]);
 
+    useEffect(() => {
+        if (items.length > 0) {
+            setRefresh(true);
+            setFilteredItems(items);
+        }
+    }, [items]);
+
     return (
         <SafeAreaView style={[styles.SafeArea]}>
             {store ? <>
@@ -101,7 +108,7 @@ export default  function Buy() {
                               keyExtractor={(item) => item.id.toString()}
                               refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />}
                               keyboardDismissMode='interactive'
-                              initialNumToRender={100}
+                              initialNumToRender={15}
                               maxToRenderPerBatch={10}
                               updateCellsBatchingPeriod={25}
                               getItemLayout={(data, index) => ({
@@ -113,11 +120,14 @@ export default  function Buy() {
                               windowSize={5}
                               onScroll={handleScroll}
                               scrollEventThrottle={16}
-                              ListEmptyComponent={
-                                  <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
-                                      <H4>Oops!</H4>
-                                      <Paragraph>{filterString ? "It looks like there's no item named " + filterString + " available in your store. Press the button below to add it!" : 'It looks like you have not yet added any item to your store. Press the button below to begin!'}</Paragraph>
-                                  </EditContainer>
+                              ListEmptyComponent={refresh ? <></> :
+                                  isLoading ?
+                                      <Spinner size="large" />
+                                      :
+                                      items.length === 0 && <EditContainer marginBottom="$5" backgroundColor={theme.colors.card}>
+                                          <H4>Oops!</H4>
+                                          <Paragraph>{filterString ? "It looks like there's no item named " + filterString + " available in your store. Press the button below to add it!" : 'It looks like you have not yet added any item to your store. Press the button below to begin!'}</Paragraph>
+                                      </EditContainer>
                               }
                               ListHeaderComponent={
                                   <BuyFilterBar onTextChange={setFilterString} onLabelChange={setFilterLabels} />

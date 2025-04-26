@@ -42,6 +42,7 @@ export default function SellLayout() {
             }
         } catch (error: any) {
             console.log(error.response.data.message);
+            setIsLoading(false);
         }
     }
 

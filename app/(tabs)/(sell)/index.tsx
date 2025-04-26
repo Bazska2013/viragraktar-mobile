@@ -53,6 +53,8 @@ export default function Sell() {
 
     useEffect(() => {
         getUserData();
+        setFilterString('');
+        setFilterLabels([]);
         fetchItems();
     }, []);
 

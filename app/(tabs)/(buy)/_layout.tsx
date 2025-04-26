@@ -12,6 +12,8 @@ const ItemsContext = createContext<{
     setSelectedItems: (items: any) => void,
     handleAddToSelected: (item: any) => void,
     removeFromSelected: (item: any) => void,
+    isLoading: boolean,
+    setIsLoading: (isLoading: boolean) => void,
 } | undefined>(undefined);
 
 export function useItemsContext() {
@@ -25,15 +27,19 @@ export function useItemsContext() {
 export default function BuyLayout() {
     const [items, setItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchItems = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get('/api/items');
             if (response.status === 200) {
                 setItems(response.data);
+                setIsLoading(false);
             }
         } catch (error: any) {
             console.log(error.response.data.message);
+            setIsLoading(false);
         }
     }
 
@@ -57,6 +63,8 @@ export default function BuyLayout() {
         setSelectedItems: setSelectedItems,
         handleAddToSelected: handleAddToSelected,
         removeFromSelected: removeFromSelected,
+        isLoading: isLoading,
+        setIsLoading: setIsLoading,
     };
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
