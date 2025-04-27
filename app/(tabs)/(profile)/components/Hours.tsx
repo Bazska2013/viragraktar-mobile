@@ -28,7 +28,15 @@ const Hours = ({from, to, onSelectFrom, onSelectTo, day, closed, onClick}) => {
             return;
         }
         setFromDate(new Date(date));
-        onSelectFrom(date.getHours() + ':' + date.getMinutes());
+        let hoursString = date.getHours().toString();
+        let minutesString = date.getMinutes().toString();
+        if (parseInt(hoursString) < 10) {
+            hoursString = '0' + hoursString;
+        }
+        if (parseInt(minutesString) < 10) {
+            minutesString = '0' + minutesString;
+        }
+        onSelectFrom(hoursString + ':' + minutesString);
         setShowFromPicker(false);
     }
 
@@ -42,7 +50,15 @@ const Hours = ({from, to, onSelectFrom, onSelectTo, day, closed, onClick}) => {
             return;
         }
         setToDate(new Date(date));
-        onSelectTo(date.getHours() + ':' + date.getMinutes());
+        let hoursString = date.getHours().toString();
+        let minutesString = date.getMinutes().toString();
+        if (parseInt(hoursString) < 10) {
+            hoursString = '0' + hoursString;
+        }
+        if (parseInt(minutesString) < 10) {
+            minutesString = '0' + minutesString;
+        }
+        onSelectTo(hoursString + ':' + minutesString);
         setShowToPicker(false);
     }
 

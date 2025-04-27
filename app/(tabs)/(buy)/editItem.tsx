@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Platform, SafeAreaView, useColorScheme,} from "react-native";
+import {Alert, Platform, SafeAreaView, useColorScheme,} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useSearchParams} from "expo-router/build/hooks";
 import axios, {BASE_URL} from '@/scripts/axiosConfig';
@@ -17,7 +17,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {Camera, FileImage} from "@tamagui/lucide-icons";
+import {Camera, FileImage, Trash} from "@tamagui/lucide-icons";
 import CameraComponent from "@/app/(tabs)/(buy)/CameraComponent";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
@@ -110,6 +110,35 @@ export default function EditItem() {
         setCameraOpen(true);
         setImageModal(false);
     }
+
+    const handleDelete = async () => {
+        let response;
+        setIsLoading(true);
+        try {
+            response = await axios.delete('/api/item/' + item.id);
+        } catch (error: any) {
+            setIsLoading(false);
+            setError(error.response.data.message);
+        } finally {
+            setIsLoading(false);
+            if (response?.status === 204) {
+                fetchItems();
+                router.back();
+            }
+        }
+    }
+
+    const confirmAlert = () =>
+        Alert.alert('Delete item', 'Are you sure you want to delete this item? This action cannot be undone.', [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'Confirm',
+                onPress: () => handleDelete()
+            },
+        ]);
 
     useEffect(() => {
         fetchItem();
@@ -241,6 +270,7 @@ export default function EditItem() {
                         </VerticalContainer>
                         <Separator />
                         <BigButton onPress={() => {handleSubmit()}} disabled={!validInput}>{isLoading ? <Spinner /> : "Edit item"}</BigButton>
+                        <SmallButtonWithAccent icon={Trash} onPress={confirmAlert}>Delete item</SmallButtonWithAccent>
                         <SizableText>{error}</SizableText>
                     </EditContainer>
                 </ScrollView>

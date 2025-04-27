@@ -4,6 +4,7 @@ import {Save, Trash} from "@tamagui/lucide-icons";
 import React, {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
+import {Alert} from "react-native";
 
 const ManageUser = ({isSeller, isBuyer, isAdmin, id, refetchUsers, name, email }) => {
     const [isSellerField, setIsSellerField] = useState(!!isSeller);
@@ -89,6 +90,18 @@ const ManageUser = ({isSeller, isBuyer, isAdmin, id, refetchUsers, name, email }
         }
     }
 
+    const confirmAlert = () =>
+        Alert.alert('Remove user', 'Are you sure you want to remove this user from the store?', [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'Confirm',
+                onPress: () => handleDelete()
+            },
+        ]);
+
     return (
         <VerticalContainer>
             <HorizontalContainer flex={1} alignItems="center">
@@ -130,7 +143,7 @@ const ManageUser = ({isSeller, isBuyer, isAdmin, id, refetchUsers, name, email }
             <Separator />
             <StyledGroup orientation="horizontal" justifyContent="space-between" alignSelf="center">
                 <SmallButtonWithAccent boxShadow="unset" icon={Save} disabled={!isChanged} opacity={isChanged ? 1 : 0.5} onPress={handleSave} >{isLoading ? <Spinner /> : 'Save changes'}</SmallButtonWithAccent>
-                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === id} opacity={user.id !== id ? 1 : 0.5} onPress={handleDelete} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
+                <SmallButtonWithAccent boxShadow="unset" icon={Trash} disabled={user.id === id} opacity={user.id !== id ? 1 : 0.5} onPress={confirmAlert} >{isLoading ? <Spinner /> :'Remove user'}</SmallButtonWithAccent>
             </StyledGroup>
             {error && <SizableText color="$red1">{error}</SizableText>}
         </VerticalContainer>
