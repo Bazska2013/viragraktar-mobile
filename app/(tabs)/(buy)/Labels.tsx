@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useCallback} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {HorizontalContainer, SmallButton, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
+import {HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {H6, Input, Separator, SizableText, Square} from "tamagui";
 import {Plus, X} from "@tamagui/lucide-icons";
 import {useColorScheme} from "react-native";

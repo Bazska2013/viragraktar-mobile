@@ -1,35 +1,13 @@
-import {
-    Alert,
-    Dimensions,
-    Platform,
-    RefreshControl,
-    SafeAreaView,
-    StatusBar,
-    StyleSheet,
-    useColorScheme
-} from "react-native";
-import {router, useNavigation} from "expo-router";
+import {Alert, Dimensions, Platform, RefreshControl, SafeAreaView, StatusBar, StyleSheet, useColorScheme} from "react-native";
+import {router} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import {useEffect, useState} from "react";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import axios from "@/scripts/axiosConfig";
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {Group, H2, H4, H6, ScrollView, Separator, SizableText} from 'tamagui';
+import {Group, H4, H6, ScrollView, Separator, SizableText} from 'tamagui';
 import {BigButton, StyledGroup, StyledListItem, VerticalContainer} from "@/tamagui.config";
-import {
-    BookKey,
-    BookUser,
-    Calendar,
-    ChevronRight,
-    DollarSign,
-    FilePen,
-    LineChart,
-    LogOut,
-    Tags,
-    TextSearch,
-    UserPen,
-    UserSearch
-} from "@tamagui/lucide-icons";
+import {BookKey, BookUser, Calendar, ChevronRight, DollarSign, FilePen, LineChart, LogOut, Tags, TextSearch, UserPen, UserSearch} from "@tamagui/lucide-icons";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function Profile() {

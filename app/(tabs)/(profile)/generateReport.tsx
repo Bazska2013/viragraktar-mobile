@@ -1,12 +1,6 @@
 import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {Checkbox, H4, H6, Label, ScrollView, Separator} from "tamagui";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButtonWithAccent,
-    VerticalContainer
-} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {Picker} from '@react-native-picker/picker';
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import {Check, LineChart} from "@tamagui/lucide-icons";

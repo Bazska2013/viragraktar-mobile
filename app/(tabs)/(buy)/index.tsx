@@ -5,9 +5,9 @@ import {router} from "expo-router";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(buy)/Item";
-import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent,} from "@/tamagui.config";
-import {AnimatePresence, H2, H4, Input, Paragraph, Spinner} from "tamagui";
-import {Combine, Plus, Search, X} from "@tamagui/lucide-icons";
+import {BigButton, EditContainer, SmallButtonWithAccent,} from "@/tamagui.config";
+import {H2, H4, Paragraph, Spinner} from "tamagui";
+import {Combine, Plus} from "@tamagui/lucide-icons";
 import BuyFilterBar from "@/app/(tabs)/(buy)/BuyFilterBar";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
@@ -39,6 +39,7 @@ export default  function Buy() {
     }
 
     const handleRefresh = () => {
+        setIsRefreshing(true);
         setFilteredItems([]);
         fetchItems();
     }
@@ -93,6 +94,7 @@ export default  function Buy() {
         if (items.length > 0) {
             setRefresh(true);
             setFilteredItems(items);
+            setIsRefreshing(false);
         }
     }, [items]);
 

@@ -7,13 +7,7 @@ import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
 import {StatusBar} from "expo-status-bar";
 import {H4, H6, Image, Input, Label, ScrollView, Separator, Sheet, SizableText, Spinner, Square} from "tamagui";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButtonWithAccent,
-    VerticalContainer
-} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import CameraComponent from "@/app/(tabs)/(buy)/CameraComponent";

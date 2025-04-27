@@ -1,7 +1,7 @@
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {RefreshControl, SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Paragraph, ScrollView, Separator, SizableText, Square} from "tamagui";
-import {BigButton, EditContainer, HorizontalContainer, SmallButton, SmallButtonWithAccent} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {useEffect, useState} from "react";
 import {Plus, Save, X} from "@tamagui/lucide-icons";
 import axios from "@/scripts/axiosConfig";

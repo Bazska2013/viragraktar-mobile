@@ -1,4 +1,4 @@
-import {HorizontalContainer, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
+import {HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {Checkbox, Group, H4, H6, Label, Separator} from "tamagui";
 import RNDateTimePicker, {DateTimePickerEvent} from "@react-native-community/datetimepicker";
 import React, {useState} from "react";

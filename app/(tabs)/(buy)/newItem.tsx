@@ -1,4 +1,4 @@
-import {Platform, SafeAreaView, useColorScheme, View} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useEffect, useState} from "react";
 import {router} from "expo-router";
@@ -6,14 +6,7 @@ import {StatusBar} from "expo-status-bar";
 import {useItemsContext} from "@/app/(tabs)/(buy)/_layout";
 import axios from "@/scripts/axiosConfig";
 import {Input, Label, ScrollView, Spinner, Image, Sheet, H4, Separator, SizableText, H6, Square} from "tamagui";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButton,
-    SmallButtonWithAccent,
-    VerticalContainer
-} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import * as ImagePicker from 'expo-image-picker';
 import Labels from "@/app/(tabs)/(buy)/Labels";
 import {useUserContext} from "@/app/(tabs)/_layout";

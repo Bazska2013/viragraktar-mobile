@@ -1,21 +1,12 @@
-import {
-    Dimensions,
-    FlatList,
-    Platform,
-    RefreshControl,
-    SafeAreaView, StatusBar,
-    StyleSheet,
-    useColorScheme,
-    View
-} from "react-native";
+import {Dimensions, FlatList, Platform, RefreshControl, SafeAreaView, StatusBar, StyleSheet, useColorScheme, View} from "react-native";
 import {useCallback, useEffect, useState} from "react";
 import {router} from "expo-router";
 import {DarkTheme, DefaultTheme, useIsFocused} from "@react-navigation/native";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import Item from "@/app/(tabs)/(sell)/Item";
-import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
-import {Search, ShoppingBasket, X} from "@tamagui/lucide-icons";
-import {AnimatePresence, H2, H4, Input, Paragraph, Spinner} from "tamagui";
+import {BigButton, EditContainer, SmallButtonWithAccent} from "@/tamagui.config";
+import {ShoppingBasket} from "@tamagui/lucide-icons";
+import {H2, H4, Paragraph, Spinner} from "tamagui";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import SellFilterBar from "@/app/(tabs)/(sell)/SellFilterBar";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";

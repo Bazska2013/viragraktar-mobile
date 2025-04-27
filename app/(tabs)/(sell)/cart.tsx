@@ -1,15 +1,7 @@
 import {Dimensions, Platform, SafeAreaView, useColorScheme} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {Group, H3, H4, Input, ScrollView, Separator, SizableText, Spinner} from "tamagui";
-import {
-    BigButton,
-    EditContainer,
-    HorizontalContainer,
-    SmallButton,
-    SmallButtonWithAccent,
-    StyledGroup,
-    VerticalContainer
-} from "@/tamagui.config";
+import {BigButton, EditContainer, HorizontalContainer, SmallButton, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
 import {useItemsContext} from "@/app/(tabs)/(sell)/_layout";
 import {Banknote, CreditCard, DollarSign, Minus, Plus, Trash} from "@tamagui/lucide-icons";
 import {useEffect, useState} from "react";

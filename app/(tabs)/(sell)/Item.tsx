@@ -1,5 +1,5 @@
 import {HorizontalContainer, SmallButton, SmallButtonWithAccent, StyledGroup, VerticalContainer} from "@/tamagui.config";
-import {Button, H4, Image, Input, SizableText, Square} from "tamagui";
+import {H4, Image, Input, SizableText, Square} from "tamagui";
 import flowerImage from "@/assets/images/defaultFlower.png";
 import React, {memo, useCallback, useEffect, useState} from "react";
 import {FileSearch, Minus, Plus, ShoppingCart, X} from "@tamagui/lucide-icons";
@@ -19,29 +19,6 @@ const Item = ({item}) => {
     const {sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-
-    const handleChange = (value, type: string) => {
-        switch (type) {
-            case 'minus':
-                if (amount > 0) {
-                    setAmount(amount - 1);
-                    setIsChanged(true);
-                }
-                break;
-            case 'plus':
-                if (amount < item.stock) {
-                    setAmount(amount + 1);
-                    setIsChanged(true);
-                }
-                break;
-            default: {
-                if (Number(value) >= 0 && Number(value) <= item.stock) {
-                    setAmount(Number(value));
-                    setIsChanged(true);
-                }}
-                break;
-        }
-    };
 
     const handleAdd = useCallback(() => {
         if (amount < item.stock) {

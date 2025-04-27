@@ -1,6 +1,6 @@
-import {BigButton, EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
+import {BigButton, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import {H2, Input, YStack} from "tamagui";
-import {Filter, FilterX, Search} from "@tamagui/lucide-icons";
+import {Filter, FilterX} from "@tamagui/lucide-icons";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import React, {useCallback, useEffect, useState} from "react";
 import {Dimensions, FlatList, useColorScheme} from "react-native";

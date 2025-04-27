@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Dimensions} from "react-native";
 import {HorizontalContainer} from "@/tamagui.config";
 import Hours from "@/app/(tabs)/(profile)/components/Hours";
 

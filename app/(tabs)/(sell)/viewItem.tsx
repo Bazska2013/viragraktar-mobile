@@ -4,11 +4,10 @@ import {useSearchParams} from "expo-router/build/hooks";
 import React, {useEffect, useRef, useState} from "react";
 import axios, {BASE_URL} from "@/scripts/axiosConfig";
 import {StatusBar} from "expo-status-bar";
-import {H4, Image, ScrollView, Separator, SizableText} from "tamagui";
+import {H4, Image, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {EditContainer, HorizontalContainer, SmallButton, VerticalContainer} from "@/tamagui.config";
 import flowerImage from "@/assets/images/defaultFlower.png";
 import {ChevronLeft, FileSearch} from "@tamagui/lucide-icons";
-import {router} from "expo-router";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
@@ -28,11 +27,14 @@ export default function ViewItem() {
 
     const fetchItem = async () => {
         let response;
+        setIsLoading(true);
         try {
             response = await axios.get('/api/item/' + id);
         } catch (error: any) {
-            setError(error.response.data.message);
+            setIsLoading(false);
+            setError(error.response.data.error);
         } finally {
+            setIsLoading(false);
             if (response?.status === 200) {
                 setItem(response.data);
             }
@@ -54,6 +56,43 @@ export default function ViewItem() {
         }
 
     }, [screenStack]);
+
+    if (error) {
+        return (
+            <SafeAreaView>
+                <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+                <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' ref={scrollViewRef}>
+                    <EditContainer
+                        backgroundColor={theme.colors.card}
+                        marginBottom={tabBarHeight + 20}
+                    >
+                        <VerticalContainer>
+                            <H4>Error</H4>
+                            <SizableText>{error}</SizableText>
+                        </VerticalContainer>
+                    </EditContainer>
+                </ScrollView>
+            </SafeAreaView>
+        )
+    }
+
+    if (isLoading) {
+        return (
+            <SafeAreaView>
+                <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+                <ScrollView style={{height: '100%'}} keyboardDismissMode='interactive' ref={scrollViewRef}>
+                    <EditContainer
+                        backgroundColor={theme.colors.card}
+                        marginBottom={tabBarHeight + 20}
+                    >
+                        <VerticalContainer>
+                            <Spinner size="large" />
+                        </VerticalContainer>
+                    </EditContainer>
+                </ScrollView>
+            </SafeAreaView>
+        )
+    }
 
     return (
         <SafeAreaView>

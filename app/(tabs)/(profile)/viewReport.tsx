@@ -1,23 +1,11 @@
 import {Dimensions, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
 import {H4, ScrollView, YStack} from "tamagui";
-import {BigButton, EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
+import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
-import {
-    VictoryAxis,
-    VictoryBar,
-    VictoryChart,
-    VictoryLine,
-    VictoryPie,
-    VictoryScatter,
-    VictoryTheme
-} from "victory-native";
+import {VictoryAxis, VictoryBar, VictoryChart, VictoryLine, VictoryPie, VictoryScatter, VictoryTheme} from "victory-native";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import TransactionsTable from "@/app/(tabs)/(profile)/components/TransactionsTable";
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
-import {captureRef} from 'react-native-view-shot';
-import {Download} from "@tamagui/lucide-icons";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 

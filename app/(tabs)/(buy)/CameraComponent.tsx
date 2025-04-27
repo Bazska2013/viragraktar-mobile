@@ -1,6 +1,6 @@
-import {useEffect, useState, useCallback, useRef} from "react";
+import {useState, useRef} from "react";
 import {CameraType, CameraView, useCameraPermissions} from "expo-camera";
-import {Spinner, YStack, Square, Circle, Image, SizableText, useTheme, H6, Paragraph} from "tamagui";
+import {Spinner, YStack, Square, Circle, Image, SizableText, H6, Paragraph} from "tamagui";
 import {BigButton, EditContainer, SmallButton} from "@/tamagui.config";
 import {RotateCcw, X, Save} from "@tamagui/lucide-icons"
 import {Platform, useColorScheme, Linking} from "react-native";

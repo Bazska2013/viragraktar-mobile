@@ -3,7 +3,6 @@ import {Button, Dimensions, Platform, useColorScheme} from "react-native";
 import React, {createContext, useContext, useState} from "react";
 import {DarkTheme, DefaultTheme} from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Stack as DefaultStack } from 'expo-router';
 
 const ReportContext = createContext<{
         data: any,
