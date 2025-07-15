@@ -22,7 +22,7 @@ export default  function Buy() {
     const [refresh, setRefresh] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const {user, store, getUserData} = useUserContext();
 

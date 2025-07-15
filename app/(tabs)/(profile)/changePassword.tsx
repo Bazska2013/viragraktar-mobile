@@ -1,4 +1,4 @@
-import {SafeAreaView, useColorScheme} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer, VerticalContainer} from "@/tamagui.config";
 import {useEffect, useRef, useState} from "react";
@@ -14,7 +14,7 @@ export default function ChangePassword() {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const [validData, setValidData] = useState<boolean>(false);
 

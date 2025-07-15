@@ -1,4 +1,4 @@
-import {RefreshControl, SafeAreaView, useColorScheme} from "react-native";
+import {Platform, RefreshControl, SafeAreaView, useColorScheme} from "react-native";
 import {H4, ScrollView, Separator, SizableText} from "tamagui";
 import {EditContainer, SmallButtonWithAccent, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -17,7 +17,7 @@ export default function StoreDetails() {
     const [copied, setCopied] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const getStoreId = async () => {
         let response;

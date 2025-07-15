@@ -2,7 +2,7 @@ import {useUserContext} from "@/app/(tabs)/_layout";
 import {useState} from "react";
 import axios from "@/scripts/axiosConfig";
 import {router} from "expo-router";
-import {SafeAreaView, useColorScheme} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 import {FilePen} from "@tamagui/lucide-icons";
@@ -14,7 +14,7 @@ export default function ChangeStoreName() {
 
     const [name, setName] = useState(store?.name)
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);

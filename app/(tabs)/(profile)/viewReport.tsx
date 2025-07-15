@@ -1,4 +1,4 @@
-import {Dimensions, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
+import {Dimensions, Platform, RefreshControl, SafeAreaView, useColorScheme, View} from "react-native";
 import {H4, ScrollView, YStack} from "tamagui";
 import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config"
 import {useReportContext} from "@/app/(tabs)/(profile)/_layout";
@@ -15,7 +15,7 @@ export default function ViewReport() {
 
     const colorScheme = useColorScheme();
     const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const fetchDayData = async () => {
         setIsLoading(true);

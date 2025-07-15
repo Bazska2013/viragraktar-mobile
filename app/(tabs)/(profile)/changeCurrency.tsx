@@ -1,7 +1,7 @@
 import {H4, Input, Label, ScrollView, Separator, SizableText, Spinner, Switch} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer} from "@/tamagui.config";
 import {DollarSign} from "@tamagui/lucide-icons";
-import {SafeAreaView, useColorScheme} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {useState} from "react";
 import {useUserContext} from "@/app/(tabs)/_layout";
 import axios from "@/scripts/axiosConfig";
@@ -14,7 +14,7 @@ export default function ChangeCurrency() {
     const {setStore, sign, before} = useUserContext()
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const [signField, setSignField] = useState(sign);
     const [beforeField, setBeforeField] = useState(before);

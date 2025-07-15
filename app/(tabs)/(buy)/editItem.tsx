@@ -17,7 +17,7 @@ import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 
 export default function EditItem() {
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const {fetchItems} = useItemsContext();
     const {sign, before} = useUserContext();

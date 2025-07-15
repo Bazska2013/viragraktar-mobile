@@ -17,7 +17,7 @@ export default function GenerateReport() {
     const [showEndPicker, setShowEndPicker] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const handleSetDate = (event: DateTimePickerEvent, date: Date) => {
         const {

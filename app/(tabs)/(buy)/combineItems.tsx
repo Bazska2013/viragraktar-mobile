@@ -20,7 +20,7 @@ export default function CombineItems() {
     const {sign, before} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');

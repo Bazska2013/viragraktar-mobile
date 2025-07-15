@@ -1,4 +1,4 @@
-import {RefreshControl, SafeAreaView} from "react-native";
+import {Platform, RefreshControl, SafeAreaView} from "react-native";
 import {Accordion, H4, ScrollView, Spinner, Square} from "tamagui";
 import {useEffect, useState} from "react";
 import axios from "@/scripts/axiosConfig";
@@ -14,7 +14,7 @@ export default function ManageUsers() {
     const [error, setError] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const fetchUsers = async () => {
         let response;

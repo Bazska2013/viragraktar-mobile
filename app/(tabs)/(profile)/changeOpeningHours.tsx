@@ -1,4 +1,4 @@
-import {SafeAreaView, useColorScheme} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {ScrollView, Separator, SizableText, Spinner} from "tamagui";
 import {BigButton, EditContainer} from "@/tamagui.config";
 import OpeningHours from "@/app/(tabs)/(profile)/components/OpeningHours";
@@ -15,7 +15,7 @@ export default function ChangeOpeningHours () {
     const [openingHours, setOpeningHours] = useState(JSON.parse(store.opening_hours));
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);

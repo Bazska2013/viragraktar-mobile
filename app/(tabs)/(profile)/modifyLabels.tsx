@@ -1,5 +1,5 @@
 import {useUserContext} from "@/app/(tabs)/_layout";
-import {RefreshControl, SafeAreaView, useColorScheme} from "react-native";
+import {Platform, RefreshControl, SafeAreaView, useColorScheme} from "react-native";
 import {H4, Input, Paragraph, ScrollView, Separator, SizableText, Square} from "tamagui";
 import {BigButton, EditContainer, HorizontalContainer, SmallButtonWithAccent} from "@/tamagui.config";
 import {useEffect, useState} from "react";
@@ -17,7 +17,7 @@ export default function ModifyLabels() {
     const [isChanged, setIsChanged] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     useEffect(() => {
         setLabels(JSON.parse(store.labels));

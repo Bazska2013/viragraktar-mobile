@@ -1,4 +1,4 @@
-import {SafeAreaView, useColorScheme} from "react-native";
+import {Platform, SafeAreaView, useColorScheme} from "react-native";
 import {H4, ScrollView, Separator, SizableText} from "tamagui";
 import {EditContainer, HorizontalContainer, VerticalContainer} from "@/tamagui.config";
 import {useUserContext} from "@/app/(tabs)/_layout";
@@ -9,7 +9,7 @@ export default function ProfileDetails() {
     const {user, store} = useUserContext();
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     return (
         <SafeAreaView>

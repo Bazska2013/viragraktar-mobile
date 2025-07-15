@@ -87,7 +87,7 @@ const TransactionsTable = ({distShown, items, transShown, transactions, totalSho
                             <Separator />
                             {items.map((item, index) => {
                                 return (
-                                    <View key={item.id}>
+                                    <View key={index}>
                                         <HorizontalContainer alignItems="center">
                                             <SizableText width="25%" textAlign="center" alignSelf="center">{item.name}</SizableText>
                                             <SizableText width="25%" textAlign="center" alignSelf="center">{before ? sign + item.price : item.price + " " + sign}</SizableText>

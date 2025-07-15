@@ -14,7 +14,7 @@ import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 export default function Sell() {
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const {user, store, getUserData} = useUserContext();
     const {items, fetchItems, cartItems, isLoading} = useItemsContext();

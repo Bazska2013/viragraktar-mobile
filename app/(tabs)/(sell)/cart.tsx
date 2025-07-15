@@ -20,7 +20,7 @@ export default function Cart() {
     const [isLoading, setIsLoading] = useState(false);
 
     const theme = useColorScheme() === 'dark' ? DarkTheme : DefaultTheme;
-    const tabBarHeight = useBottomTabBarHeight();
+    const tabBarHeight = Platform.OS === "android" ? 0 : useBottomTabBarHeight();
 
     const [error, setError] = useState(null);
 
